@@ -1,0 +1,70 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn() &&
+             exists(/databases/$(database)/documents/roles/$(request.auth.uid)) &&
+             get(/databases/$(database)/documents/roles/$(request.auth.uid)).data.admin == true;
+    }
+
+    // Vitrine pública. Somente administradores podem alterar produtos.
+    match /products/{document=**} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Configurações públicas da loja. Alteração somente por administrador.
+    match /settings/{document=**} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Cupons nunca devem ser expostos ao cliente.
+    // A validação é feita exclusivamente pela Cloud Function.
+    match /coupons/{document=**} {
+      allow read, write: if isAdmin();
+    }
+
+    // Pedidos: cliente lê apenas os próprios pedidos; admin lê e altera todos.
+    match /orders/{orderId} {
+      allow read: if isSignedIn() &&
+        (resource.data.userId == request.auth.uid || isAdmin());
+      allow create, update, delete: if isAdmin();
+    }
+
+    // Perfil do cliente.
+    match /users/{userId} {
+      allow read, write: if isSignedIn() &&
+        (request.auth.uid == userId || isAdmin());
+    }
+
+    // Roles: leitura protegida; somente admin pode promover outro usuário.
+    match /roles/{userId} {
+      allow read: if isAdmin() || (isSignedIn() && request.auth.uid == userId);
+      allow write: if isAdmin() ||
+        (isSignedIn() &&
+         request.auth.uid == userId &&
+         !request.resource.data.keys().hasAny(['admin']));
+    }
+
+    // CRM somente para administradores.
+    match /customers/{document=**} {
+      allow read, write: if isAdmin();
+    }
+
+    // Dashboard somente para administradores.
+    match /system/{document=**} {
+      allow read, write: if isAdmin();
+    }
+
+    // Cotações de frete são criadas e consumidas pelo backend.
+    match /shippingQuotes/{quoteId} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,404 @@
+/* =========================================================
+   OLOMI — PÁGINA DE PRODUTO
+   ========================================================= */
+
+.product-page {
+    min-height: 100vh;
+    padding: 2.25rem 0 5rem;
+    background:
+        radial-gradient(circle at 8% 12%, rgba(201, 154, 74, 0.09), transparent 28rem),
+        var(--olomi-cream, #f8f1e6);
+}
+
+.product-page-container {
+    width: min(1180px, calc(100% - 2rem));
+    margin: 0 auto;
+}
+
+.product-breadcrumb {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    margin-bottom: 1.5rem;
+    color: var(--olomi-wine, #4a1f2b);
+    font-size: .9rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: opacity .2s ease, transform .2s ease;
+}
+
+.product-breadcrumb:hover {
+    opacity: .72;
+    transform: translateX(-3px);
+}
+
+.product-detail-shell {
+    min-height: 560px;
+}
+
+.product-detail-card {
+    display: grid;
+    grid-template-columns: minmax(0, 1.02fr) minmax(0, .98fr);
+    gap: clamp(2rem, 5vw, 5rem);
+    padding: clamp(1.25rem, 3vw, 2.25rem);
+    background: rgba(255, 252, 247, .92);
+    border: 1px solid rgba(74, 31, 43, .1);
+    border-radius: 28px;
+    box-shadow: 0 22px 70px rgba(55, 28, 20, .09);
+}
+
+.product-gallery {
+    min-width: 0;
+}
+
+.product-main-image-wrap {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    background: #efe2d1;
+    border-radius: 22px;
+}
+
+.product-main-image {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: contain;
+    transition: transform .45s ease;
+}
+
+.product-main-image-wrap:hover .product-main-image {
+    transform: scale(1.025);
+}
+
+.product-image-placeholder {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    color: var(--olomi-wine, #4a1f2b);
+    font-family: var(--olomi-display, Georgia, serif);
+    font-size: 1.4rem;
+}
+
+.product-thumbnails {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: .7rem;
+    margin-top: .8rem;
+}
+
+.product-thumb {
+    aspect-ratio: 1 / 1;
+    padding: 0;
+    overflow: hidden;
+    background: #f4e8d8;
+    border: 2px solid transparent;
+    border-radius: 13px;
+    cursor: pointer;
+    transition: border-color .2s ease, transform .2s ease;
+}
+
+.product-thumb:hover {
+    transform: translateY(-2px);
+}
+
+.product-thumb.is-active {
+    border-color: var(--olomi-gold, #c99a4a);
+}
+
+.product-thumb img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+}
+
+.product-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding: .5rem 0;
+}
+
+.product-category {
+    margin: 0 0 .7rem;
+    color: var(--olomi-terracotta, #b85c38);
+    font-size: .76rem;
+    font-weight: 800;
+    letter-spacing: .13em;
+    text-transform: uppercase;
+}
+
+.product-title-large {
+    margin: 0;
+    color: var(--olomi-wine-dark, #32141d);
+    font-family: var(--olomi-display, Georgia, serif);
+    font-size: clamp(2.1rem, 4vw, 3.5rem);
+    line-height: .98;
+    letter-spacing: -.025em;
+}
+
+.product-rating {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    margin-top: 1rem;
+    color: #8b5d16;
+    font-size: .88rem;
+    font-weight: 600;
+}
+
+.product-rating-stars {
+    letter-spacing: .12em;
+}
+
+.product-price-block {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: .65rem;
+    margin: 1.5rem 0 1.25rem;
+}
+
+.product-old-price {
+    color: #8c8177;
+    font-size: .95rem;
+    text-decoration: line-through;
+}
+
+.product-price-large {
+    margin: 0;
+    color: var(--olomi-wine, #4a1f2b);
+    font-family: var(--olomi-display, Georgia, serif);
+    font-size: 2.15rem;
+    line-height: 1;
+}
+
+.product-installment {
+    width: 100%;
+    margin: .15rem 0 0;
+    color: #756960;
+    font-size: .82rem;
+}
+
+.product-description-large {
+    margin: 0;
+    color: #5f554e;
+    font-size: 1rem;
+    line-height: 1.85;
+    white-space: pre-line;
+}
+
+.product-stock {
+    display: inline-flex;
+    align-items: center;
+    gap: .45rem;
+    width: fit-content;
+    margin-top: 1.25rem;
+    padding: .45rem .7rem;
+    color: #5c4618;
+    background: #f8eecf;
+    border-radius: 999px;
+    font-size: .78rem;
+    font-weight: 800;
+}
+
+.product-stock.is-out {
+    color: #7a2525;
+    background: #f9dddd;
+}
+
+.product-purchase-box {
+    margin-top: 1.6rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(74, 31, 43, .12);
+}
+
+.product-quantity-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.product-quantity-label {
+    color: #4e4540;
+    font-size: .88rem;
+    font-weight: 800;
+}
+
+.product-quantity {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid rgba(74, 31, 43, .18);
+    border-radius: 10px;
+    overflow: hidden;
+    background: #fff;
+}
+
+.product-quantity button {
+    width: 40px;
+    height: 40px;
+    border: 0;
+    background: transparent;
+    color: var(--olomi-wine, #4a1f2b);
+    font-size: 1.15rem;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.product-quantity button:hover {
+    background: #f7eee4;
+}
+
+.product-quantity-value {
+    min-width: 38px;
+    text-align: center;
+    color: #2d2521;
+    font-weight: 800;
+}
+
+.add-to-cart-btn-large {
+    width: 100%;
+    min-height: 56px;
+    border: 0;
+    border-radius: 12px;
+    background: var(--olomi-wine, #4a1f2b);
+    color: #fffaf2;
+    font-family: var(--olomi-body, Inter, sans-serif);
+    font-size: .95rem;
+    font-weight: 800;
+    letter-spacing: .01em;
+    cursor: pointer;
+    box-shadow: 0 12px 25px rgba(74, 31, 43, .18);
+    transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
+}
+
+.add-to-cart-btn-large:hover:not(:disabled) {
+    transform: translateY(-2px);
+    background: var(--olomi-wine-dark, #32141d);
+    box-shadow: 0 15px 30px rgba(74, 31, 43, .24);
+}
+
+.add-to-cart-btn-large:disabled {
+    opacity: .55;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.product-trust-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .7rem;
+    margin-top: 1.2rem;
+}
+
+.product-trust-item {
+    min-height: 66px;
+    display: flex;
+    align-items: center;
+    gap: .65rem;
+    padding: .75rem;
+    background: #f7eee4;
+    border-radius: 12px;
+    color: #574c45;
+    font-size: .76rem;
+    line-height: 1.35;
+}
+
+.product-trust-icon {
+    flex: 0 0 auto;
+    width: 30px;
+    height: 30px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: #ead6b5;
+    color: var(--olomi-wine, #4a1f2b);
+    font-size: .85rem;
+}
+
+.product-loading,
+.product-error {
+    min-height: 430px;
+    display: grid;
+    place-items: center;
+    align-content: center;
+    gap: .9rem;
+    padding: 2rem;
+    text-align: center;
+    background: rgba(255, 252, 247, .9);
+    border: 1px solid rgba(74, 31, 43, .1);
+    border-radius: 24px;
+}
+
+.product-loading p,
+.product-error p {
+    margin: 0;
+    color: #6d625b;
+}
+
+.product-error a {
+    color: var(--olomi-wine, #4a1f2b);
+    font-weight: 800;
+}
+
+.product-spinner {
+    width: 38px;
+    height: 38px;
+    border: 3px solid #e5d7c6;
+    border-top-color: var(--olomi-gold, #c99a4a);
+    border-radius: 50%;
+    animation: product-spin .8s linear infinite;
+}
+
+@keyframes product-spin {
+    to { transform: rotate(360deg); }
+}
+
+@media (max-width: 850px) {
+    .product-detail-card {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        border-radius: 20px;
+    }
+
+    .product-main-image-wrap {
+        max-height: 620px;
+    }
+}
+
+@media (max-width: 560px) {
+    .product-page {
+        padding-top: 1.25rem;
+    }
+
+    .product-page-container {
+        width: min(100% - 1rem, 1180px);
+    }
+
+    .product-detail-card {
+        padding: .8rem;
+        border-radius: 18px;
+    }
+
+    .product-info {
+        padding: .5rem .25rem .25rem;
+    }
+
+    .product-title-large {
+        font-size: 2.35rem;
+    }
+
+    .product-trust-list {
+        grid-template-columns: 1fr;
+    }
+
+    .product-thumbnails {
+        gap: .5rem;
+    }
+}

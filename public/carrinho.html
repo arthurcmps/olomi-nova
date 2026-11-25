@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Finalize sua compra na Olomi." />
+  <meta name="theme-color" content="#351313" />
+  <title>Finalizar compra | Olomi</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./css/style.css?v=7.0" />
+  <link rel="stylesheet" href="./css/carrinho.css?v=7.0" />
+
+  <script src="https://sdk.mercadopago.com/js/v2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script type="module" src="js/main.js?v=7.0" defer></script>
+  <script type="module" src="js/carrinho.js?v=7.0" defer></script>
+</head>
+<body>
+  <div class="page-shell">
+    <main class="site-main cart-page checkout-page">
+      <section class="cart-hero checkout-hero">
+        <div class="container cart-hero-inner">
+          <div>
+            <span class="section-kicker">OLomi • FINALIZAÇÃO</span>
+            <h1>Finalize sua compra</h1>
+            <p>Confira seus produtos, escolha a entrega e conclua o pagamento com segurança.</p>
+          </div>
+          <a href="index.html#catalogo" class="cart-continue">← Continuar comprando</a>
+        </div>
+      </section>
+
+      <div class="container checkout-container">
+        <nav class="checkout-steps" aria-label="Etapas da compra">
+          <div class="checkout-step is-active">
+            <span class="step-number">1</span>
+            <div><strong>Pedido</strong><small>Revise seus itens</small></div>
+          </div>
+          <span class="step-line"></span>
+          <div class="checkout-step is-active">
+            <span class="step-number">2</span>
+            <div><strong>Entrega</strong><small>Seus dados</small></div>
+          </div>
+          <span class="step-line"></span>
+          <div class="checkout-step">
+            <span class="step-number">3</span>
+            <div><strong>Pagamento</strong><small>Mercado Pago</small></div>
+          </div>
+        </nav>
+
+        <div id="cart-container" class="cart-layout checkout-layout">
+          <section class="cart-items-column" aria-labelledby="cart-items-title">
+            <div class="cart-section-head">
+              <div>
+                <span class="section-kicker">01 • PEDIDO</span>
+                <h2 id="cart-items-title">Seus produtos</h2>
+              </div>
+              <span class="cart-items-count" id="cart-items-count">0 itens</span>
+            </div>
+            <div id="cart-items-list"></div>
+
+            <div class="checkout-assurance">
+              <div class="assurance-item"><span>✓</span><div><strong>Compra protegida</strong><small>Seus dados são tratados com segurança.</small></div></div>
+              <div class="assurance-item"><span>✦</span><div><strong>Olomi com propósito</strong><small>Produtos selecionados com respeito à tradição.</small></div></div>
+            </div>
+          </section>
+
+          <aside class="cart-summary-column" aria-label="Resumo e pagamento">
+            <section class="cart-summary-card">
+              <div class="summary-head">
+                <div>
+                  <span class="section-kicker">RESUMO DO PEDIDO</span>
+                  <h2>Confira os valores</h2>
+                </div>
+              </div>
+
+              <div class="cart-tool-card">
+                <div class="tool-heading">
+                  <span class="tool-icon">⌁</span>
+                  <div>
+                    <h3>Entrega</h3>
+                    <p>Informe o CEP para consultar as opções disponíveis.</p>
+                  </div>
+                </div>
+                <div class="shipping-input-group">
+                  <input type="text" id="calc-cep" inputmode="numeric" autocomplete="postal-code" placeholder="00000-000" maxlength="9" />
+                  <button type="button" id="btn-calc-shipping" class="btn-cart-primary">Calcular</button>
+                </div>
+                <div id="shipping-result" class="shipping-result" aria-live="polite"></div>
+              </div>
+
+              <div class="cart-tool-card coupon-card">
+                <div class="tool-heading">
+                  <span class="tool-icon">%</span>
+                  <div>
+                    <h3>Tem um cupom?</h3>
+                    <p>Aplique seu desconto antes de pagar.</p>
+                  </div>
+                </div>
+                <div class="shipping-input-group">
+                  <input type="text" id="cupom-input" placeholder="SEU CUPOM" autocomplete="off" maxlength="40" />
+                  <button type="button" id="btn-aplicar-cupom" class="btn-cart-secondary">Aplicar</button>
+                </div>
+                <div id="cupom-result" class="coupon-result" aria-live="polite"></div>
+              </div>
+
+              <div id="totals-summary" class="totals-summary"></div>
+            </section>
+
+            <section class="checkout-form-container">
+              <div class="checkout-heading">
+                <span class="section-kicker">02 • ENTREGA</span>
+                <h2>Onde devemos entregar?</h2>
+                <p>Usaremos estas informações para identificar seu pedido e calcular a entrega.</p>
+              </div>
+
+              <form id="checkout-form" class="checkout-form" method="POST" novalidate>
+                <fieldset>
+                  <legend>Seus dados</legend>
+                  <div class="field-grid single">
+                    <label>Nome completo
+                      <input type="text" id="user_name" name="name" placeholder="Seu nome completo" autocomplete="name" required />
+                    </label>
+                  </div>
+                  <div class="field-grid two">
+                    <label>WhatsApp
+                      <input type="tel" id="user_phone" name="phone" placeholder="(21) 99999-9999" autocomplete="tel" required />
+                    </label>
+                    <label>E-mail
+                      <input type="email" id="user_email" name="email" placeholder="voce@email.com" autocomplete="email" required />
+                    </label>
+                  </div>
+                </fieldset>
+
+                <fieldset>
+                  <legend>Endereço de entrega</legend>
+                  <div class="field-grid two">
+                    <label>CEP
+                      <input type="text" id="address_cep" name="cep" inputmode="numeric" placeholder="00000-000" autocomplete="postal-code" required />
+                    </label>
+                    <label>Estado (UF)
+                      <input type="text" id="address_state" name="state" placeholder="RJ" maxlength="2" autocomplete="address-level1" required />
+                    </label>
+                  </div>
+                  <label>Rua / Logradouro
+                    <input type="text" id="address_street" name="street" placeholder="Nome da rua" autocomplete="address-line1" required />
+                  </label>
+                  <div class="field-grid two">
+                    <label>Número
+                      <input type="text" id="address_number" name="number" placeholder="123" autocomplete="address-line2" required />
+                    </label>
+                    <label>Complemento
+                      <input type="text" id="address_complement" name="complement" placeholder="Apto, bloco..." autocomplete="address-line3" />
+                    </label>
+                  </div>
+                  <label>Bairro
+                    <input type="text" id="address_neighborhood" name="neighborhood" placeholder="Seu bairro" autocomplete="address-level3" required />
+                  </label>
+                  <label>Cidade
+                    <input type="text" id="address_city" name="city" placeholder="Sua cidade" autocomplete="address-level2" required />
+                  </label>
+                </fieldset>
+
+                <div class="payment-intro">
+                  <span class="section-kicker">03 • PAGAMENTO</span>
+                  <h3>Escolha como pagar</h3>
+                  <p>O pagamento é processado pelo Mercado Pago. A Olomi não armazena os dados do seu cartão.</p>
+                </div>
+
+                <div class="checkout-security-note">
+                  <span>🔒</span>
+                  <div><strong>Pagamento protegido</strong><span>Você será atendido pelo ambiente seguro do Mercado Pago para concluir a transação.</span></div>
+                </div>
+
+                <div id="paymentCardBrick_container" class="payment-brick-container"></div>
+              </form>
+            </section>
+          </aside>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

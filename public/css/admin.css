@@ -1,0 +1,509 @@
+/* Estilos Gerais da Página de Admin */
+.admin-page {
+    padding-top: 2rem;
+    padding-bottom: 4rem;
+}
+
+.admin-section {
+    background-color: #fff;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.admin-section-title {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #f0f0f0;
+    color: #333;
+}
+
+/* Formulário de Produtos */
+.admin-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* =========================================
+   ESTILOS DE LABELS E CAMPOS (UX Melhorada)
+   ========================================= */
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    text-align: left;
+    width: 100%;
+}
+
+.input-group label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* =========================================
+   SECÇÃO DE TEMA E LOGO (Responsividade)
+   ========================================= */
+.theme-settings-wrapper {
+    display: flex;
+    gap: 3rem;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+}
+
+.logo-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo-section label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.logo-hint {
+    font-size: 0.85rem;
+    color: #888;
+    text-align: center;
+}
+
+.theme-form-container {
+    flex: 1;
+    min-width: 300px;
+}
+
+/* 📱 Ajuste perfeito para o Painel no Celular */
+@media (max-width: 768px) {
+    .theme-settings-wrapper {
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+    }
+
+    .theme-form-container {
+        width: 100%;
+    }
+
+    /* O botão de Salvar Produto/Tema ocupa a largura toda no mobile */
+    .admin-form .submit-btn {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+.admin-form input[type="text"],
+.admin-form input[type="number"],
+.admin-form textarea {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.admin-form input:focus,
+.admin-form textarea:focus {
+    outline: none;
+    border-color: #f39c12;
+    box-shadow: 0 0 0 3px rgba(243, 156, 18, 0.2);
+}
+
+.admin-form textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.file-upload-label {
+    display: block;
+    padding: 0.8rem 1rem;
+    background-color: #f7f7f7;
+    border: 2px dashed #ccc;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.file-upload-label:hover {
+    background-color: #f0f0f0;
+    border-color: #f39c12;
+}
+
+#image-upload {
+    display: none; /* O input real fica escondido */
+}
+
+#image-preview-container {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+}
+
+#image-preview-container img {
+    max-width: 100px;
+    max-height: 100px;
+    border-radius: 5px;
+    object-fit: cover;
+    border: 2px solid #eee;
+}
+
+/* Tabelas */
+.table-container {
+    overflow-x: auto;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 2rem;
+}
+
+.admin-table th,
+.admin-table td {
+    padding: 0.9rem 1rem;
+    text-align: left;
+    vertical-align: middle;
+    border-bottom: 1px solid #e9e9e9;
+}
+
+.admin-table th {
+    background-color: #f9f9f9;
+    font-weight: 600;
+    color: #555;
+}
+
+.admin-table tbody tr:hover {
+    background-color: #fdf5e8;
+}
+
+.admin-table img {
+    border-radius: 5px;
+    object-fit: cover;
+}
+
+.actions-cell {
+    text-align: right;
+}
+
+/* --- ✅ CORREÇÃO: Novo design dos botões de ação com Ícones --- */
+.action-btn-icon {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    margin-left: 8px;
+    border-radius: 50%;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.action-btn-icon svg {
+    stroke: #888; /* Cor cinza neutra para os ícones */
+    transition: stroke 0.2s;
+}
+
+.action-btn-icon:hover {
+    background-color: #f0f0f0; /* Fundo cinza claro ao passar o rato */
+    transform: scale(1.1);
+}
+
+.action-btn-icon.edit:hover svg {
+    stroke: #f39c12; /* Laranja para editar */
+}
+
+.action-btn-icon.delete:hover svg {
+    stroke: #e74c3c; /* Vermelho para apagar */
+}
+
+
+/* Tabela de Pedidos - Estilos Específicos */
+#orders-table .order-summary-row {
+    cursor: pointer;
+}
+
+#orders-table .order-details-row {
+    display: none; /* Escondido por padrão */
+    background-color: #fafafa;
+}
+
+#orders-table .order-details-content {
+    padding: 1.5rem;
+}
+
+#orders-table .order-details-content p {
+    margin-bottom: 0.5rem;
+}
+#orders-table .order-details-content ul {
+    list-style-type: disc;
+    padding-left: 20px;
+}
+
+.status {
+    padding: 0.3rem 0.6rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: white;
+}
+
+.status.pending {
+    background-color: #3498db;
+}
+
+.status.shipped {
+    background-color: #2ecc71;
+}
+
+.status.cancelled {
+    background-color: #e74c3c;
+}
+
+.order-actions {
+    min-height: 59px; 
+    vertical-align: middle;
+}
+
+.action-btn {
+    padding: 0.4rem 0.8rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: background-color 0.3s, transform 0.2s;
+    margin-right: 0.5rem;
+}
+
+.action-btn.ship {
+    background-color: #27ae60;
+    color: white;
+}
+
+.action-btn.cancel {
+    background-color: #c0392b;
+    color: white;
+}
+
+.action-btn.ship:hover {
+    background-color: #219d55;
+}
+
+.action-btn.cancel:hover {
+    background-color: #a5281b;
+}
+
+/* Estilo para o status de Pagamento Aprovado */
+.status.paid, 
+.order-status-badge.paid {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+/* =========================================
+   ESTILOS DO DASHBOARD (FINANCEIRO & ESTOQUE)
+   ========================================= */
+.dash-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.dash-card {
+    background: linear-gradient(135deg, #2C1B4D, #1a0f2e); /* Roxo Meia-noite */
+    color: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.dash-card::after {
+    content: '';
+    position: absolute;
+    top: -50%; right: -20%;
+    width: 150px; height: 150px;
+    background: rgba(224, 90, 61, 0.2); /* Terracota sutil */
+    border-radius: 50%;
+}
+
+.dash-card h3 {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.5rem;
+    color: #e2e8f0;
+}
+
+.dash-value {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #E05A3D; /* Laranja Terracota */
+}
+
+.dash-main-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+}
+
+.dash-chart-wrapper {
+    background: #fff;
+    border: 1px solid #eee;
+    padding: 1.5rem;
+    border-radius: 12px;
+}
+
+.dash-side-panels {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.dash-panel {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 1.2rem;
+    border-radius: 12px;
+}
+
+.alert-panel {
+    border-left: 4px solid #e74c3c;
+    background: #fffafa;
+}
+
+.dash-list {
+    list-style: none;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+}
+
+.dash-list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.dash-list li:last-child {
+    border-bottom: none;
+}
+
+@media (max-width: 992px) {
+    .dash-main-grid { grid-template-columns: 1fr; }
+}
+
+/* =========================================
+   SISTEMA DE PAGINAÇÃO
+   ========================================= */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.page-btn {
+    padding: 0.5rem 1rem;
+    border: 1px solid #e2e8f0;
+    background-color: #fff;
+    color: #333;
+    cursor: pointer;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.page-btn:hover:not(.active) {
+    background-color: #f8fafc;
+    border-color: #cbd5e1;
+}
+
+.page-btn.active {
+    background-color: var(--cor-laranja, #E05A3D);
+    color: white;
+    border-color: var(--cor-laranja, #E05A3D);
+    pointer-events: none;
+}
+
+/* =========================================
+   RESPONSIVIDADE EXTRA (MOBILE)
+   Dashboard e Filtros de Pedidos
+   ========================================= */
+
+@media (max-width: 768px) {
+    /* 1. Dashboard: Empilha os cartões financeiros e painéis laterais */
+    .dash-cards-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .dash-side-panels {
+        margin-top: 1.5rem;
+    }
+
+    .dash-panel {
+        margin-bottom: 1rem;
+    }
+
+    /* 2. Filtros de Pedidos e CRM: Transforma em coluna para ocupar 100% da largura */
+    .search-bar-container {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 0.8rem !important;
+    }
+
+    .search-bar-container > input,
+    .search-bar-container > select,
+    .search-bar-container > div,
+    .search-bar-container > button {
+        width: 100% !important;
+        min-width: 100% !important;
+        flex: none !important;
+        box-sizing: border-box;
+    }
+
+    /* Ajuste fino da caixinha interna de "De / Até" */
+    .search-bar-container > div {
+        flex-wrap: wrap !important;
+        justify-content: space-between !important;
+    }
+
+    .search-bar-container > div input {
+        flex: 1;
+        min-width: 100px;
+    }
+
+    /* 3. Ajuste dos Títulos para ecrãs menores */
+    .admin-section {
+        padding: 1.2rem;
+    }
+    
+    .admin-section-title {
+        font-size: 1.4rem;
+    }
+}

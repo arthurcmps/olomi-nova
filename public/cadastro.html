@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Crie sua conta | Olomi</title>
+    <meta
+        name="description"
+        content="Crie sua conta na Olomi e facilite suas próximas compras."
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link rel="stylesheet" href="./css/cadastro.css?v=3.0" />
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="module" src="js/cliente-auth-cadastro.js?v=3.0" defer></script>
+</head>
+
+<body>
+    <main class="register-page">
+        <section class="register-brand" aria-label="Olomi">
+            <div class="brand-inner">
+                <a href="index.html" class="brand-logo-link" aria-label="Voltar para a Olomi">
+                    <img
+                        src="./assets/img/logo.jpg"
+                        alt="Olomi"
+                        class="brand-logo"
+                    />
+                </a>
+
+                <div class="brand-copy">
+                    <span class="eyebrow">OLomi · sua casa de fé</span>
+                    <h1>Uma conta para acompanhar sua jornada.</h1>
+                    <p>
+                        Cadastre seus dados uma única vez e tenha uma experiência
+                        mais simples nas próximas compras.
+                    </p>
+                </div>
+
+                <div class="brand-note">
+                    <span class="brand-note-mark">✦</span>
+                    <span>Feito com respeito às tradições e à diversidade das religiões afro-brasileiras.</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="register-panel">
+            <div class="register-card">
+                <div class="mobile-brand">
+                    <a href="index.html" aria-label="Voltar para a Olomi">
+                        <img src="./assets/img/logo.jpg" alt="Olomi" />
+                    </a>
+                </div>
+
+                <header class="form-header">
+                    <span class="eyebrow">Criar conta</span>
+                    <h2>Bem-vindo à Olomi</h2>
+                    <p>Preencha seus dados para criar seu acesso.</p>
+                </header>
+
+                <div class="progress" aria-label="Etapas do cadastro">
+                    <div class="progress-item is-active" data-progress="1">
+                        <span>1</span>
+                        <strong>Seus dados</strong>
+                    </div>
+                    <div class="progress-line"></div>
+                    <div class="progress-item" data-progress="2">
+                        <span>2</span>
+                        <strong>Entrega</strong>
+                    </div>
+                </div>
+
+                <form id="register-form" class="register-form" method="POST" novalidate>
+                    <section class="form-step is-active" data-step="1">
+                        <div class="step-heading">
+                            <span class="step-kicker">Primeiro passo</span>
+                            <h3>Vamos começar por você</h3>
+                            <p>Esses dados serão usados para identificar sua conta.</p>
+                        </div>
+
+                        <div class="field">
+                            <label for="register-name">Nome completo</label>
+                            <input
+                                id="register-name"
+                                name="name"
+                                type="text"
+                                autocomplete="name"
+                                placeholder="Como podemos chamar você?"
+                                required
+                                minlength="3"
+                            />
+                        </div>
+
+                        <div class="field">
+                            <label for="register-phone">Telefone</label>
+                            <input
+                                id="register-phone"
+                                name="phone"
+                                type="tel"
+                                inputmode="tel"
+                                autocomplete="tel"
+                                placeholder="(21) 99999-9999"
+                                required
+                                pattern="\(\d{2}\)\s\d{4,5}-\d{4}"
+                                title="Informe o telefone no formato (XX) XXXXX-XXXX"
+                            />
+                        </div>
+
+                        <div class="field">
+                            <label for="register-email">E-mail</label>
+                            <input
+                                id="register-email"
+                                name="email"
+                                type="email"
+                                autocomplete="email"
+                                placeholder="voce@exemplo.com"
+                                required
+                            />
+                        </div>
+
+                        <div class="password-grid">
+                            <div class="field">
+                                <label for="register-password">Senha</label>
+                                <div class="password-field">
+                                    <input
+                                        id="register-password"
+                                        name="password"
+                                        type="password"
+                                        autocomplete="new-password"
+                                        placeholder="Mínimo de 6 caracteres"
+                                        required
+                                        minlength="6"
+                                    />
+                                    <button type="button" class="password-toggle" data-target="register-password" aria-label="Mostrar senha">Mostrar</button>
+                                </div>
+                            </div>
+
+                            <div class="field">
+                                <label for="register-confirm-password">Confirme a senha</label>
+                                <div class="password-field">
+                                    <input
+                                        id="register-confirm-password"
+                                        name="confirmPassword"
+                                        type="password"
+                                        autocomplete="new-password"
+                                        placeholder="Digite novamente"
+                                        required
+                                    />
+                                    <button type="button" class="password-toggle" data-target="register-confirm-password" aria-label="Mostrar confirmação da senha">Mostrar</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="button" class="primary-button next-step" data-next="2">
+                            Continuar para entrega
+                            <span aria-hidden="true">→</span>
+                        </button>
+                    </section>
+
+                    <section class="form-step" data-step="2">
+                        <div class="step-heading">
+                            <span class="step-kicker">Segundo passo</span>
+                            <h3>Onde você recebe?</h3>
+                            <p>Usaremos seu endereço para facilitar a entrega dos seus pedidos.</p>
+                        </div>
+
+                        <div class="field">
+                            <label for="register-cep">CEP</label>
+                            <div class="cep-field">
+                                <input
+                                    id="register-cep"
+                                    name="cep"
+                                    type="text"
+                                    inputmode="numeric"
+                                    autocomplete="postal-code"
+                                    placeholder="00000-000"
+                                    required
+                                    pattern="[0-9]{5}-?[0-9]{3}"
+                                    title="Digite um CEP válido com 8 dígitos"
+                                />
+                                <span class="field-status" id="cep-status" aria-live="polite"></span>
+                            </div>
+                            <small class="field-help">Ao informar o CEP, tentaremos preencher o endereço automaticamente.</small>
+                        </div>
+
+                        <div class="field">
+                            <label for="register-street">Rua / Logradouro</label>
+                            <input
+                                id="register-street"
+                                name="street"
+                                type="text"
+                                autocomplete="street-address"
+                                placeholder="Rua, avenida, estrada..."
+                                required
+                            />
+                        </div>
+
+                        <div class="address-grid">
+                            <div class="field">
+                                <label for="register-number">Número</label>
+                                <input
+                                    id="register-number"
+                                    name="number"
+                                    type="text"
+                                    inputmode="numeric"
+                                    autocomplete="address-line2"
+                                    placeholder="123"
+                                    required
+                                />
+                            </div>
+
+                            <div class="field">
+                                <label for="register-complement">Complemento</label>
+                                <input
+                                    id="register-complement"
+                                    name="complement"
+                                    type="text"
+                                    autocomplete="address-line2"
+                                    placeholder="Apto, casa, bloco..."
+                                />
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label for="register-neighborhood">Bairro</label>
+                            <input
+                                id="register-neighborhood"
+                                name="neighborhood"
+                                type="text"
+                                autocomplete="address-level3"
+                                placeholder="Seu bairro"
+                                required
+                            />
+                        </div>
+
+                        <div class="address-grid">
+                            <div class="field">
+                                <label for="register-city">Cidade</label>
+                                <input
+                                    id="register-city"
+                                    name="city"
+                                    type="text"
+                                    autocomplete="address-level2"
+                                    placeholder="Sua cidade"
+                                    required
+                                />
+                            </div>
+
+                            <div class="field">
+                                <label for="register-state">Estado (UF)</label>
+                                <input
+                                    id="register-state"
+                                    name="state"
+                                    type="text"
+                                    maxlength="2"
+                                    autocomplete="address-level1"
+                                    placeholder="RJ"
+                                    required
+                                />
+                            </div>
+                        </div>
+
+                        <div class="step-actions">
+                            <button type="button" class="secondary-button prev-step" data-prev="1">
+                                <span aria-hidden="true">←</span>
+                                Voltar
+                            </button>
+
+                            <button type="submit" class="primary-button" id="register-submit">
+                                Criar minha conta
+                            </button>
+                        </div>
+                    </section>
+                </form>
+
+                <div class="account-link">
+                    Já tem uma conta?
+                    <a href="login-cliente.html">Entrar na Olomi</a>
+                </div>
+
+                <p class="privacy-note">
+                    Ao criar sua conta, você poderá acessar e acompanhar seus pedidos
+                    com mais facilidade.
+                </p>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

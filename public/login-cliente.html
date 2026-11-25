@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Acesse sua conta Olomi para acompanhar pedidos e facilitar suas compras." />
+    <title>Entrar | Olomi</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="./css/login.css?v=3.0" />
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="module" src="js/cliente-auth.js?v=3.0" defer></script>
+</head>
+<body class="login-page">
+    <a class="back-link" href="index.html" aria-label="Voltar para a loja">
+        <span aria-hidden="true">←</span> Voltar para a loja
+    </a>
+
+    <main class="auth-shell">
+        <section class="auth-brand-panel" aria-label="Olomi">
+            <div class="brand-pattern" aria-hidden="true"></div>
+            <div class="brand-content">
+                <a href="index.html" class="brand-logo-link">
+                    <img src="./assets/img/logo.jpg" alt="Olomi" class="brand-logo" />
+                </a>
+                <p class="eyebrow">OLOMI</p>
+                <h1>Entre para continuar sua jornada.</h1>
+                <p class="brand-copy">
+                    Seus pedidos, seus dados e uma experiência de compra feita para você.
+                </p>
+                <div class="brand-signature">
+                    <span></span>
+                    Fé, ancestralidade e cuidado em cada detalhe.
+                    <span></span>
+                </div>
+            </div>
+        </section>
+
+        <section class="auth-form-panel">
+            <div class="auth-card">
+                <div class="mobile-logo-wrap">
+                    <a href="index.html">
+                        <img src="./assets/img/logo.jpg" alt="Olomi" class="mobile-logo" />
+                    </a>
+                </div>
+
+                <p class="section-kicker">MINHA CONTA</p>
+                <h2>Bem-vindo(a) de volta.</h2>
+                <p class="auth-intro">Acesse sua conta para acompanhar seus pedidos e continuar suas compras.</p>
+
+                <form id="login-cliente-form" class="login-form" novalidate>
+                    <div class="field-group">
+                        <label for="login-email">E-mail</label>
+                        <input
+                            id="login-email"
+                            name="email"
+                            type="email"
+                            autocomplete="email"
+                            placeholder="voce@exemplo.com"
+                            required
+                        />
+                    </div>
+
+                    <div class="field-group">
+                        <div class="field-label-row">
+                            <label for="login-password">Senha</label>
+                            <a href="#" id="reset-password-link">Esqueci minha senha</a>
+                        </div>
+                        <input
+                            id="login-password"
+                            name="password"
+                            type="password"
+                            autocomplete="current-password"
+                            placeholder="Digite sua senha"
+                            required
+                        />
+                    </div>
+
+                    <button type="submit" class="submit-button">
+                        <span class="button-text">Entrar na minha conta</span>
+                        <span class="button-spinner" aria-hidden="true"></span>
+                    </button>
+                </form>
+
+                <div class="divider"><span>ou</span></div>
+
+                <p class="register-prompt">
+                    Ainda não tem uma conta?
+                    <a href="cadastro.html">Criar minha conta</a>
+                </p>
+
+                <div class="security-note">
+                    <span class="security-icon" aria-hidden="true">⌾</span>
+                    <div>
+                        <strong>Seus dados estão protegidos</strong>
+                        <p>Usamos autenticação segura para proteger sua conta.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

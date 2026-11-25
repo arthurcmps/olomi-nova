@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Minha Conta | Olomi</title>
+
+    <meta
+        name="description"
+        content="Gerencie seus dados, endereço e acompanhe seus pedidos na Olomi."
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link rel="stylesheet" href="./css/style.css?v=2.0" />
+    <link rel="stylesheet" href="./css/minha-conta.css?v=3.0" />
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script type="module" src="./js/main.js?v=2.0" defer></script>
+</head>
+
+<body>
+
+    <main class="account-page">
+
+        <div class="account-container">
+
+            <!-- Cabeçalho da página -->
+            <header class="account-hero">
+
+                <div class="account-eyebrow">
+                    Minha conta
+                </div>
+
+                <h1>
+                    Seu espaço na Olomi.
+                </h1>
+
+                <p>
+                    Cuide dos seus dados, acompanhe seus pedidos
+                    e mantenha suas informações de entrega sempre atualizadas.
+                </p>
+
+                <a href="index.html" class="account-back-link">
+                    ← Continuar comprando
+                </a>
+
+            </header>
+
+
+            <!-- Conteúdo principal -->
+            <div class="account-layout">
+
+                <!-- PERFIL -->
+                <section class="account-card profile-card">
+
+                    <div class="account-card-header">
+
+                        <div>
+                            <span class="card-eyebrow">
+                                Seus dados
+                            </span>
+
+                            <h2>
+                                Perfil e endereço
+                            </h2>
+                        </div>
+
+                        <div class="card-icon">
+                            ◌
+                        </div>
+
+                    </div>
+
+                    <div
+                        id="user-details-content"
+                        class="account-card-content"
+                    ></div>
+
+                </section>
+
+
+                <!-- PEDIDOS -->
+                <section class="account-card orders-card">
+
+                    <div class="account-card-header">
+
+                        <div>
+                            <span class="card-eyebrow">
+                                Seus pedidos
+                            </span>
+
+                            <h2>
+                                Histórico de compras
+                            </h2>
+                        </div>
+
+                        <div class="card-icon">
+                            ◷
+                        </div>
+
+                    </div>
+
+                    <div
+                        id="order-history-list"
+                        class="account-card-content"
+                    ></div>
+
+                </section>
+
+            </div>
+
+
+            <!-- Rodapé informativo -->
+            <div class="account-note">
+
+                <div class="account-note-icon">
+                    ✦
+                </div>
+
+                <div>
+                    <strong>
+                        Seus dados ficam com você.
+                    </strong>
+
+                    <p>
+                        Utilizamos suas informações apenas para facilitar
+                        sua experiência na Olomi, processar pedidos e realizar
+                        entregas.
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <script type="module">
+
+        import { auth } from './js/firebase.js';
+
+        import {
+            onAuthStateChanged
+        } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js";
+
+        import {
+            initMinhaContaPage
+        } from './js/minha-conta.js';
+
+
+        onAuthStateChanged(auth, (user) => {
+
+            if (user) {
+
+                initMinhaContaPage(user);
+
+            } else {
+
+                console.log(
+                    "Utilizador não autenticado. Redirecionando para o login..."
+                );
+
+                window.location.href = 'login-cliente.html';
+
+            }
+
+        });
+
+    </script>
+
+</body>
+</html>

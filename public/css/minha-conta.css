@@ -1,0 +1,818 @@
+/* =========================================================
+   OLOMI — MINHA CONTA
+   ========================================================= */
+
+:root {
+    --olomi-ink: #160d0b;
+    --olomi-wine: #351313;
+    --olomi-wine-light: #4a1c1d;
+
+    --olomi-ochre: #c56a18;
+    --olomi-gold: #d8a23b;
+
+    --olomi-cream: #f6e9d0;
+    --olomi-paper: #fffaf3;
+
+    --olomi-text: #2b211c;
+    --olomi-muted: #776b62;
+
+    --olomi-border: rgba(53, 19, 19, 0.14);
+
+    --olomi-success: #39704b;
+    --olomi-danger: #9b4747;
+
+    --olomi-radius: 20px;
+    --olomi-shadow:
+        0 18px 50px rgba(22, 13, 11, 0.08);
+}
+
+
+/* =========================================================
+   PÁGINA
+   ========================================================= */
+
+.account-page {
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at top left,
+            rgba(216, 162, 59, 0.09),
+            transparent 32%
+        ),
+        linear-gradient(
+            180deg,
+            var(--olomi-paper) 0%,
+            #f8efe1 100%
+        );
+
+    padding: 60px 20px 90px;
+
+    color: var(--olomi-text);
+}
+
+
+/* =========================================================
+   CONTAINER
+   ========================================================= */
+
+.account-container {
+    width: 100%;
+    max-width: 1180px;
+
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.account-hero {
+    max-width: 760px;
+
+    margin-bottom: 42px;
+}
+
+.account-eyebrow {
+    display: inline-flex;
+    align-items: center;
+
+    margin-bottom: 14px;
+
+    color: var(--olomi-ochre);
+
+    font-size: 0.78rem;
+    font-weight: 700;
+
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+.account-hero h1 {
+    margin: 0 0 16px;
+
+    color: var(--olomi-wine);
+
+    font-family: "Playfair Display", serif;
+
+    font-size: clamp(
+        2.5rem,
+        5vw,
+        4.4rem
+    );
+
+    line-height: 1.05;
+
+    font-weight: 600;
+}
+
+.account-hero p {
+    max-width: 680px;
+
+    margin: 0 0 22px;
+
+    color: var(--olomi-muted);
+
+    font-size: 1.05rem;
+    line-height: 1.8;
+}
+
+.account-back-link {
+    display: inline-flex;
+    align-items: center;
+
+    color: var(--olomi-wine);
+
+    font-size: 0.95rem;
+    font-weight: 700;
+
+    text-decoration: none;
+
+    transition:
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.account-back-link:hover {
+    color: var(--olomi-ochre);
+
+    transform: translateX(-3px);
+}
+
+
+/* =========================================================
+   GRID PRINCIPAL
+   ========================================================= */
+
+.account-layout {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        minmax(0, 1fr);
+
+    gap: 28px;
+
+    align-items: start;
+}
+
+
+/* =========================================================
+   CARDS
+   ========================================================= */
+
+.account-card {
+    min-width: 0;
+
+    background: rgba(255, 250, 243, 0.88);
+
+    border: 1px solid var(--olomi-border);
+
+    border-radius: var(--olomi-radius);
+
+    box-shadow: var(--olomi-shadow);
+
+    overflow: hidden;
+}
+
+.account-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 30px 30px 24px;
+
+    border-bottom: 1px solid var(--olomi-border);
+}
+
+.card-eyebrow {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: var(--olomi-ochre);
+
+    font-size: 0.72rem;
+    font-weight: 700;
+
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+}
+
+.account-card-header h2 {
+    margin: 0;
+
+    color: var(--olomi-wine);
+
+    font-family: "Playfair Display", serif;
+
+    font-size: 1.65rem;
+
+    font-weight: 600;
+}
+
+.card-icon {
+    flex: 0 0 auto;
+
+    width: 44px;
+    height: 44px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: var(--olomi-cream);
+
+    color: var(--olomi-wine);
+
+    font-size: 1.25rem;
+}
+
+
+/* =========================================================
+   CONTEÚDO
+   ========================================================= */
+
+.account-card-content {
+    padding: 30px;
+}
+
+
+/* =========================================================
+   FORMULÁRIO
+   ========================================================= */
+
+#user-details-form {
+    display: flex;
+    flex-direction: column;
+
+    gap: 28px;
+}
+
+.account-fieldset {
+    min-width: 0;
+
+    margin: 0;
+    padding: 0;
+
+    border: 0;
+}
+
+.account-fieldset legend {
+    margin-bottom: 16px;
+
+    color: var(--olomi-wine);
+
+    font-family: "Playfair Display", serif;
+
+    font-size: 1.15rem;
+    font-weight: 600;
+}
+
+.account-form-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 15px;
+}
+
+.account-field {
+    display: flex;
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+.account-field.full {
+    grid-column: 1 / -1;
+}
+
+.account-field label {
+    color: var(--olomi-text);
+
+    font-size: 0.78rem;
+    font-weight: 700;
+
+    letter-spacing: 0.02em;
+}
+
+.account-field input {
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 13px 14px;
+
+    border: 1px solid rgba(53, 19, 19, 0.2);
+
+    border-radius: 10px;
+
+    background: #fffdf9;
+
+    color: var(--olomi-text);
+
+    font-family: "DM Sans", sans-serif;
+    font-size: 0.95rem;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+.account-field input:hover {
+    border-color: rgba(197, 106, 24, 0.45);
+}
+
+.account-field input:focus {
+    border-color: var(--olomi-ochre);
+
+    background: #fff;
+
+    box-shadow:
+        0 0 0 4px rgba(197, 106, 24, 0.1);
+}
+
+.account-field input::placeholder {
+    color: #9a8f87;
+}
+
+
+/* =========================================================
+   BOTÃO
+   ========================================================= */
+
+.account-submit {
+    width: 100%;
+
+    min-height: 50px;
+
+    padding: 14px 20px;
+
+    border: 0;
+
+    border-radius: 10px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--olomi-wine),
+            var(--olomi-wine-light)
+        );
+
+    color: #fffaf3;
+
+    font-family: "DM Sans", sans-serif;
+
+    font-size: 0.95rem;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 10px 24px rgba(53, 19, 19, 0.18);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        opacity 0.2s ease;
+}
+
+.account-submit:hover:not(:disabled) {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 14px 30px rgba(53, 19, 19, 0.24);
+}
+
+.account-submit:disabled {
+    opacity: 0.6;
+
+    cursor: not-allowed;
+}
+
+
+/* =========================================================
+   PEDIDOS
+   ========================================================= */
+
+#order-history-list {
+    display: flex;
+    flex-direction: column;
+
+    gap: 16px;
+}
+
+
+/* =========================================================
+   ITEM DO PEDIDO
+   ========================================================= */
+
+.order-item {
+    padding: 20px;
+
+    border: 1px solid var(--olomi-border);
+
+    border-radius: 14px;
+
+    background: #fffdf9;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.order-item:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 12px 30px rgba(22, 13, 11, 0.07);
+}
+
+.order-item-header {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 12px;
+
+    padding-bottom: 15px;
+
+    border-bottom: 1px solid var(--olomi-border);
+}
+
+.order-id {
+    color: var(--olomi-wine);
+
+    font-family: "Playfair Display", serif;
+
+    font-size: 1.1rem;
+
+    font-weight: 600;
+}
+
+.order-status-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 28px;
+
+    padding: 5px 10px;
+
+    border-radius: 999px;
+
+    font-size: 0.72rem;
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+.order-status-badge.pending {
+    background: rgba(197, 106, 24, 0.14);
+
+    color: #9a510f;
+}
+
+.order-status-badge.paid {
+    background: rgba(57, 112, 75, 0.13);
+
+    color: var(--olomi-success);
+}
+
+.order-status-badge.shipped {
+    background: rgba(57, 112, 75, 0.13);
+
+    color: var(--olomi-success);
+}
+
+.order-status-badge.cancelled {
+    background: rgba(155, 71, 71, 0.13);
+
+    color: var(--olomi-danger);
+}
+
+.order-status-badge.default {
+    background: rgba(119, 107, 98, 0.13);
+
+    color: var(--olomi-muted);
+}
+
+
+/* =========================================================
+   DETALHES DO PEDIDO
+   ========================================================= */
+
+.order-details {
+    padding: 17px 0 5px;
+}
+
+.order-details p {
+    margin: 0 0 7px;
+
+    color: var(--olomi-muted);
+
+    font-size: 0.88rem;
+}
+
+.order-details strong {
+    color: var(--olomi-text);
+}
+
+
+/* =========================================================
+   ITENS
+   ========================================================= */
+
+.order-items-list {
+    margin-top: 14px;
+
+    padding-top: 14px;
+
+    border-top: 1px solid rgba(53, 19, 19, 0.08);
+
+    color: var(--olomi-muted);
+
+    font-size: 0.85rem;
+}
+
+.order-items-list strong {
+    color: var(--olomi-text);
+}
+
+.order-items-list ul {
+    margin: 8px 0 0;
+
+    padding-left: 20px;
+}
+
+.order-items-list li {
+    margin-bottom: 5px;
+}
+
+
+/* =========================================================
+   BOTÃO DE PAGAMENTO
+   ========================================================= */
+
+.order-payment-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-top: 12px;
+
+    min-height: 42px;
+
+    padding: 0 16px;
+
+    border-radius: 9px;
+
+    background: var(--olomi-ochre);
+
+    color: #fff;
+
+    font-size: 0.85rem;
+    font-weight: 700;
+
+    text-decoration: none;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease;
+}
+
+.order-payment-link:hover {
+    background: #ad5910;
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   ESTADOS VAZIOS / ERROS
+   ========================================================= */
+
+.account-empty {
+    padding: 24px 8px;
+
+    text-align: center;
+
+    color: var(--olomi-muted);
+
+    line-height: 1.7;
+}
+
+.account-empty strong {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: var(--olomi-wine);
+
+    font-family: "Playfair Display", serif;
+
+    font-size: 1.15rem;
+}
+
+.account-error {
+    padding: 18px;
+
+    border: 1px solid rgba(155, 71, 71, 0.2);
+
+    border-radius: 12px;
+
+    background: rgba(155, 71, 71, 0.06);
+
+    color: var(--olomi-danger);
+
+    font-size: 0.9rem;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+.account-loading {
+    min-height: 120px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.spinner {
+    width: 34px;
+    height: 34px;
+
+    border: 3px solid rgba(53, 19, 19, 0.12);
+
+    border-top-color: var(--olomi-ochre);
+
+    border-radius: 50%;
+
+    animation: olomi-spin 0.8s linear infinite;
+}
+
+@keyframes olomi-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* =========================================================
+   AVISO
+   ========================================================= */
+
+.account-note {
+    display: flex;
+    align-items: flex-start;
+
+    gap: 15px;
+
+    max-width: 800px;
+
+    margin: 30px auto 0;
+
+    padding: 20px 22px;
+
+    border: 1px solid rgba(216, 162, 59, 0.3);
+
+    border-radius: 14px;
+
+    background: rgba(246, 233, 208, 0.55);
+}
+
+.account-note-icon {
+    flex: 0 0 auto;
+
+    width: 36px;
+    height: 36px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: var(--olomi-gold);
+
+    color: var(--olomi-wine);
+
+    font-weight: 700;
+}
+
+.account-note strong {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: var(--olomi-wine);
+
+    font-size: 0.9rem;
+}
+
+.account-note p {
+    margin: 0;
+
+    color: var(--olomi-muted);
+
+    font-size: 0.82rem;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    .account-page {
+        padding-top: 45px;
+    }
+
+    .account-layout {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    .account-page {
+        padding:
+            32px 15px 60px;
+    }
+
+    .account-hero {
+        margin-bottom: 30px;
+    }
+
+    .account-hero h1 {
+        font-size: 2.6rem;
+    }
+
+    .account-hero p {
+        font-size: 0.95rem;
+    }
+
+    .account-card-header {
+        padding:
+            23px 20px 20px;
+    }
+
+    .account-card-content {
+        padding: 22px 20px;
+    }
+
+    .account-card-header h2 {
+        font-size: 1.45rem;
+    }
+
+    .account-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .account-field.full {
+        grid-column: auto;
+    }
+
+    .order-item {
+        padding: 16px;
+    }
+
+    .order-item-header {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .order-status-badge {
+        align-self: flex-start;
+    }
+
+    .account-note {
+        padding: 17px;
+    }
+
+}
