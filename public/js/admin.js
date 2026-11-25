@@ -1153,23 +1153,36 @@ async function refreshDashboard() {
 
 async function initializeAdmin(user) {
 
+    console.log('[ADMIN] 1. initializeAdmin iniciado');
+    console.log('[ADMIN] Usuário:', user);
+
     const hasAccess =
         await checkAdminAccess(user);
 
+    console.log('[ADMIN] 2. checkAdminAccess terminou:', hasAccess);
 
     if (!hasAccess) {
+        console.log('[ADMIN] Acesso negado.');
         return;
     }
 
+    console.log('[ADMIN] 3. Usuário autorizado.');
 
     populateAdminUser(user);
 
+    console.log('[ADMIN] 4. populateAdminUser concluído.');
+
     setupNavigation();
+
+    console.log('[ADMIN] 5. setupNavigation concluído.');
 
     setupSidebar();
 
+    console.log('[ADMIN] 6. setupSidebar concluído.');
+
     setupLogout();
 
+    console.log('[ADMIN] 7. setupLogout concluído.');
 
     if (refreshDashboardEl) {
 
@@ -1180,38 +1193,36 @@ async function initializeAdmin(user) {
 
     }
 
+    console.log('[ADMIN] 8. Iniciando loadDashboard...');
 
     try {
 
         await loadDashboard();
 
+        console.log('[ADMIN] 9. loadDashboard concluído.');
 
         if (loadingEl) {
             loadingEl.hidden = true;
         }
-
 
         if (appEl) {
             appEl.hidden = false;
         }
 
+        console.log('[ADMIN] 10. Painel exibido com sucesso.');
+
     } catch (error) {
 
         console.error(
-            'Erro ao carregar painel administrativo:',
+            '[ADMIN] ERRO ao carregar painel:',
             error
         );
-
 
         if (loadingEl) {
             loadingEl.hidden = true;
         }
 
-
-        if (
-            typeof Swal !==
-            'undefined'
-        ) {
+        if (typeof Swal !== 'undefined') {
 
             Swal.fire({
                 icon: 'error',
@@ -1222,13 +1233,6 @@ async function initializeAdmin(user) {
 
         }
 
-
-        /*
-         * Mesmo que o dashboard falhe,
-         * mantemos a interface disponível
-         * para facilitar o diagnóstico.
-         */
-
         if (appEl) {
             appEl.hidden = false;
         }
@@ -1236,6 +1240,7 @@ async function initializeAdmin(user) {
     }
 
 }
+
 
 
 onAuthStateChanged(
