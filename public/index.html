@@ -1,50 +1,541 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Olomi - Catálogo</title>
-  
-  <link rel="stylesheet" href="./css/style.css?v=1.0" />
-  
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="description"
+    content="Olomi — artigos africanos e religiosos escolhidos com respeito às tradições e à sua caminhada."
+  >
+
+  <meta name="theme-color" content="#160D0B">
+
+  <title>Olomi | Artigos africanos e religiosos</title>
+
+  <!-- Tipografia da marca -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@700&family=Rubik:wght@500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
-  <!-- CORREÇÃO: Adiciona a biblioteca SweetAlert2 -->
-  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700&family=Manrope:wght@500;600;700&display=swap"
+    rel="stylesheet"
+  >
 
-
-  <script type="module" src="js/catalogo.js?v=4.0" defer></script>
-  <script type="module" src="js/main.js?v=4.0" defer></script>
-
+  <!-- Estilos globais -->
+  <link rel="stylesheet" href="css/style.css?v=8.0">
 </head>
+
 <body>
-  <main class="site-main">
-    <div class="container">
-      <section class="filters">
-        <input id="search" placeholder="Procurar por nome do produto..." />
-          <select id="category" title="Filtrar por categoria" aria-label="Filtrar por categoria">
-          <option value="">Todas as categorias</option>
-        </select>
-      </section>
-      <section id="products" class="products-grid">
-        <!-- Produtos carregados aqui -->
-      </section>
-    </div>
+
+  <!--
+    O cabeçalho e o rodapé são inseridos pelo main.js.
+    Não coloque outro header/footer aqui.
+  -->
+
+  <main class="home-page">
+
+    <!-- =========================================================
+         HERO
+    ========================================================== -->
+    <section class="hero-section" aria-labelledby="hero-title">
+
+      <div class="hero-background" aria-hidden="true">
+        <div class="hero-orb hero-orb-one"></div>
+        <div class="hero-orb hero-orb-two"></div>
+        <div class="hero-pattern"></div>
+      </div>
+
+      <div class="container hero-container">
+
+        <div class="hero-content">
+
+          <span class="eyebrow">
+            Axé, ancestralidade e cuidado
+          </span>
+
+          <h1 id="hero-title">
+            Objetos que carregam
+            <span>histórias, fé e tradição.</span>
+          </h1>
+
+          <p class="hero-text">
+            Na Olomi, cada produto é escolhido para acompanhar
+            sua caminhada com respeito às tradições afro-brasileiras.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#catalogo" class="btn btn-primary">
+              Conhecer produtos
+            </a>
+
+            <a href="#sobre" class="btn btn-secondary">
+              Conhecer a Olomi
+            </a>
+          </div>
+
+          <div class="hero-signature" aria-hidden="true">
+            <span></span>
+            <strong>O futuro é ancestral.</strong>
+            <span></span>
+          </div>
+
+        </div>
+
+        <div class="hero-visual" aria-hidden="true">
+
+          <div class="hero-frame">
+
+            <div class="hero-frame-inner">
+
+              <div class="hero-symbol">
+                <span>O</span>
+              </div>
+
+              <div class="hero-visual-copy">
+                <small>OLOMI</small>
+                <strong>Axé que fortalece<br>seus rituais.</strong>
+              </div>
+
+            </div>
+
+          </div>
+
+          <div class="hero-floating-card hero-card-top">
+            <span class="floating-icon">✦</span>
+            <div>
+              <strong>Escolhidos com cuidado</strong>
+              <small>Respeito às tradições</small>
+            </div>
+          </div>
+
+          <div class="hero-floating-card hero-card-bottom">
+            <span class="floating-icon">◌</span>
+            <div>
+              <strong>Para sua caminhada</strong>
+              <small>Produtos com propósito</small>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- =========================================================
+         CATEGORIAS
+    ========================================================== -->
+    <section class="category-section" aria-labelledby="category-title">
+
+      <div class="container">
+
+        <div class="section-heading section-heading-inline">
+
+          <div>
+            <span class="eyebrow">Encontre o que procura</span>
+
+            <h2 id="category-title">
+              Caminhos para cada propósito
+            </h2>
+          </div>
+
+          <p>
+            Explore nossos produtos por categoria e encontre
+            aquilo que acompanha sua prática.
+          </p>
+
+        </div>
+
+        <div class="category-grid">
+
+          <a href="#catalogo" class="category-card" data-category="Guias e colares">
+            <span class="category-number">01</span>
+            <div>
+              <h3>Guias e colares</h3>
+              <p>Peças para sua caminhada</p>
+            </div>
+            <span class="category-arrow">→</span>
+          </a>
+
+          <a href="#catalogo" class="category-card" data-category="Velas">
+            <span class="category-number">02</span>
+            <div>
+              <h3>Velas</h3>
+              <p>Luz para seus momentos</p>
+            </div>
+            <span class="category-arrow">→</span>
+          </a>
+
+          <a href="#catalogo" class="category-card" data-category="Ervas">
+            <span class="category-number">03</span>
+            <div>
+              <h3>Ervas</h3>
+              <p>Saberes da natureza</p>
+            </div>
+            <span class="category-arrow">→</span>
+          </a>
+
+          <a href="#catalogo" class="category-card" data-category="Defumações">
+            <span class="category-number">04</span>
+            <div>
+              <h3>Defumações</h3>
+              <p>Aromas e tradição</p>
+            </div>
+            <span class="category-arrow">→</span>
+          </a>
+
+          <a href="#catalogo" class="category-card" data-category="Banhos">
+            <span class="category-number">05</span>
+            <div>
+              <h3>Banhos</h3>
+              <p>Cuidado e preparação</p>
+            </div>
+            <span class="category-arrow">→</span>
+          </a>
+
+          <a href="#catalogo" class="category-card" data-category="Imagens">
+            <span class="category-number">06</span>
+            <div>
+              <h3>Imagens</h3>
+              <p>Representações e devoção</p>
+            </div>
+            <span class="category-arrow">→</span>
+          </a>
+
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- =========================================================
+         CATÁLOGO
+    ========================================================== -->
+    <section
+      id="catalogo"
+      class="catalog-section"
+      aria-labelledby="catalog-title"
+    >
+
+      <div class="container">
+
+        <div class="section-heading">
+
+          <div>
+            <span class="eyebrow">Nossa seleção</span>
+
+            <h2 id="catalog-title">
+              Produtos para sua caminhada
+            </h2>
+          </div>
+
+          <p>
+            Encontre artigos escolhidos para diferentes práticas,
+            momentos e necessidades.
+          </p>
+
+        </div>
+
+
+        <!-- Filtros -->
+        <div class="catalog-controls">
+
+          <div class="catalog-search">
+
+            <label for="search">
+              Buscar produtos
+            </label>
+
+            <div class="search-field">
+
+              <span aria-hidden="true">⌕</span>
+
+              <input
+                type="search"
+                id="search"
+                name="search"
+                placeholder="Digite o nome do produto..."
+                autocomplete="off"
+              >
+
+            </div>
+
+          </div>
+
+
+          <div class="catalog-filter">
+
+            <label for="category">
+              Categoria
+            </label>
+
+            <select id="category" name="category">
+              <option value="">Todas as categorias</option>
+            </select>
+
+          </div>
+
+        </div>
+
+
+        <!-- Produtos carregados pelo catalogo.js -->
+        <div
+          id="products"
+          class="products-grid"
+          aria-live="polite"
+        ></div>
+
+
+        <!-- Estado de carregamento -->
+        <div
+          id="products-loading"
+          class="catalog-state"
+          hidden
+        >
+          <div class="loading-spinner"></div>
+
+          <p>
+            Carregando produtos...
+          </p>
+        </div>
+
+
+        <!-- Estado vazio -->
+        <div
+          id="products-empty"
+          class="catalog-state"
+          hidden
+        >
+          <div class="state-icon">◌</div>
+
+          <h3>
+            Nenhum produto encontrado
+          </h3>
+
+          <p>
+            Tente alterar sua busca ou escolher outra categoria.
+          </p>
+        </div>
+
+
+        <!-- Botão criado/utilizado pelo catalogo.js -->
+        <div
+          id="load-more-container"
+          class="load-more-container"
+        ></div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================================================
+         MANIFESTO / SOBRE
+    ========================================================== -->
+    <section
+      id="sobre"
+      class="manifesto-section"
+      aria-labelledby="about-title"
+    >
+
+      <div class="container manifesto-container">
+
+        <div class="manifesto-decoration" aria-hidden="true">
+          <span>O</span>
+        </div>
+
+        <div class="manifesto-content">
+
+          <span class="eyebrow">
+            Sobre a Olomi
+          </span>
+
+          <h2 id="about-title">
+            Mais que produtos.
+            <span>Uma conexão com a ancestralidade.</span>
+          </h2>
+
+          <p>
+            A Olomi nasce do desejo de aproximar pessoas de produtos
+            que fazem parte de práticas, histórias e tradições
+            afro-brasileiras.
+          </p>
+
+          <p>
+            Cada escolha é feita com cuidado para que sua experiência
+            de compra seja acolhedora, respeitosa e próxima daquilo
+            que realmente importa: sua caminhada.
+          </p>
+
+          <a href="#catalogo" class="text-link">
+            Explorar a coleção
+            <span aria-hidden="true">→</span>
+          </a>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================================================
+         DIFERENCIAIS
+    ========================================================== -->
+    <section
+      class="benefits-section"
+      aria-labelledby="benefits-title"
+    >
+
+      <div class="container">
+
+        <div class="section-heading centered">
+
+          <span class="eyebrow">
+            Comprar na Olomi
+          </span>
+
+          <h2 id="benefits-title">
+            Cuidado em cada detalhe
+          </h2>
+
+        </div>
+
+
+        <div class="benefits-grid">
+
+          <article class="benefit-card">
+
+            <div class="benefit-icon">
+              ✦
+            </div>
+
+            <h3>
+              Escolhas cuidadosas
+            </h3>
+
+            <p>
+              Produtos selecionados pensando na qualidade
+              e no significado que carregam.
+            </p>
+
+          </article>
+
+
+          <article class="benefit-card">
+
+            <div class="benefit-icon">
+              ◌
+            </div>
+
+            <h3>
+              Respeito às tradições
+            </h3>
+
+            <p>
+              Nossa proposta valoriza a diversidade das
+              tradições e dos caminhos afro-brasileiros.
+            </p>
+
+          </article>
+
+
+          <article class="benefit-card">
+
+            <div class="benefit-icon">
+              ♡
+            </div>
+
+            <h3>
+              Atendimento próximo
+            </h3>
+
+            <p>
+              Estamos aqui para ajudar você a encontrar
+              o que procura com atenção e acolhimento.
+            </p>
+
+          </article>
+
+
+          <article class="benefit-card">
+
+            <div class="benefit-icon">
+              ✓
+            </div>
+
+            <h3>
+              Compra segura
+            </h3>
+
+            <p>
+              Uma experiência de compra pensada para ser
+              simples, clara e segura.
+            </p>
+
+          </article>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================================================
+         CTA FINAL
+    ========================================================== -->
+    <section class="final-cta-section">
+
+      <div class="container">
+
+        <div class="final-cta">
+
+          <div class="final-cta-content">
+
+            <span class="eyebrow">
+              Sua caminhada começa aqui
+            </span>
+
+            <h2>
+              Encontre algo que faça sentido para você.
+            </h2>
+
+            <p>
+              Explore a seleção da Olomi e descubra produtos
+              para acompanhar seus momentos de fé, cuidado e conexão.
+            </p>
+
+          </div>
+
+          <a href="#catalogo" class="btn btn-light">
+            Ver produtos
+          </a>
+
+        </div>
+
+      </div>
+
+    </section>
+
   </main>
 
-  <footer class="site-footer">
-    <div class="container">
-      <p class="footer-title">Olomi – Artigos Africanos e Religiosos</p>
-      <div class="footer-links">
-        <a href="https://wa.me/5519987346984">WhatsApp</a>
-        <span>|</span>
-        <a href="https://www.instagram.com/olomi_rj/" target="_blank" rel="noopener noreferrer">Instagram</a>
-      </div>
-      <p class="footer-tagline">Axé que fortalece os seus rituais ✨</p>
-    </div>
-  </footer>
+
+  <!--
+    Scripts:
+    main.js = cabeçalho, rodapé, autenticação, carrinho e tema
+    catalogo.js = produtos, busca, categorias e paginação
+  -->
+  <script
+    type="module"
+    src="js/main.js?v=8.0"
+  ></script>
+
+  <script
+    type="module"
+    src="js/catalogo.js?v=8.0"
+  ></script>
 
 </body>
 </html>
