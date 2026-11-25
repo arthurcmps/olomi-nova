@@ -1,341 +1,1088 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Painel Admin - Olomi</title>
+    <meta charset="UTF-8" />
 
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <meta http-equiv="Pragma" content="no-cache" />
-  <meta http-equiv="Expires" content="0" />
-  
-  <link rel="stylesheet" href="./css/style.css?v=1.0" />
-  <link rel="stylesheet" href="./css/admin.css?v=1.0" />
-  
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@700&family=Rubik:wght@500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    />
 
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
-  <!-- Importação do Chart.js para os gráficos do Dashboard -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
-  
-<<<<<<< HEAD
-  <script type="module" src="js/main.js?v=1.0" defer></script>
-  <script type="module" src="js/admin.js?v=1.0" defer></script>
-=======
-  <script type="module" src="js/main.js?v=3.1" defer></script>
-  <script type="module" src="js/admin-v3.js" defer></script>
->>>>>>> secundaria
+    <meta
+        name="description"
+        content="Painel administrativo da Olomi."
+    />
+
+    <title>Painel Administrativo | Olomi</title>
+
+    <!-- Fontes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- CSS -->
+    <link
+        rel="stylesheet"
+        href="./css/admin.css?v=1.0"
+    >
+
+    <!-- SweetAlert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- JavaScript -->
+    <script
+        type="module"
+        src="./js/admin.js"
+        defer
+    ></script>
 </head>
-<body>
-  <main class="site-main">
-    <div class="container">
-      
-      <!-- DASHBOARD FINANCEIRO E ESTOQUE -->
-      <section class="admin-section dashboard-section">
-        <h2 class="admin-section-title">Visão Geral do Negócio</h2>
-        
-        <div class="dash-cards-grid">
-            <div class="dash-card">
-                <h3>Faturamento Total</h3>
-                <p id="dash-total" class="dash-value">Carregando...</p>
-            </div>
-            <div class="dash-card">
-                <h3>Faturamento (Este Mês)</h3>
-                <p id="dash-mes" class="dash-value">Carregando...</p>
-            </div>
-            <div class="dash-card">
-                <h3>Ticket Médio</h3>
-                <p id="dash-ticket" class="dash-value">Carregando...</p>
-            </div>
-        </div>
 
-        <div class="dash-main-grid">
-            <div class="dash-chart-wrapper">
-                <h3>Evolução de Vendas (Últimos 6 meses)</h3>
-                <canvas id="salesChart"></canvas>
-            </div>
-            
-            <div class="dash-side-panels">
-                <div class="dash-panel alert-panel">
-                    <h3>⚠️ Alerta de Estoque Baixo</h3>
-                    <ul id="low-stock-list" class="dash-list"></ul>
+<body class="admin-page">
+
+    <!-- =====================================================
+         LOADING
+         ===================================================== -->
+
+    <div
+        id="admin-loading"
+        class="admin-loading"
+        aria-live="polite"
+    >
+        <div class="admin-loading-card">
+
+            <div class="admin-spinner"></div>
+
+            <p>
+                Verificando acesso administrativo...
+            </p>
+
+        </div>
+    </div>
+
+
+    <!-- =====================================================
+         APP
+         ===================================================== -->
+
+    <div
+        id="admin-app"
+        class="admin-app"
+        hidden
+    >
+
+        <!-- =================================================
+             SIDEBAR
+             ================================================= -->
+
+        <aside
+            id="admin-sidebar"
+            class="admin-sidebar"
+        >
+
+            <div class="sidebar-brand">
+
+                <a
+                    href="index.html"
+                    class="sidebar-logo"
+                >
+                    <img
+                        src="./assets/img/logo.jpg"
+                        alt="Olomi"
+                    >
+                </a>
+
+                <div class="sidebar-brand-text">
+
+                    <span>
+                        OLOMI
+                    </span>
+
+                    <small>
+                        Painel administrativo
+                    </small>
+
                 </div>
-                <div class="dash-panel">
-                    <h3>🏆 Top 5 Produtos</h3>
-                    <ul id="top-products-list" class="dash-list"></ul>
+
+            </div>
+
+
+            <!-- Navegação -->
+
+            <nav
+                class="admin-nav"
+                aria-label="Navegação administrativa"
+            >
+
+                <button
+                    type="button"
+                    class="admin-nav-item is-active"
+                    data-section="dashboard"
+                >
+                    <span class="nav-icon">⌂</span>
+
+                    <span>
+                        Dashboard
+                    </span>
+                </button>
+
+
+                <button
+                    type="button"
+                    class="admin-nav-item"
+                    data-section="products"
+                >
+                    <span class="nav-icon">◇</span>
+
+                    <span>
+                        Produtos
+                    </span>
+                </button>
+
+
+                <button
+                    type="button"
+                    class="admin-nav-item"
+                    data-section="orders"
+                >
+                    <span class="nav-icon">▣</span>
+
+                    <span>
+                        Pedidos
+                    </span>
+                </button>
+
+
+                <button
+                    type="button"
+                    class="admin-nav-item"
+                    data-section="customers"
+                >
+                    <span class="nav-icon">♙</span>
+
+                    <span>
+                        Clientes
+                    </span>
+                </button>
+
+
+                <button
+                    type="button"
+                    class="admin-nav-item"
+                    data-section="coupons"
+                >
+                    <span class="nav-icon">%</span>
+
+                    <span>
+                        Cupons
+                    </span>
+                </button>
+
+
+                <button
+                    type="button"
+                    class="admin-nav-item"
+                    data-section="settings"
+                >
+                    <span class="nav-icon">⚙</span>
+
+                    <span>
+                        Configurações
+                    </span>
+                </button>
+
+            </nav>
+
+
+            <!-- Rodapé sidebar -->
+
+            <div class="sidebar-footer">
+
+                <a
+                    href="index.html"
+                    class="back-store-link"
+                >
+                    <span>←</span>
+                    Voltar para a loja
+                </a>
+
+
+                <button
+                    type="button"
+                    id="admin-logout"
+                    class="logout-button"
+                >
+                    <span>↪</span>
+                    Sair
+                </button>
+
+            </div>
+
+        </aside>
+
+
+        <!-- =================================================
+             CONTEÚDO PRINCIPAL
+             ================================================= -->
+
+        <main class="admin-main">
+
+            <!-- Header -->
+
+            <header class="admin-header">
+
+                <div class="admin-header-left">
+
+                    <button
+                        type="button"
+                        id="sidebar-toggle"
+                        class="sidebar-toggle"
+                        aria-label="Abrir menu"
+                    >
+                        ☰
+                    </button>
+
+
+                    <div>
+
+                        <span class="header-kicker">
+                            ADMINISTRAÇÃO
+                        </span>
+
+                        <h1 id="page-title">
+                            Dashboard
+                        </h1>
+
+                    </div>
+
                 </div>
-                <div class="dash-panel">
-                    <h3>⭐ Top Clientes</h3>
-                    <ul id="top-customers-list" class="dash-list"></ul>
+
+
+                <div class="admin-header-right">
+
+                    <div class="admin-user">
+
+                        <div class="admin-user-avatar">
+                            <span id="admin-user-initial">
+                                A
+                            </span>
+                        </div>
+
+                        <div class="admin-user-info">
+
+                            <strong id="admin-user-name">
+                                Administrador
+                            </strong>
+
+                            <span id="admin-user-email">
+                                —
+                            </span>
+
+                        </div>
+
+                    </div>
+
                 </div>
-            </div>
-        </div>
-      </section>
 
-      <section class="admin-section">
-        <h2 class="admin-section-title">Aparência da Loja (Tema)</h2>
-        <style>
-          .logo-edit-container:hover .logo-overlay { opacity: 1 !important; }
-        </style>
-        
-        <div class="theme-settings-wrapper">
-          
-          <div class="logo-section">
-            <label>Logotipo da Loja</label>
-            <div class="logo-edit-container" id="logo-edit-container" style="position: relative; width: 120px; height: 120px; border-radius: 50%; border: 3px solid var(--cor-laranja); overflow: hidden; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
-              <img id="current-logo-img" src="./assets/img/logo.jpg" alt="Logo Atual" style="width: 100%; height: 100%; object-fit: cover;" />
-              <div class="logo-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
-              </div>
-            </div>
-            <input type="file" id="logoUpload" accept="image/png, image/jpeg, image/webp" style="display: none;" />
-            <span class="logo-hint">Clique na imagem para alterar</span>
-          </div>
+            </header>
 
-          <form id="theme-form" class="admin-form theme-form-container">
-            <div class="form-grid">
-              <div class="input-group">
-                <label for="themeColor">Cor Principal dos Botões</label>
-                <input type="color" id="themeColor" name="themeColor" value="#f39c12" style="height: 50px; cursor: pointer; padding: 0;" />
-              </div>
-              
-              <div style="display: flex; flex-direction: column; gap: 10px;">
-                <div class="input-group">
-                  <label for="topBarText">Mensagem da Faixa no Topo</label>
-                  <input type="text" id="topBarText" name="topBarText" placeholder="Ex: Frete Grátis acima de R$ 200!" />
+
+            <!-- =================================================
+                 DASHBOARD
+                 ================================================= -->
+
+            <section
+                id="section-dashboard"
+                class="admin-section is-active"
+                data-section-content="dashboard"
+            >
+
+                <div class="section-intro">
+
+                    <div>
+
+                        <span class="section-kicker">
+                            VISÃO GERAL
+                        </span>
+
+                        <h2>
+                            Bem-vindo ao painel.
+                        </h2>
+
+                        <p>
+                            Acompanhe o movimento da Olomi em um só lugar.
+                        </p>
+
+                    </div>
+
+                    <button
+                        type="button"
+                        id="refresh-dashboard"
+                        class="secondary-button"
+                    >
+                        ↻ Atualizar dados
+                    </button>
+
                 </div>
-                <div class="input-group">
-                  <label for="topBarAnimation">Animação da Faixa</label>
-                  <select id="topBarAnimation" name="topBarAnimation" style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px;">
-                    <option value="static">Estática (Parada)</option>
-                    <option value="blink">Piscar (Atenção)</option>
-                    <option value="scroll">Rolar (Letreiro Marquee)</option>
-                  </select>
+
+
+                <!-- Cards -->
+
+                <div class="stats-grid">
+
+                    <article class="stat-card">
+
+                        <div class="stat-icon">
+                            R$
+                        </div>
+
+                        <div class="stat-content">
+
+                            <span>
+                                Faturamento
+                            </span>
+
+                            <strong id="stat-revenue">
+                                R$ 0,00
+                            </strong>
+
+                            <small>
+                                Pedidos pagos
+                            </small>
+
+                        </div>
+
+                    </article>
+
+
+                    <article class="stat-card">
+
+                        <div class="stat-icon">
+                            #
+                        </div>
+
+                        <div class="stat-content">
+
+                            <span>
+                                Pedidos
+                            </span>
+
+                            <strong id="stat-orders">
+                                0
+                            </strong>
+
+                            <small>
+                                Total registrado
+                            </small>
+
+                        </div>
+
+                    </article>
+
+
+                    <article class="stat-card">
+
+                        <div class="stat-icon">
+                            ◇
+                        </div>
+
+                        <div class="stat-content">
+
+                            <span>
+                                Produtos
+                            </span>
+
+                            <strong id="stat-products">
+                                0
+                            </strong>
+
+                            <small>
+                                Cadastrados
+                            </small>
+
+                        </div>
+
+                    </article>
+
+
+                    <article class="stat-card">
+
+                        <div class="stat-icon">
+                            ♙
+                        </div>
+
+                        <div class="stat-content">
+
+                            <span>
+                                Clientes
+                            </span>
+
+                            <strong id="stat-customers">
+                                0
+                            </strong>
+
+                            <small>
+                                Contas cadastradas
+                            </small>
+
+                        </div>
+
+                    </article>
+
                 </div>
-              </div>
-            </div>
-            <button type="submit" class="submit-btn" style="margin-top: 1rem;">Salvar Tema da Loja</button>
-          </form>
-        </div>
-      </section>
 
-      <section class="admin-section">
-        <h2 class="admin-section-title">Adicionar / Editar Produto</h2>
-        <form id="product-form" class="admin-form">
-          
-          <div class="input-group">
-            <label>Nome do Produto</label>
-            <input name="name" type="text" placeholder="Ex: Bata Africana Branca" required />
-          </div>
 
-          <div class="input-group">
-            <label>Descrição do Produto</label>
-            <textarea name="description" placeholder="Detalhes, tecido, significados..." rows="4"></textarea>
-          </div>
+                <!-- =================================================
+                     DASHBOARD GRID
+                     ================================================= -->
 
-          <div class="form-grid">
-            <div class="input-group">
-              <label>Preço (R$)</label>
-              <input name="price" type="text" placeholder="Ex: 89,90" required />
-            </div>
-            <div class="input-group">
-              <label>Preço Promocional (Opcional)</label>
-              <input name="promoPrice" type="number" step="0.01" placeholder="Ex: 69.90" />
-            </div>
-            <div class="input-group">
-              <label>Quantidade em Estoque</label>
-              <input name="stock" type="number" placeholder="Ex: 15" required />
-            </div>
-          </div>
+                <div class="dashboard-grid">
 
-          <div class="input-group">
-            <label>Categoria</label>
-            <input name="category" type="text" placeholder="Ex: Roupas, Acessórios, Imagens..." required />
-          </div>
+                    <!-- Pedidos recentes -->
 
-          <fieldset style="border: 1px solid #ddd; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
-            <legend style="font-weight: bold; padding: 0 0.5rem; color: var(--cor-laranja);">Dados para Cálculo de Frete</legend>
-            <div class="form-grid">
-              <div class="input-group">
-                <label>Peso (kg)</label>
-                <input name="weight" type="number" step="0.01" placeholder="Ex: 0.5" required />
-              </div>
-              <div class="input-group">
-                <label>Comprimento (cm)</label>
-                <input name="length" type="number" placeholder="Ex: 20" required />
-              </div>
-              <div class="input-group">
-                <label>Largura (cm)</label>
-                <input name="width" type="number" placeholder="Ex: 15" required />
-              </div>
-              <div class="input-group">
-                <label>Altura (cm)</label>
-                <input name="height" type="number" placeholder="Ex: 10" required />
-              </div>
-            </div>
-          </fieldset>
+                    <section class="admin-card">
 
-          <label class="file-upload-label">
-            <span>Escolher imagens do produto</span>
-            <input id="image-upload" name="images" type="file" accept="image/*" multiple />
-          </label>
-          <div id="image-preview-container" class="image-preview-container"></div>
-          
-          <button type="submit" class="submit-btn">Salvar Produto</button>
-        </form>
-      </section>
+                        <div class="card-header">
 
-      <section class="admin-section">
-        <h2 class="admin-section-title">Gerenciador de Cupons</h2>
-        
-        <form id="coupon-form" class="admin-form" style="margin-bottom: 2rem;">
-          <div class="form-grid">
-            <div class="input-group">
-              <label>Código do Cupom</label>
-              <input name="codigo" type="text" placeholder="Ex: AXE10" required style="text-transform: uppercase;" />
-            </div>
-            <div class="input-group">
-              <label for="tipoDesconto">Tipo de Desconto</label>
-              <select id="tipoDesconto" name="tipo" required style="width: 100%; padding: 0.8rem 1rem; border: 1px solid #ccc; border-radius: 5px;">
-                <option value="porcentagem">Porcentagem (%)</option>
-                <option value="fixo">Valor Fixo (R$)</option>
-              </select>
-            </div>
-            <div class="input-group">
-              <label>Valor do Desconto</label>
-              <input name="valor" type="number" step="0.01" placeholder="Ex: 10" required />
-            </div>
-          </div>
+                            <div>
 
-          <div class="form-grid">
-            <div class="input-group">
-              <label>Compra Mínima (R$)</label>
-              <input name="valorMinimo" type="number" step="0.01" placeholder="Ex: 100" required />
-            </div>
-            <div class="input-group">
-              <label>Limite de Usos Totais</label>
-              <input name="limiteUso" type="number" placeholder="Ex: 50" required />
-            </div>
-            <div class="input-group" style="justify-content: center; align-items: flex-start; padding-top: 1rem;">
-              <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 1rem; text-transform: none; color: #333;">
-                <input name="ativo" type="checkbox" checked style="width: 20px; height: 20px; cursor: pointer;" />
-                Cupom Ativo (Pronto para uso)
-              </label>
-            </div>
-          </div>
-          
-          <button type="submit" class="submit-btn">Criar / Atualizar Cupom</button>
-        </form>
+                                <span class="card-kicker">
+                                    MOVIMENTAÇÃO
+                                </span>
 
-        <h3 style="margin-bottom: 1rem; color: #666; font-size: 1.1rem;">Cupons Ativos na Loja</h3>
-        <div class="table-container">
-          <table id="coupons-table" class="admin-table">
-            <thead>
-              <tr>
-                <th>Código</th>
-                <th>Desconto</th>
-                <th>Mínimo</th>
-                <th>Usos</th>
-                <th>Status</th>
-                <th>Ações</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-        </div>
-      </section>
+                                <h3>
+                                    Pedidos recentes
+                                </h3>
 
-      <section class="admin-section">
-        <h2 class="admin-section-title">Produtos Cadastrados</h2>
-        <div class="table-container">
-          <table id="products-table" class="admin-table">
-            <thead>
-              <tr>
-                <th>Imagem</th>
-                <th>Nome</th>
-                <th>Preço</th>
-                <th>Estoque</th>
-                <th>Ações</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-        </div>
-      </section>
+                            </div>
 
-      <!-- SEÇÃO CRM - GESTÃO DE CLIENTES -->
-      <section class="admin-section">
-        <h2 class="admin-section-title">CRM - Gestão de Clientes</h2>
-        
-        <!-- NOVA BARRA DE BUSCA DO CRM -->
-        <div class="search-bar-container" style="margin-bottom: 1.5rem;">
-          <input type="text" id="search-crm-text" placeholder="Buscar por Nome, Email ou Telefone..." style="width: 100%; max-width: 400px; padding: 0.8rem 1rem; border: 1px solid #ccc; border-radius: 8px; font-size: 1rem;" />
-        </div>
+                            <button
+                                type="button"
+                                class="text-button"
+                                data-section-link="orders"
+                            >
+                                Ver todos
+                            </button>
 
-        <div class="table-container">
-          <table id="crm-table" class="admin-table">
-            <thead>
-              <tr>
-                <th>Cliente</th>
-                <th>Email / Telefone</th>
-                <th>Gasto Total (LTV)</th>
-                <th>Ticket Médio</th>
-                <th>Última Compra</th>
-                <th>Ações</th>
-              </tr>
-            </thead>
-            <tbody id="crm-table-body"></tbody>
-          </table>
-        </div>
-        <div id="crm-pagination" class="pagination-container"></div>
-      </section>
+                        </div>
 
-      <section class="admin-section">
-        <h2 class="admin-section-title">Pedidos Recebidos</h2>
-        
-        <div class="search-bar-container" style="display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; align-items: center;">
-          <input type="text" id="search-order-text" placeholder="Buscar por ID ou Nome do Cliente..." style="flex: 1; min-width: 250px; padding: 0.8rem 1rem; border: 1px solid #ccc; border-radius: 8px; font-size: 1rem; font-family: var(--fonte-corpo);" />
-          
-          <div style="display: flex; align-items: center; gap: 0.5rem; background: #fff; padding: 0.2rem 0.8rem; border: 1px solid #ccc; border-radius: 8px;">
-            <span style="font-size: 0.9rem; color: #555; font-weight: bold;">De:</span>
-            <input type="date" id="search-order-date-start" style="padding: 0.5rem; border: none; background: transparent; font-size: 1rem; font-family: var(--fonte-corpo); color: #555; cursor: pointer;" title="Data Inicial" />
-            <span style="font-size: 0.9rem; color: #555; font-weight: bold;">Até:</span>
-            <input type="date" id="search-order-date-end" style="padding: 0.5rem; border: none; background: transparent; font-size: 1rem; font-family: var(--fonte-corpo); color: #555; cursor: pointer;" title="Data Final" />
-          </div>
-          
-          <select id="search-order-status" title="Filtrar por status" aria-label="Filtrar por status" style="padding: 0.8rem 1rem; border: 1px solid #ccc; border-radius: 8px; font-size: 1rem; font-family: var(--fonte-corpo); color: #555; cursor: pointer;">
-            <option value="">Todos os Status</option>
-            <option value="pending">Pendente</option>
-            <option value="paid">Pago</option>
-            <option value="shipped">Enviado</option>
-            <option value="cancelled">Cancelado</option>
-          </select>
 
-          <button id="btn-export-csv" class="action-btn" style="background-color: #2ecc71; color: white; padding: 0.8rem 1.5rem; font-weight: bold; border-radius: 8px; margin-right: 0;">📥 Exportar Relatório</button>
-        </div>
+                        <div
+                            id="recent-orders"
+                            class="recent-orders"
+                        >
+                            <div class="table-loading">
+                                Carregando pedidos...
+                            </div>
+                        </div>
 
-        <div class="table-container">
-          <table id="orders-table" class="admin-table">
-            <thead>
-              <tr>
-                <th>ID do Pedido</th>
-                <th>Cliente</th>
-                <th>Data</th>
-                <th>Total</th>
-                <th>Status</th>
-                <th>Ações</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-        </div>
-        <div id="orders-pagination" class="pagination-container"></div>
-      </section>
+                    </section>
+
+
+                    <!-- Resumo da loja -->
+
+                    <section class="admin-card">
+
+                        <div class="card-header">
+
+                            <div>
+
+                                <span class="card-kicker">
+                                    CATÁLOGO
+                                </span>
+
+                                <h3>
+                                    Resumo da loja
+                                </h3>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="summary-list">
+
+                            <div class="summary-row">
+
+                                <span>
+                                    Produtos ativos
+                                </span>
+
+                                <strong id="summary-active-products">
+                                    0
+                                </strong>
+
+                            </div>
+
+
+                            <div class="summary-row">
+
+                                <span>
+                                    Produtos inativos
+                                </span>
+
+                                <strong id="summary-inactive-products">
+                                    0
+                                </strong>
+
+                            </div>
+
+
+                            <div class="summary-row">
+
+                                <span>
+                                    Pedidos pendentes
+                                </span>
+
+                                <strong id="summary-pending-orders">
+                                    0
+                                </strong>
+
+                            </div>
+
+
+                            <div class="summary-row">
+
+                                <span>
+                                    Pedidos pagos
+                                </span>
+
+                                <strong id="summary-paid-orders">
+                                    0
+                                </strong>
+
+                            </div>
+
+
+                            <div class="summary-row">
+
+                                <span>
+                                    Pedidos enviados
+                                </span>
+
+                                <strong id="summary-shipped-orders">
+                                    0
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </section>
+
+                </div>
+
+
+                <!-- =================================================
+                     ACESSO RÁPIDO
+                     ================================================= -->
+
+                <section class="quick-actions">
+
+                    <div class="section-heading">
+
+                        <div>
+
+                            <span class="section-kicker">
+                                ATALHOS
+                            </span>
+
+                            <h2>
+                                Acesso rápido
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="quick-actions-grid">
+
+                        <button
+                            type="button"
+                            class="quick-action"
+                            data-section-link="products"
+                        >
+
+                            <span class="quick-action-icon">
+                                +
+                            </span>
+
+                            <span>
+
+                                <strong>
+                                    Novo produto
+                                </strong>
+
+                                <small>
+                                    Adicionar item ao catálogo
+                                </small>
+
+                            </span>
+
+                            <span class="quick-arrow">
+                                →
+                            </span>
+
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="quick-action"
+                            data-section-link="orders"
+                        >
+
+                            <span class="quick-action-icon">
+                                #
+                            </span>
+
+                            <span>
+
+                                <strong>
+                                    Pedidos
+                                </strong>
+
+                                <small>
+                                    Acompanhar vendas
+                                </small>
+
+                            </span>
+
+                            <span class="quick-arrow">
+                                →
+                            </span>
+
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="quick-action"
+                            data-section-link="customers"
+                        >
+
+                            <span class="quick-action-icon">
+                                ♙
+                            </span>
+
+                            <span>
+
+                                <strong>
+                                    Clientes
+                                </strong>
+
+                                <small>
+                                    Consultar compradores
+                                </small>
+
+                            </span>
+
+                            <span class="quick-arrow">
+                                →
+                            </span>
+
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="quick-action"
+                            data-section-link="coupons"
+                        >
+
+                            <span class="quick-action-icon">
+                                %
+                            </span>
+
+                            <span>
+
+                                <strong>
+                                    Cupons
+                                </strong>
+
+                                <small>
+                                    Gerenciar descontos
+                                </small>
+
+                            </span>
+
+                            <span class="quick-arrow">
+                                →
+                            </span>
+
+                        </button>
+
+                    </div>
+
+                </section>
+
+            </section>
+
+
+            <!-- =================================================
+                 PRODUTOS
+                 ================================================= -->
+
+            <section
+                id="section-products"
+                class="admin-section"
+                data-section-content="products"
+                hidden
+            >
+
+                <div class="section-intro">
+
+                    <div>
+
+                        <span class="section-kicker">
+                            CATÁLOGO
+                        </span>
+
+                        <h2>
+                            Produtos
+                        </h2>
+
+                        <p>
+                            Gerencie os produtos exibidos na loja.
+                        </p>
+
+                    </div>
+
+                    <button
+                        type="button"
+                        class="primary-button"
+                        id="new-product-button"
+                    >
+                        + Novo produto
+                    </button>
+
+                </div>
+
+
+                <div class="admin-card">
+
+                    <div
+                        id="products-content"
+                        class="section-placeholder"
+                    >
+
+                        <div class="placeholder-icon">
+                            ◇
+                        </div>
+
+                        <h3>
+                            Gestão de produtos
+                        </h3>
+
+                        <p>
+                            A estrutura está pronta. Vamos implementar
+                            o cadastro e a edição dos produtos na próxima etapa.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 PEDIDOS
+                 ================================================= -->
+
+            <section
+                id="section-orders"
+                class="admin-section"
+                data-section-content="orders"
+                hidden
+            >
+
+                <div class="section-intro">
+
+                    <div>
+
+                        <span class="section-kicker">
+                            VENDAS
+                        </span>
+
+                        <h2>
+                            Pedidos
+                        </h2>
+
+                        <p>
+                            Consulte e acompanhe os pedidos da loja.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="admin-card">
+
+                    <div
+                        id="orders-content"
+                        class="section-placeholder"
+                    >
+
+                        <div class="placeholder-icon">
+                            ▣
+                        </div>
+
+                        <h3>
+                            Gestão de pedidos
+                        </h3>
+
+                        <p>
+                            A estrutura está pronta. Vamos implementar
+                            a listagem e atualização dos pedidos na próxima etapa.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 CLIENTES
+                 ================================================= -->
+
+            <section
+                id="section-customers"
+                class="admin-section"
+                data-section-content="customers"
+                hidden
+            >
+
+                <div class="section-intro">
+
+                    <div>
+
+                        <span class="section-kicker">
+                            CRM
+                        </span>
+
+                        <h2>
+                            Clientes
+                        </h2>
+
+                        <p>
+                            Consulte os clientes cadastrados na Olomi.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="admin-card">
+
+                    <div
+                        id="customers-content"
+                        class="section-placeholder"
+                    >
+
+                        <div class="placeholder-icon">
+                            ♙
+                        </div>
+
+                        <h3>
+                            Gestão de clientes
+                        </h3>
+
+                        <p>
+                            A estrutura está pronta. Vamos implementar
+                            a listagem dos clientes na próxima etapa.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 CUPONS
+                 ================================================= -->
+
+            <section
+                id="section-coupons"
+                class="admin-section"
+                data-section-content="coupons"
+                hidden
+            >
+
+                <div class="section-intro">
+
+                    <div>
+
+                        <span class="section-kicker">
+                            DESCONTOS
+                        </span>
+
+                        <h2>
+                            Cupons
+                        </h2>
+
+                        <p>
+                            Gerencie os cupons promocionais da loja.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="admin-card">
+
+                    <div
+                        id="coupons-content"
+                        class="section-placeholder"
+                    >
+
+                        <div class="placeholder-icon">
+                            %
+                        </div>
+
+                        <h3>
+                            Gestão de cupons
+                        </h3>
+
+                        <p>
+                            A estrutura está pronta. Vamos implementar
+                            o cadastro e gerenciamento dos cupons na próxima etapa.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 CONFIGURAÇÕES
+                 ================================================= -->
+
+            <section
+                id="section-settings"
+                class="admin-section"
+                data-section-content="settings"
+                hidden
+            >
+
+                <div class="section-intro">
+
+                    <div>
+
+                        <span class="section-kicker">
+                            SISTEMA
+                        </span>
+
+                        <h2>
+                            Configurações
+                        </h2>
+
+                        <p>
+                            Configurações gerais da loja.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="admin-card">
+
+                    <div
+                        class="section-placeholder"
+                    >
+
+                        <div class="placeholder-icon">
+                            ⚙
+                        </div>
+
+                        <h3>
+                            Configurações da loja
+                        </h3>
+
+                        <p>
+                            Esta área será implementada posteriormente.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
 
     </div>
-  </main>
+
+
+    <!-- =====================================================
+         ACESSO NEGADO
+         ===================================================== -->
+
+    <div
+        id="access-denied"
+        class="access-denied"
+        hidden
+    >
+
+        <div class="access-denied-card">
+
+            <div class="access-denied-icon">
+                !
+            </div>
+
+            <span class="section-kicker">
+                ACESSO RESTRITO
+            </span>
+
+            <h1>
+                Área administrativa
+            </h1>
+
+            <p>
+                Você não possui permissão para acessar
+                o painel administrativo da Olomi.
+            </p>
+
+            <div class="access-denied-actions">
+
+                <a
+                    href="index.html"
+                    class="primary-button"
+                >
+                    Voltar para a loja
+                </a>
+
+                <button
+                    type="button"
+                    id="denied-logout"
+                    class="secondary-button"
+                >
+                    Sair da conta
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </body>
 </html>
