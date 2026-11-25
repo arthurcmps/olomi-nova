@@ -57,6 +57,57 @@ const deniedLogoutEl =
 const refreshDashboardEl =
     document.getElementById('refresh-dashboard');
 
+const productsLoadingEl =
+    document.getElementById('products-loading');
+
+const productsEmptyEl =
+    document.getElementById('products-empty');
+
+const productsTableWrapperEl =
+    document.getElementById('products-table-wrapper');
+
+const productsTableBodyEl =
+    document.getElementById('products-table-body');
+
+const productsSearchEl =
+    document.getElementById('products-search');
+
+const refreshProductsEl =
+    document.getElementById('refresh-products');
+
+const productEditorEl =
+    document.getElementById('product-editor');
+
+const productFormEl =
+    document.getElementById('product-form');
+
+const productIdEl =
+    document.getElementById('product-id');
+
+const productNameEl =
+    document.getElementById('product-name');
+
+const productCategoryEl =
+    document.getElementById('product-category');
+
+const productPriceEl =
+    document.getElementById('product-price');
+
+const productPromotionalPriceEl =
+    document.getElementById('product-promotional-price');
+
+const productStockEl =
+    document.getElementById('product-stock');
+
+const productWeightEl =
+    document.getElementById('product-weight');
+
+const productDescriptionEl =
+    document.getElementById('product-description');
+
+const cancelProductEditEl =
+    document.getElementById('cancel-product-edit');
+
 
 /* =========================================================
    UTILITÁRIOS
@@ -404,9 +455,8 @@ async function loadDashboard() {
 
 }
 
-
 /* =========================================================
-   PRODUTOS
+   PRODUTOS — ESTATÍSTICAS
    ========================================================= */
 
 function updateProductStats(products) {
@@ -481,6 +531,478 @@ function updateProductStats(products) {
             String(inactive);
 
     }
+
+}
+
+
+/* =========================================================
+   GESTÃO DE PRODUTOS
+   ========================================================= */
+
+let adminProducts = [];
+
+
+async function loadProducts() {
+
+    if (!productsTableBodyEl) {
+        return;
+    }
+
+
+    if (productsLoadingEl) {
+        productsLoadingEl.hidden = false;
+    }
+
+    if (productsEmptyEl) {
+        productsEmptyEl.hidden = true;
+    }
+
+    if (productsTableWrapperEl) {
+        productsTableWrapperEl.hidden = true;
+    }
+
+
+    try {
+
+        const snapshot =
+            await getDocs(
+                collection(
+                    db,
+                    'products'
+                )
+            );
+
+
+        adminProducts =
+            snapshot.docs.map(
+                document => ({
+                    id: document.id,
+                    ...document.data()
+                })
+            );
+
+
+        renderProductsTable(
+            adminProducts
+        );
+
+    } catch (error) {
+
+        console.error(
+            'Erro ao carregar produtos:',
+            error
+        );
+
+
+        if (productsLoadingEl) {
+            productsLoadingEl.hidden = true;
+        }
+
+
+        if (productsEmptyEl) {
+            productsEmptyEl.hidden = false;
+
+            productsEmptyEl.textContent =
+                'Não foi possível carregar os produtos.';
+        }
+
+    }
+
+}
+
+
+function renderProductsTable(products) {
+
+    if (!productsTableBodyEl) {
+        return;
+    }
+
+
+    if (productsLoadingEl) {
+        productsLoadingEl.hidden = true;
+    }
+
+
+    if (!products.length) {
+
+        productsTableBodyEl.innerHTML = '';
+
+        if (productsTableWrapperEl) {
+            productsTableWrapperEl.hidden = true;
+        }
+
+        if (productsEmptyEl) {
+            productsEmptyEl.hidden = false;
+            productsEmptyEl.textContent =
+                'Nenhum produto cadastrado.';
+        }
+
+        return;
+
+    }
+
+
+    if (productsEmptyEl) {
+        productsEmptyEl.hidden = true;
+    }
+
+
+    if (productsTableWrapperEl) {
+        productsTableWrapperEl.hidden = false;
+    }
+
+
+    productsTableBodyEl.innerHTML =
+        products.map(product => {
+
+            const price =
+                Number(
+                    product.price || 0
+                );
+
+
+            const promotionalPrice =
+                Number(
+                    product.promotionalPrice || 0
+                );
+
+
+            const hasPromotion =
+                promotionalPrice > 0 &&
+                promotionalPrice < price;
+
+
+            const stock =
+                Number(
+                    product.stock || 0
+                );
+
+
+            const isActive =
+                product.active !== false &&
+                product.status !== 'inactive';
+
+
+            const statusClass =
+                isActive
+                    ? 'status-active'
+                    : 'status-inactive';
+
+
+            const statusText =
+                isActive
+                    ? 'Ativo'
+                    : 'Inativo';
+
+
+            const imageUrl =
+                product.imageUrls &&
+                product.imageUrls.length
+                    ? product.imageUrls[0]
+                    : '';
+
+
+            const imageHtml =
+                imageUrl
+                    ? `
+                        <img
+                            src="${escapeHTML(imageUrl)}"
+                            alt="${escapeHTML(product.name || 'Produto')}"
+                            class="product-table-image"
+                            loading="lazy"
+                        >
+                    `
+                    : `
+                        <div class="product-table-image product-table-image-placeholder">
+                            ◇
+                        </div>
+                    `;
+
+
+            const priceHtml =
+                hasPromotion
+                    ? `
+                        <div class="product-price-cell">
+
+                            <span class="product-old-price">
+                                ${formatCurrency(price)}
+                            </span>
+
+                            <strong>
+                                ${formatCurrency(
+                                    promotionalPrice
+                                )}
+                            </strong>
+
+                        </div>
+                    `
+                    : `
+                        <strong>
+                            ${formatCurrency(price)}
+                        </strong>
+                    `;
+
+
+            return `
+
+                <tr>
+
+                    <td>
+
+                        <div class="product-table-name">
+
+                            ${imageHtml}
+
+                            <div>
+
+                                <strong>
+                                    ${escapeHTML(
+                                        product.name ||
+                                        'Produto sem nome'
+                                    )}
+                                </strong>
+
+                                <span>
+                                    ID: ${escapeHTML(
+                                        product.id
+                                    )}
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </td>
+
+
+                    <td>
+                        ${escapeHTML(
+                            product.category ||
+                            'Sem categoria'
+                        )}
+                    </td>
+
+
+                    <td>
+                        ${priceHtml}
+                    </td>
+
+
+                    <td>
+
+                        <span
+                            class="stock-value ${
+                                stock <= 0
+                                    ? 'stock-empty'
+                                    : ''
+                            }"
+                        >
+                            ${stock}
+                        </span>
+
+                    </td>
+
+
+                    <td>
+
+                        <span
+                            class="status-badge ${
+                                statusClass
+                            }"
+                        >
+                            ${statusText}
+                        </span>
+
+                    </td>
+
+
+                    <td>
+
+                        <div class="table-actions">
+                            
+                            <button
+                                type="button"
+                                class="table-action-button"
+                                data-product-action="edit"
+                                data-product-id="${escapeHTML(
+                                    product.id
+                                )}"
+                            >
+                                Editar
+                            </button>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        }).join('');
+
+}
+
+function openProductEditor(productId) {
+
+    const product = adminProducts.find(
+        item => item.id === productId
+    );
+
+    if (!product) {
+        console.error(
+            'Produto não encontrado:',
+            productId
+        );
+        return;
+    }
+
+    if (!productEditorEl) {
+        return;
+    }
+
+    productIdEl.value = product.id;
+
+    productNameEl.value =
+        product.name || '';
+
+    productCategoryEl.value =
+        product.category || '';
+
+    productPriceEl.value =
+        product.price ?? '';
+
+    productPromotionalPriceEl.value =
+        product.promotionalPrice ?? '';
+
+    productStockEl.value =
+        product.stock ?? 0;
+
+    productWeightEl.value =
+        product.weight ?? '';
+
+    productDescriptionEl.value =
+        product.description || '';
+
+    productEditorEl.hidden = false;
+
+    productEditorEl.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+    });
+}
+
+function filterAdminProducts() {
+
+    if (!productsSearchEl) {
+        return;
+    }
+
+
+    const term =
+        productsSearchEl.value
+            .trim()
+            .toLowerCase();
+
+
+    if (!term) {
+
+        renderProductsTable(
+            adminProducts
+        );
+
+        return;
+
+    }
+
+
+    const filtered =
+        adminProducts.filter(
+            product => {
+
+                const name =
+                    String(
+                        product.name || ''
+                    ).toLowerCase();
+
+
+                const category =
+                    String(
+                        product.category || ''
+                    ).toLowerCase();
+
+
+                return (
+                    name.includes(term) ||
+                    category.includes(term)
+                );
+
+            }
+        );
+
+
+    renderProductsTable(
+        filtered
+    );
+
+}
+
+if (productsSearchEl) {
+
+    productsSearchEl.addEventListener(
+        'input',
+        filterAdminProducts
+    );
+
+}
+
+if (productsTableBodyEl) {
+
+    productsTableBodyEl.addEventListener(
+        'click',
+        event => {
+
+            const button =
+                event.target.closest(
+                    '[data-product-action="edit"]'
+                );
+
+            if (!button) {
+                return;
+            }
+
+            const productId =
+                button.dataset.productId;
+
+            openProductEditor(productId);
+        }
+    );
+}
+
+if (cancelProductEditEl) {
+
+    cancelProductEditEl.addEventListener(
+        'click',
+        () => {
+
+            if (productEditorEl) {
+                productEditorEl.hidden = true;
+            }
+
+            if (productFormEl) {
+                productFormEl.reset();
+            }
+        }
+    );
+}
+
+
+if (refreshProductsEl) {
+
+    refreshProductsEl.addEventListener(
+        'click',
+        loadProducts
+    );
 
 }
 
@@ -1110,6 +1632,16 @@ async function refreshDashboard() {
     try {
 
         await loadDashboard();
+
+        await loadProducts();
+
+        if (loadingEl) {
+        loadingEl.hidden = true;
+    }
+
+    if (appEl) {
+        appEl.hidden = false;
+    }
 
 
     } catch (error) {

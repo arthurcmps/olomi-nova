@@ -767,29 +767,266 @@
                 </div>
 
 
-                <div class="admin-card">
+                <div class="admin-card products-card">
 
-                    <div
-                        id="products-content"
-                        class="section-placeholder"
-                    >
+    <div class="products-toolbar">
 
-                        <div class="placeholder-icon">
-                            ◇
-                        </div>
+        <div class="products-toolbar-info">
 
-                        <h3>
-                            Gestão de produtos
-                        </h3>
+            <span class="card-kicker">
+                CATÁLOGO
+            </span>
 
-                        <p>
-                            A estrutura está pronta. Vamos implementar
-                            o cadastro e a edição dos produtos na próxima etapa.
-                        </p>
+            <h3>
+                Produtos cadastrados
+            </h3>
 
-                    </div>
+            <p>
+                Visualize os produtos atualmente registrados na Olomi.
+            </p>
 
-                </div>
+        </div>
+
+        <div class="products-toolbar-actions">
+
+            <label
+                class="admin-search"
+                for="products-search"
+            >
+                <span aria-hidden="true">⌕</span>
+
+                <input
+                    type="search"
+                    id="products-search"
+                    placeholder="Buscar produto..."
+                    autocomplete="off"
+                >
+            </label>
+
+            <button
+                type="button"
+                class="secondary-button"
+                id="refresh-products"
+            >
+                ↻ Atualizar
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div
+        id="products-loading"
+        class="table-loading"
+        hidden
+    >
+        Carregando produtos...
+    </div>
+
+
+    <div
+        id="products-empty"
+        class="empty-table"
+        hidden
+    >
+        Nenhum produto cadastrado.
+    </div>
+
+
+    <div
+        id="products-table-wrapper"
+        class="admin-table-wrapper"
+        hidden
+    >
+
+        <table class="admin-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Produto
+                    </th>
+
+                    <th>
+                        Categoria
+                    </th>
+
+                    <th>
+                        Preço
+                    </th>
+
+                    <th>
+                        Estoque
+                    </th>
+
+                    <th>
+                        Status
+                    </th>
+
+                    <th>
+                        Ações
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="products-table-body">
+            </tbody>
+
+        </table>
+
+    </div>
+    <div
+    id="product-editor"
+    class="admin-card product-editor"
+    hidden
+>
+    <div class="product-editor-header">
+
+        <div>
+            <span class="card-kicker">
+                CATÁLOGO
+            </span>
+
+            <h3 id="product-editor-title">
+                Editar produto
+            </h3>
+
+            <p>
+                Atualize as informações do produto selecionado.
+            </p>
+        </div>
+
+        <button
+            type="button"
+            class="secondary-button"
+            id="cancel-product-edit"
+        >
+            Cancelar
+        </button>
+
+    </div>
+
+    <form id="product-form" class="product-form">
+
+        <input
+            type="hidden"
+            id="product-id"
+        >
+
+        <div class="product-form-grid">
+
+            <div class="form-field">
+                <label for="product-name">
+                    Nome do produto
+                </label>
+
+                <input
+                    type="text"
+                    id="product-name"
+                    required
+                >
+            </div>
+
+            <div class="form-field">
+                <label for="product-category">
+                    Categoria
+                </label>
+
+                <input
+                    type="text"
+                    id="product-category"
+                    required
+                >
+            </div>
+
+            <div class="form-field">
+                <label for="product-price">
+                    Preço
+                </label>
+
+                <input
+                    type="number"
+                    id="product-price"
+                    min="0"
+                    step="0.01"
+                    required
+                >
+            </div>
+
+            <div class="form-field">
+                <label for="product-promotional-price">
+                    Preço promocional
+                </label>
+
+                <input
+                    type="number"
+                    id="product-promotional-price"
+                    min="0"
+                    step="0.01"
+                >
+            </div>
+
+            <div class="form-field">
+                <label for="product-stock">
+                    Estoque
+                </label>
+
+                <input
+                    type="number"
+                    id="product-stock"
+                    min="0"
+                    step="1"
+                    required
+                >
+            </div>
+
+            <div class="form-field">
+                <label for="product-weight">
+                    Peso (g)
+                </label>
+
+                <input
+                    type="number"
+                    id="product-weight"
+                    min="0"
+                    step="1"
+                >
+            </div>
+
+            <div class="form-field form-field-full">
+                <label for="product-description">
+                    Descrição
+                </label>
+
+                <textarea
+                    id="product-description"
+                    rows="5"
+                ></textarea>
+            </div>
+
+        </div>
+
+        <div class="product-form-actions">
+
+            <button
+                type="submit"
+                class="primary-button"
+                id="save-product"
+            >
+                Salvar alterações
+            </button>
+
+        </div>
+
+    </form>
+</div>
+
+</div>
 
             </section>
 

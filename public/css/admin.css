@@ -1656,3 +1656,547 @@ a {
 [hidden] {
     display: none !important;
 }
+
+/* =========================================================
+   PRODUTOS — TABELA ADMINISTRATIVA
+   ========================================================= */
+
+.products-card {
+    padding: 0;
+    overflow: hidden;
+}
+
+
+.products-toolbar {
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: space-between;
+
+    gap: 24px;
+
+    padding: 24px;
+
+    border-bottom:
+        1px solid var(--admin-border);
+}
+
+
+.products-toolbar-info h3 {
+    margin: 4px 0 4px;
+
+    color: var(--admin-wine);
+
+    font-family: var(--font-display);
+
+    font-size: 25px;
+
+    font-weight: 400;
+}
+
+
+.products-toolbar-info p {
+    margin: 0;
+
+    color: var(--admin-muted);
+
+    font-size: 11px;
+
+    line-height: 1.5;
+}
+
+
+.products-toolbar-actions {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+}
+
+
+.admin-search {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    min-width: 240px;
+
+    height: 44px;
+
+    padding: 0 13px;
+
+    border:
+        1px solid var(--admin-border);
+
+    border-radius: 11px;
+
+    background: var(--admin-paper);
+
+    color: var(--admin-muted);
+}
+
+
+.admin-search span {
+    font-size: 17px;
+}
+
+
+.admin-search input {
+    width: 100%;
+
+    min-width: 0;
+
+    border: 0;
+
+    outline: 0;
+
+    background: transparent;
+
+    color: var(--admin-text);
+
+    font-family: var(--font-ui);
+
+    font-size: 11px;
+}
+
+
+.admin-search input::placeholder {
+    color: var(--admin-muted);
+}
+
+
+.admin-table-wrapper {
+    width: 100%;
+
+    overflow-x: auto;
+}
+
+
+.admin-table {
+    width: 100%;
+
+    min-width: 780px;
+
+    border-collapse: collapse;
+}
+
+
+.admin-table th {
+    padding: 13px 18px;
+
+    border-bottom:
+        1px solid var(--admin-border);
+
+    background:
+        rgba(53, 19, 19, 0.025);
+
+    color: var(--admin-muted);
+
+    font-family: var(--font-ui);
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.08em;
+
+    text-align: left;
+
+    text-transform: uppercase;
+
+    white-space: nowrap;
+}
+
+
+.admin-table td {
+    padding: 14px 18px;
+
+    border-bottom:
+        1px solid var(--admin-border);
+
+    color: var(--admin-text);
+
+    font-size: 11px;
+
+    vertical-align: middle;
+}
+
+
+.admin-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+
+.admin-table tbody tr {
+    transition:
+        background 0.15s ease;
+}
+
+
+.admin-table tbody tr:hover {
+    background:
+        rgba(197, 106, 24, 0.035);
+}
+
+
+.product-table-name {
+    display: flex;
+
+    align-items: center;
+
+    gap: 11px;
+
+    min-width: 220px;
+}
+
+
+.product-table-name > div:last-child {
+    display: flex;
+
+    flex-direction: column;
+
+    min-width: 0;
+}
+
+
+.product-table-name strong {
+    overflow: hidden;
+
+    color: var(--admin-wine);
+
+    font-family: var(--font-ui);
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+
+.product-table-name span {
+    margin-top: 3px;
+
+    color: var(--admin-muted);
+
+    font-size: 8px;
+
+    word-break: break-all;
+}
+
+
+.product-table-image {
+    width: 46px;
+
+    height: 46px;
+
+    flex: 0 0 46px;
+
+    border-radius: 10px;
+
+    object-fit: cover;
+
+    border:
+        1px solid var(--admin-border);
+
+    background:
+        rgba(197, 106, 24, 0.06);
+}
+
+
+.product-table-image-placeholder {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    color: var(--admin-accent);
+
+    font-size: 16px;
+}
+
+
+.product-price-cell {
+    display: flex;
+
+    flex-direction: column;
+    gap: 2px;
+}
+
+
+.product-price-cell strong {
+    color: var(--admin-wine);
+
+    font-family: var(--font-ui);
+
+    font-size: 11px;
+
+    font-weight: 800;
+}
+
+
+.product-old-price {
+    color: var(--admin-muted);
+
+    font-size: 9px;
+
+    text-decoration: line-through;
+}
+
+
+.stock-value {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-width: 32px;
+
+    min-height: 25px;
+
+    padding: 0 8px;
+
+    border-radius: 999px;
+
+    background:
+        rgba(56, 130, 83, 0.10);
+
+    color: #27623d;
+
+    font-family: var(--font-ui);
+
+    font-size: 10px;
+
+    font-weight: 800;
+}
+
+
+.stock-value.stock-empty {
+    background:
+        rgba(170, 55, 55, 0.10);
+
+    color: #8d2e2e;
+}
+
+
+.status-active {
+    background:
+        rgba(56, 130, 83, 0.12);
+
+    color: #27623d;
+}
+
+
+.status-inactive {
+    background:
+        rgba(116, 104, 95, 0.12);
+
+    color: var(--admin-muted);
+}
+
+
+.table-actions {
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+}
+
+
+.table-action-button {
+    min-height: 30px;
+
+    padding: 0 10px;
+
+    border:
+        1px solid var(--admin-border);
+
+    border-radius: 8px;
+
+    background: var(--admin-paper);
+
+    color: var(--admin-wine);
+
+    font-family: var(--font-ui);
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition:
+        background 0.15s ease,
+        border-color 0.15s ease;
+}
+
+
+.table-action-button:hover {
+    border-color:
+        rgba(197, 106, 24, 0.35);
+
+    background:
+        rgba(197, 106, 24, 0.07);
+}
+
+
+@media (max-width: 720px) {
+
+    .products-toolbar {
+        align-items: stretch;
+
+        flex-direction: column;
+    }
+
+
+    .products-toolbar-actions {
+        align-items: stretch;
+
+        flex-direction: column;
+    }
+
+
+    .admin-search {
+        width: 100%;
+
+        min-width: 0;
+    }
+
+
+    .products-toolbar-actions .secondary-button {
+        width: 100%;
+    }
+
+}
+
+/* =========================================================
+   EDITOR DE PRODUTO
+   ========================================================= */
+
+.product-editor {
+    margin-top: 24px;
+    padding: 0;
+    overflow: hidden;
+}
+
+.product-editor-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 24px;
+    border-bottom: 1px solid var(--admin-border);
+}
+
+.product-editor-header h3 {
+    margin: 4px 0 4px;
+    color: var(--admin-wine);
+    font-family: var(--font-display);
+    font-size: 25px;
+    font-weight: 400;
+}
+
+.product-editor-header p {
+    margin: 0;
+    color: var(--admin-muted);
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.product-form {
+    padding: 24px;
+}
+
+.product-form-grid {
+    display: grid;
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.form-field-full {
+    grid-column: 1 / -1;
+}
+
+.form-field label {
+    color: var(--admin-wine);
+    font-family: var(--font-ui);
+    font-size: 10px;
+    font-weight: 800;
+}
+
+.form-field input,
+.form-field textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 11px 12px;
+    border: 1px solid var(--admin-border);
+    border-radius: 9px;
+    outline: none;
+    background: var(--admin-paper);
+    color: var(--admin-text);
+    font-family: var(--font-ui);
+    font-size: 11px;
+    transition:
+        border-color 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+.form-field textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.form-field input:focus,
+.form-field textarea:focus {
+    border-color: rgba(197, 106, 24, 0.55);
+    box-shadow:
+        0 0 0 3px rgba(197, 106, 24, 0.08);
+}
+
+.product-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--admin-border);
+}
+
+@media (max-width: 720px) {
+
+    .product-editor-header {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .product-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-field-full {
+        grid-column: auto;
+    }
+
+    .product-form-actions {
+        justify-content: stretch;
+    }
+
+    .product-form-actions button {
+        width: 100%;
+    }
+}
