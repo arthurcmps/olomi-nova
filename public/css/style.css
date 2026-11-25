@@ -901,3 +901,708 @@ button { cursor: pointer; }
         grid-column: 1 / -1;
     }
 }
+
+
+/* =========================================================
+   OLOMI — COMPATIBILIDADE COM A HOME ATUAL
+   Complemento para as classes utilizadas em index.html
+========================================================= */
+
+/* HERO */
+.hero-section {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding: 90px 0;
+    min-height: 570px;
+    display: flex;
+    align-items: center;
+    color: var(--olomi-paper);
+    background: linear-gradient(120deg, #160d0b, #351313 55%, #713512);
+}
+
+.hero-background {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.hero-orb {
+    position: absolute;
+    width: 420px;
+    height: 420px;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: .2;
+    background: var(--olomi-gold);
+}
+
+.hero-orb-one {
+    top: -180px;
+    right: 5%;
+}
+
+.hero-orb-two {
+    bottom: -250px;
+    left: 15%;
+    background: var(--olomi-accent);
+}
+
+.hero-pattern {
+    position: absolute;
+    inset: 0;
+    opacity: .12;
+    background-image:
+        repeating-linear-gradient(
+            45deg,
+            transparent 0 28px,
+            rgba(226,166,43,.35) 29px 30px,
+            transparent 31px 58px
+        );
+}
+
+.hero-container {
+    display: grid;
+    grid-template-columns: 1.1fr .9fr;
+    align-items: center;
+    gap: 60px;
+}
+
+.hero-content {
+    max-width: 650px;
+}
+
+.hero-content h1 {
+    font: 400 clamp(42px, 5vw, 68px)/1.05 var(--font-display);
+    letter-spacing: -.025em;
+    color: var(--olomi-paper);
+}
+
+.hero-content h1 span {
+    display: block;
+    color: var(--olomi-gold);
+}
+
+.hero-text {
+    max-width: 560px;
+    margin: 24px 0 30px;
+    color: #eadccf;
+    font-size: 16px;
+    line-height: 1.8;
+}
+
+.hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.btn-secondary {
+    border: 1px solid rgba(255,255,255,.5);
+    color: var(--olomi-paper);
+    background: transparent;
+}
+
+.btn-secondary:hover {
+    background: rgba(255,255,255,.1);
+}
+
+.hero-signature {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: 290px;
+    margin-top: 38px;
+    color: var(--olomi-gold);
+    font: 600 12px var(--font-ui);
+    letter-spacing: .08em;
+}
+
+.hero-signature span {
+    height: 1px;
+    flex: 1;
+    background: var(--olomi-gold);
+    opacity: .6;
+}
+
+.hero-visual {
+    min-height: 380px;
+    position: relative;
+    display: grid;
+    place-items: center;
+}
+
+.hero-frame {
+    width: min(100%, 390px);
+    aspect-ratio: 1;
+    padding: 14px;
+    border: 1px solid rgba(226,166,43,.5);
+    border-radius: 50%;
+    background: rgba(255,255,255,.04);
+    box-shadow: 0 25px 80px rgba(0,0,0,.25);
+}
+
+.hero-frame-inner {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 1px solid rgba(226,166,43,.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle, #713512, #351313 70%);
+}
+
+.hero-symbol {
+    width: 100px;
+    height: 100px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--olomi-gold);
+    border-radius: 50%;
+    color: var(--olomi-gold);
+    font: 400 68px var(--font-display);
+}
+
+.hero-visual-copy {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-top: 22px;
+    text-align: center;
+}
+
+.hero-visual-copy small {
+    color: var(--olomi-gold);
+    font: 700 11px var(--font-ui);
+    letter-spacing: .3em;
+}
+
+.hero-visual-copy strong {
+    color: var(--olomi-paper);
+    font: 400 23px/1.25 var(--font-display);
+}
+
+.hero-floating-card {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 17px;
+    border: 1px solid rgba(255,255,255,.15);
+    border-radius: 14px;
+    background: rgba(22,13,11,.88);
+    box-shadow: 0 12px 35px rgba(0,0,0,.2);
+}
+
+.hero-card-top {
+    top: 35px;
+    right: -10px;
+}
+
+.hero-card-bottom {
+    bottom: 35px;
+    left: -10px;
+}
+
+.floating-icon {
+    color: var(--olomi-gold);
+    font-size: 24px;
+}
+
+.hero-floating-card strong,
+.hero-floating-card small {
+    display: block;
+}
+
+.hero-floating-card strong {
+    color: var(--olomi-paper);
+    font: 700 11px var(--font-ui);
+}
+
+.hero-floating-card small {
+    margin-top: 4px;
+    color: #c9b8a9;
+    font-size: 10px;
+}
+
+/* CATEGORIAS */
+.category-section {
+    padding: 75px 0;
+    background: var(--olomi-cream);
+}
+
+.section-heading-inline {
+    align-items: flex-end;
+}
+
+.section-heading > div {
+    min-width: 0;
+}
+
+.section-heading h2 {
+    margin-top: 10px;
+    font: 400 clamp(32px, 4vw, 46px)/1.1 var(--font-display);
+    color: var(--olomi-wine);
+}
+
+.section-heading > p {
+    max-width: 390px;
+    color: var(--olomi-muted);
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    min-height: auto;
+    margin-top: 35px;
+}
+
+.category-card {
+    min-height: 125px;
+    padding: 22px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    border: 1px solid rgba(53,19,19,.12);
+    border-radius: 16px;
+    background: var(--olomi-paper);
+    color: var(--olomi-wine);
+    text-decoration: none;
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.category-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--olomi-shadow);
+}
+
+.category-number {
+    color: var(--olomi-accent);
+    font: 400 25px var(--font-display);
+}
+
+.category-card h3 {
+    font: 700 14px var(--font-ui);
+}
+
+.category-card p {
+    margin-top: 5px;
+    color: var(--olomi-muted);
+    font-size: 11px;
+}
+
+.category-arrow {
+    margin-left: auto;
+    color: var(--olomi-accent);
+    font-size: 22px;
+}
+
+/* CATÁLOGO E FILTROS */
+.catalog-section {
+    padding: 85px 0;
+    background: var(--olomi-paper);
+}
+
+.catalog-controls {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 280px;
+    gap: 18px;
+    margin: 30px 0;
+}
+
+.catalog-search,
+.catalog-filter {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.catalog-search label,
+.catalog-filter label {
+    color: var(--olomi-wine);
+    font: 700 11px var(--font-ui);
+}
+
+.search-field {
+    min-height: 52px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 16px;
+    border: 1px solid var(--olomi-border);
+    border-radius: 12px;
+    background: var(--olomi-white);
+    color: var(--olomi-accent);
+}
+
+.search-field span {
+    font-size: 23px;
+}
+
+.search-field input {
+    width: 100%;
+    min-width: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--olomi-text);
+    font-size: 13px;
+}
+
+.catalog-filter select {
+    width: 100%;
+    min-height: 52px;
+    padding: 0 14px;
+    border: 1px solid var(--olomi-border);
+    border-radius: 12px;
+    background: var(--olomi-white);
+    color: var(--olomi-text);
+    font-size: 13px;
+}
+
+.products-grid {
+    align-items: stretch;
+}
+
+.product-card > .product-link {
+    height: auto;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background: var(--olomi-cream);
+}
+
+.promo-badge {
+    position: absolute;
+    z-index: 2;
+    top: 12px;
+    left: 12px;
+    padding: 7px 10px;
+    border-radius: 30px;
+    background: #a92828;
+    color: white;
+    font: 800 9px var(--font-ui);
+}
+
+.product-card {
+    position: relative;
+}
+
+.current-price {
+    color: var(--olomi-wine);
+    font: 800 20px/1.2 var(--font-ui);
+}
+
+.catalog-state {
+    padding: 35px 15px;
+    text-align: center;
+    color: var(--olomi-muted);
+}
+
+.load-more-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+/* SOBRE / MANIFESTO */
+.manifesto-section {
+    padding: 90px 0;
+    overflow: hidden;
+    background: var(--olomi-cream);
+}
+
+.manifesto-container {
+    display: grid;
+    grid-template-columns: .8fr 1.2fr;
+    align-items: center;
+    gap: 75px;
+}
+
+.manifesto-decoration {
+    width: min(100%, 360px);
+    aspect-ratio: 1;
+    display: grid;
+    place-items: center;
+    justify-self: center;
+    border: 1px solid rgba(226,166,43,.6);
+    border-radius: 50%;
+    background: radial-gradient(circle, #713512, #351313 70%);
+    box-shadow: 0 25px 65px rgba(53,19,19,.18);
+}
+
+.manifesto-decoration span {
+    color: var(--olomi-gold);
+    font: 400 180px var(--font-display);
+}
+
+.manifesto-content h2 {
+    margin-bottom: 22px;
+    color: var(--olomi-wine);
+    font: 400 clamp(34px, 4vw, 49px)/1.1 var(--font-display);
+}
+
+.manifesto-content h2 span {
+    color: var(--olomi-accent);
+}
+
+.manifesto-content p {
+    margin: 0 0 15px;
+    color: var(--olomi-muted);
+    font-size: 14px;
+    line-height: 1.85;
+}
+
+.text-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 15px;
+    color: var(--olomi-wine);
+    font: 800 12px var(--font-ui);
+    text-decoration: none;
+}
+
+.text-link span {
+    color: var(--olomi-accent);
+    font-size: 20px;
+}
+
+/* DIFERENCIAIS */
+.benefits-section {
+    padding: 85px 0;
+    background: var(--olomi-paper);
+}
+
+.section-heading.centered {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+    margin-top: 35px;
+}
+
+.benefit-card {
+    padding: 28px 22px;
+    border: 1px solid var(--olomi-border);
+    border-radius: 16px;
+    background: var(--olomi-white);
+}
+
+.benefit-icon {
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    margin-bottom: 20px;
+    border-radius: 50%;
+    background: var(--olomi-cream);
+    color: var(--olomi-accent);
+    font-size: 23px;
+}
+
+.benefit-card h3 {
+    margin-bottom: 10px;
+    color: var(--olomi-wine);
+    font: 700 14px var(--font-ui);
+}
+
+.benefit-card p {
+    color: var(--olomi-muted);
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+/* CHAMADA FINAL */
+.final-cta-section {
+    padding: 55px 0;
+    background: var(--olomi-cream);
+}
+
+.final-cta {
+    padding: 55px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 35px;
+    border-radius: 22px;
+    background: linear-gradient(115deg, #351313, #713512);
+    color: var(--olomi-paper);
+}
+
+.final-cta-content {
+    max-width: 650px;
+}
+
+.final-cta h2 {
+    margin-bottom: 15px;
+    color: var(--olomi-paper);
+    font: 400 clamp(30px, 4vw, 44px)/1.1 var(--font-display);
+}
+
+.final-cta p {
+    color: #eadccf;
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+.btn-light {
+    flex: 0 0 auto;
+    background: var(--olomi-gold);
+    color: var(--olomi-wine);
+}
+
+.btn-light:hover {
+    background: #f0b936;
+}
+
+/* RESPONSIVIDADE DA HOME ATUAL */
+@media (max-width: 900px) {
+    .hero-container {
+        grid-template-columns: 1fr  .8fr;
+        gap: 25px;
+    }
+
+    .hero-floating-card {
+        padding: 10px;
+    }
+
+    .hero-card-top {
+        right: -5px;
+    }
+
+    .hero-card-bottom {
+        left: -5px;
+    }
+
+    .category-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .benefits-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .manifesto-container {
+        gap: 35px;
+    }
+}
+
+@media (max-width: 600px) {
+    .hero-section {
+        padding: 65px 0 45px;
+    }
+
+    .hero-container {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+
+    .hero-content h1 {
+        font-size: 43px;
+    }
+
+    .hero-text {
+        font-size: 14px;
+    }
+
+    .hero-visual {
+        min-height: 300px;
+    }
+
+    .hero-frame {
+        width: 270px;
+    }
+
+    .hero-symbol {
+        width: 75px;
+        height: 75px;
+        font-size: 52px;
+    }
+
+    .hero-visual-copy strong {
+        font-size: 19px;
+    }
+
+    .hero-floating-card {
+        max-width: 175px;
+    }
+
+    .hero-card-top {
+        top: 0;
+        right: 0;
+    }
+
+    .hero-card-bottom {
+        bottom: 0;
+        left: 0;
+    }
+
+    .category-section,
+    .catalog-section,
+    .manifesto-section,
+    .benefits-section {
+        padding: 60px 0;
+    }
+
+    .section-heading-inline {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .section-heading > p {
+        max-width: 100%;
+    }
+
+    .category-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .category-card {
+        min-height: 95px;
+    }
+
+    .catalog-controls {
+        grid-template-columns: 1fr;
+    }
+
+    .manifesto-container {
+        grid-template-columns: 1fr;
+        gap: 35px;
+    }
+
+    .manifesto-decoration {
+        width: 230px;
+    }
+
+    .manifesto-decoration span {
+        font-size: 125px;
+    }
+
+    .benefits-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .final-cta {
+        padding: 35px 25px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .final-cta .btn {
+        width: 100%;
+    }
+}

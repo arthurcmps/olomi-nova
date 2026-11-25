@@ -1,4 +1,4 @@
-import { db, auth, functions } from './firebase.js';
+import { db, auth, app } from './firebase.js';
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js";
 import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-functions.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js";
@@ -67,7 +67,7 @@ if (btnCalcShipping) {
             height: item.height || 20
         }));
 
-        const functionsBR = getFunctions(functions.app, 'southamerica-east1');
+        const functionsBR = getFunctions(app, 'southamerica-east1');
         const calcularFreteFunction = httpsCallable(functionsBR, 'calcularfrete');
         
         try {
@@ -119,26 +119,44 @@ cartStore.onChange(() => {
     renderCart();
 });
 
+
 async function populateFormWithUserData(user) {
     if (!user || !form) return;
-    const userRef = doc(db, 'users', user.uid);
-    const docSnap = await getDoc(userRef);
-    if (docSnap.exists()) {
+
+    try {
+        const userRef = doc(db, 'users', user.uid);
+        const docSnap = await getDoc(userRef);
+
+        if (!docSnap.exists()) return;
+
         const userData = docSnap.data();
-        form.name.value = userData.name || '';
-        form.phone.value = userData.phone || '';
-        form.email.value = user.email || '';
-        if (userData.address) {
-            form.cep.value = userData.address.cep || '';
-            form.street.value = userData.address.street || '';
-            form.number.value = userData.address.number || '';
-            form.complement.value = userData.address.complement || '';
-            form.neighborhood.value = userData.address.neighborhood || '';
-            form.city.value = userData.address.city || '';
-            form.state.value = userData.address.state || '';
-        }
+        const address = userData.address || {};
+
+        const fields = {
+            name: userData.name || '',
+            phone: userData.phone || '',
+            email: user.email || '',
+            cep: address.cep || '',
+            street: address.street || '',
+            number: address.number || '',
+            complement: address.complement || '',
+            neighborhood: address.neighborhood || '',
+            city: address.city || '',
+            state: address.state || ''
+        };
+
+        Object.entries(fields).forEach(([name, value]) => {
+            const field = form.elements.namedItem(name);
+
+            if (field) {
+                field.value = value;
+            }
+        });
+    } catch (error) {
+        console.error('Erro ao preencher dados do cliente:', error);
     }
 }
+
 
 function updateCart(productId, action) {
     const cart = cartStore.get();
@@ -195,7 +213,7 @@ const renderPaymentBrick = async (totalFinal) => {
             }
         },
         callbacks: {
-            onReady: () => ,
+            onReady: () => {},
             onSubmit: ({ selectedPaymentMethod, formData }) => {
                 return new Promise(async (resolve, reject) => {
                     // RASTREADOR: Vai imprimir no painel (F12) o que o Mercado Pago gerou
@@ -234,7 +252,7 @@ const renderPaymentBrick = async (totalFinal) => {
                         const shippingPayload = { method: window.nomeFrete, cost: window.valorFrete };
                         const itemsForFunction = cartStore.get().map(item => ({ id: item.id, qty: item.qty }));
 
-                        const functionsBR = getFunctions(functions.app, 'southamerica-east1');
+                        const functionsBR = getFunctions(app, 'southamerica-east1');
                         const createOrderFunction = httpsCallable(functionsBR, 'createorder');
 
                         // Chama o Servidor
@@ -417,7 +435,7 @@ if (btnAplicarCupom) {
         const subtotal = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
 
         try {
-            const functionsBR = getFunctions(functions.app, 'southamerica-east1');
+            const functionsBR = getFunctions(app, 'southamerica-east1');
             const validarCupomFn = httpsCallable(functionsBR, 'validarcupom');
             const result = await validarCupomFn({ codigo, subtotal });
             
