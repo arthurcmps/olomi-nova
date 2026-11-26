@@ -4,7 +4,8 @@ import {
     collection,
     doc,
     getDoc,
-    getDocs
+    getDocs,
+    updateDoc
 } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js";
 
 import {
@@ -101,6 +102,15 @@ const productStockEl =
 
 const productWeightEl =
     document.getElementById('product-weight');
+
+const productLengthEl =
+    document.getElementById('product-length');
+
+const productWidthEl =
+    document.getElementById('product-width');
+
+const productHeightEl =
+    document.getElementById('product-height');
 
 const productDescriptionEl =
     document.getElementById('product-description');
@@ -879,7 +889,16 @@ function openProductEditor(productId) {
         product.stock ?? 0;
 
     productWeightEl.value =
-        product.weight ?? '';
+    product.weight ?? '';
+
+    productLengthEl.value =
+        product.length ?? '';
+
+    productWidthEl.value =
+        product.width ?? '';
+
+    productHeightEl.value =
+        product.height ?? '';
 
     productDescriptionEl.value =
         product.description || '';
@@ -890,6 +909,184 @@ function openProductEditor(productId) {
         behavior: 'smooth',
         block: 'start'
     });
+}
+
+async function saveProductChanges() {
+
+    if (!productFormEl) {
+        return;
+    }
+
+    const productId = productIdEl.value.trim();
+
+    if (!productId) {
+        console.error('ID do produto não encontrado.');
+        return;
+    }
+
+    const productData = {
+        name: productNameEl.value.trim(),
+        category: productCategoryEl.value.trim(),
+        price: Number(productPriceEl.value),
+        promotionalPrice:
+            productPromotionalPriceEl.value.trim() === ''
+                ? 0
+                : Number(productPromotionalPriceEl.value),
+        stock: Number(productStockEl.value),
+        weight:
+            productWeightEl.value.trim() === ''
+                ? 0
+                : Number(productWeightEl.value),
+
+        length:
+            productLengthEl.value.trim() === ''
+                ? 0
+                : Number(productLengthEl.value),
+
+        width:
+            productWidthEl.value.trim() === ''
+                ? 0
+                : Number(productWidthEl.value),
+
+        height:
+            productHeightEl.value.trim() === ''
+                ? 0
+                : Number(productHeightEl.value),
+
+        description:
+            productDescriptionEl.value.trim()
+    };
+
+    if (!productData.name) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Nome obrigatório',
+            text: 'Informe o nome do produto.'
+        });
+        return;
+    }
+
+    if (!productData.category) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Categoria obrigatória',
+            text: 'Informe a categoria do produto.'
+        });
+        return;
+    }
+
+    if (productData.price < 0) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Preço inválido',
+            text: 'O preço não pode ser negativo.'
+        });
+        return;
+    }
+
+    if (
+        productData.promotionalPrice < 0 ||
+        (
+            productData.promotionalPrice > 0 &&
+            productData.promotionalPrice >= productData.price
+        )
+    ) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Preço promocional inválido',
+            text: 'O preço promocional deve ser maior que zero e menor que o preço normal.'
+        });
+        return;
+    }
+
+    if (productData.stock < 0) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Estoque inválido',
+            text: 'O estoque não pode ser negativo.'
+        });
+        return;
+    }
+
+    if (
+    productData.weight < 0 ||
+    productData.length < 0 ||
+    productData.width < 0 ||
+    productData.height < 0
+) {
+    Swal.fire({
+        icon: 'warning',
+        title: 'Medidas inválidas',
+        text: 'Peso e dimensões não podem ser negativos.'
+    });
+    return;
+}
+
+    const saveButton =
+        document.getElementById('save-product');
+
+    if (saveButton) {
+        saveButton.disabled = true;
+        saveButton.textContent = 'Salvando...';
+    }
+
+    try {
+
+        const productRef =
+            doc(db, 'products', productId);
+
+        await updateDoc(
+            productRef,
+            productData
+        );
+
+        const productIndex =
+            adminProducts.findIndex(
+                product => product.id === productId
+            );
+
+        if (productIndex !== -1) {
+
+            adminProducts[productIndex] = {
+                ...adminProducts[productIndex],
+                ...productData
+            };
+        }
+
+        renderProductsTable(adminProducts);
+
+        if (productEditorEl) {
+            productEditorEl.hidden = true;
+        }
+
+        Swal.fire({
+            icon: 'success',
+            title: 'Produto atualizado',
+            text: 'As alterações foram salvas com sucesso.',
+            timer: 1800,
+            showConfirmButton: false
+        });
+
+    } catch (error) {
+
+        console.error(
+            'Erro ao atualizar produto:',
+            error
+        );
+
+        Swal.fire({
+            icon: 'error',
+            title: 'Erro ao salvar',
+            text: 'Não foi possível atualizar o produto.'
+        });
+
+    } finally {
+
+        if (saveButton) {
+            saveButton.disabled = false;
+            saveButton.textContent = 'Salvar alterações';
+        }
+    }
 }
 
 function filterAdminProducts() {
@@ -992,6 +1189,19 @@ if (cancelProductEditEl) {
             if (productFormEl) {
                 productFormEl.reset();
             }
+        }
+    );
+}
+
+if (productFormEl) {
+
+    productFormEl.addEventListener(
+        'submit',
+        async event => {
+
+            event.preventDefault();
+
+            await saveProductChanges();
         }
     );
 }
