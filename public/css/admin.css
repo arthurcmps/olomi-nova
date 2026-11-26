@@ -2248,3 +2248,40 @@ a {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+.product-image-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.product-image-action-button {
+    width: 100%;
+    min-height: 26px;
+    padding: 0 6px;
+    border: 1px solid var(--admin-border);
+    border-radius: 7px;
+    background: var(--admin-paper);
+    color: var(--admin-wine);
+    font-family: var(--font-ui);
+    font-size: 8px;
+    font-weight: 800;
+    cursor: pointer;
+    transition:
+        background 0.15s ease,
+        border-color 0.15s ease;
+}
+
+.product-image-action-button:hover {
+    border-color: rgba(197, 106, 24, 0.35);
+    background: rgba(197, 106, 24, 0.07);
+}
+
+.product-image-delete-button {
+    color: #8d2e2e;
+}
+
+.product-image-delete-button:hover {
+    border-color: rgba(170, 55, 55, 0.35);
+    background: rgba(170, 55, 55, 0.07);
+}

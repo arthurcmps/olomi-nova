@@ -851,34 +851,440 @@ function renderCurrentProductImages(product) {
 
     productCurrentImagesEl.innerHTML = '';
 
-    const images = Array.isArray(product.imageUrls)
-        ? product.imageUrls
-        : [];
+    const images =
+        Array.isArray(product.imageUrls)
+            ? product.imageUrls
+            : [];
+
+    const imagePaths =
+        Array.isArray(product.imagePaths)
+            ? product.imagePaths
+            : [];
 
     if (!images.length) {
+
         productCurrentImagesEl.textContent =
             'Este produto ainda não possui imagens cadastradas.';
+
         return;
+
     }
 
     images.forEach((url, index) => {
 
-        const item = document.createElement('div');
-        item.className = 'product-image-preview-item';
+        const item =
+            document.createElement('div');
 
-        const image = document.createElement('img');
+        item.className =
+            'product-image-preview-item';
+
+        const image =
+            document.createElement('img');
+
         image.src = url;
-        image.alt = `Imagem ${index + 1} do produto`;
+
+        image.alt =
+            `Imagem ${index + 1} do produto`;
+
         image.loading = 'lazy';
 
-        const label = document.createElement('span');
-        label.textContent = `Imagem ${index + 1}`;
+        const label =
+            document.createElement('span');
 
-        item.append(image, label);
+        label.textContent =
+            index === 0
+                ? 'Imagem principal'
+                : `Imagem ${index + 1}`;
 
-        productCurrentImagesEl.appendChild(item);
+        const actions =
+            document.createElement('div');
+
+        actions.className =
+            'product-image-actions';
+
+        if (index !== 0) {
+
+            const primaryButton =
+                document.createElement('button');
+
+            primaryButton.type = 'button';
+
+            primaryButton.className =
+                'product-image-action-button';
+
+            primaryButton.textContent =
+                'Definir principal';
+
+            primaryButton.dataset.imageAction =
+                'primary';
+
+            primaryButton.dataset.imageIndex =
+                String(index);
+
+            actions.appendChild(
+                primaryButton
+            );
+
+        }
+
+        const deleteButton =
+            document.createElement('button');
+
+        deleteButton.type = 'button';
+
+        deleteButton.className =
+            'product-image-action-button product-image-delete-button';
+
+        deleteButton.textContent =
+            'Excluir';
+
+        deleteButton.dataset.imageAction =
+            'delete';
+
+        deleteButton.dataset.imageIndex =
+            String(index);
+
+        actions.appendChild(
+            deleteButton
+        );
+
+        item.append(
+            image,
+            label,
+            actions
+        );
+
+        productCurrentImagesEl.appendChild(
+            item
+        );
 
     });
+
+}
+
+function getStoragePathFromDownloadUrl(url) {
+
+    if (!url) {
+        return null;
+    }
+
+    try {
+
+        const parsedUrl =
+            new URL(url);
+
+        const match =
+            parsedUrl.pathname.match(
+                /\/o\/(.+)$/
+            );
+
+        if (!match) {
+            return null;
+        }
+
+        return decodeURIComponent(
+            match[1]
+        );
+
+    } catch (error) {
+
+        console.warn(
+            'Não foi possível identificar o caminho da imagem no Storage:',
+            error
+        );
+
+        return null;
+
+    }
+
+}
+
+async function setPrimaryProductImage(
+    productId,
+    imageIndex
+) {
+
+    const product =
+        adminProducts.find(
+            item => item.id === productId
+        );
+
+    if (!product) {
+        return;
+    }
+
+    const imageUrls =
+        Array.isArray(product.imageUrls)
+            ? [...product.imageUrls]
+            : [];
+
+    const imagePaths =
+        Array.isArray(product.imagePaths)
+            ? [...product.imagePaths]
+            : [];
+
+    if (
+        imageIndex < 0 ||
+        imageIndex >= imageUrls.length
+    ) {
+        return;
+    }
+
+    if (imageIndex === 0) {
+        return;
+    }
+
+    const selectedUrl =
+        imageUrls.splice(
+            imageIndex,
+            1
+        )[0];
+
+    imageUrls.unshift(
+        selectedUrl
+    );
+
+    const selectedPath =
+        imagePaths.length > imageIndex
+            ? imagePaths.splice(
+                imageIndex,
+                1
+            )[0]
+            : null;
+
+    imagePaths.unshift(
+        selectedPath || null
+    );
+
+    try {
+
+        await updateDoc(
+            doc(
+                db,
+                'products',
+                productId
+            ),
+            {
+                imageUrls,
+                imagePaths
+            }
+        );
+
+        const productIndex =
+            adminProducts.findIndex(
+                item => item.id === productId
+            );
+
+        if (productIndex !== -1) {
+
+            adminProducts[productIndex] = {
+                ...adminProducts[productIndex],
+                imageUrls,
+                imagePaths
+            };
+
+        }
+
+        renderCurrentProductImages(
+            adminProducts[productIndex]
+        );
+
+        renderProductsTable(
+            adminProducts
+        );
+
+        Swal.fire({
+            icon: 'success',
+            title: 'Imagem principal alterada',
+            text: 'A nova imagem principal foi definida.',
+            timer: 1500,
+            showConfirmButton: false
+        });
+
+    } catch (error) {
+
+        console.error(
+            'Erro ao definir imagem principal:',
+            error
+        );
+
+        Swal.fire({
+            icon: 'error',
+            title: 'Erro',
+            text: 'Não foi possível alterar a imagem principal.'
+        });
+
+    }
+
+}
+
+async function deleteProductImage(
+    productId,
+    imageIndex
+) {
+
+    const product =
+        adminProducts.find(
+            item => item.id === productId
+        );
+
+    if (!product) {
+        return;
+    }
+
+    const imageUrls =
+        Array.isArray(product.imageUrls)
+            ? [...product.imageUrls]
+            : [];
+
+    const imagePaths =
+        Array.isArray(product.imagePaths)
+            ? [...product.imagePaths]
+            : [];
+
+    if (
+        imageIndex < 0 ||
+        imageIndex >= imageUrls.length
+    ) {
+        return;
+    }
+
+    if (imageUrls.length === 1) {
+
+        const result =
+            await Swal.fire({
+                icon: 'warning',
+                title: 'Excluir a única imagem?',
+                text: 'O produto ficará sem imagem no catálogo.',
+                showCancelButton: true,
+                confirmButtonText: 'Sim, excluir',
+                cancelButtonText: 'Cancelar',
+                confirmButtonColor: '#a33',
+                reverseButtons: true
+            });
+
+        if (!result.isConfirmed) {
+            return;
+        }
+
+    } else {
+
+        const result =
+            await Swal.fire({
+                icon: 'warning',
+                title: 'Excluir imagem?',
+                text: 'Esta imagem será removida do produto.',
+                showCancelButton: true,
+                confirmButtonText: 'Sim, excluir',
+                cancelButtonText: 'Cancelar',
+                confirmButtonColor: '#a33',
+                reverseButtons: true
+            });
+
+        if (!result.isConfirmed) {
+            return;
+        }
+
+    }
+
+    const imageUrl =
+        imageUrls[imageIndex];
+
+    const imagePath =
+        imagePaths[imageIndex] ||
+        getStoragePathFromDownloadUrl(
+            imageUrl
+        );
+
+    try {
+
+        if (imagePath) {
+
+            const fileRef =
+                storageRef(
+                    storage,
+                    imagePath
+                );
+
+            await deleteObject(
+                fileRef
+            );
+
+        }
+
+        imageUrls.splice(
+            imageIndex,
+            1
+        );
+
+        if (
+            imagePaths.length > imageIndex
+        ) {
+
+            imagePaths.splice(
+                imageIndex,
+                1
+            );
+
+        }
+
+        await updateDoc(
+            doc(
+                db,
+                'products',
+                productId
+            ),
+            {
+                imageUrls,
+                imagePaths
+            }
+        );
+
+        const productIndex =
+            adminProducts.findIndex(
+                item => item.id === productId
+            );
+
+        if (productIndex !== -1) {
+
+            adminProducts[productIndex] = {
+                ...adminProducts[productIndex],
+                imageUrls,
+                imagePaths
+            };
+
+            renderCurrentProductImages(
+                adminProducts[productIndex]
+            );
+
+            renderProductsTable(
+                adminProducts
+            );
+
+        }
+
+        Swal.fire({
+            icon: 'success',
+            title: 'Imagem excluída',
+            text: 'A imagem foi removida com sucesso.',
+            timer: 1500,
+            showConfirmButton: false
+        });
+
+    } catch (error) {
+
+        console.error(
+            'Erro ao excluir imagem:',
+            error
+        );
+
+        Swal.fire({
+            icon: 'error',
+            title: 'Erro ao excluir',
+            text: 'Não foi possível remover a imagem.'
+        });
+
+    }
 
 }
 
@@ -1017,19 +1423,6 @@ async function saveProductChanges() {
             productDescriptionEl.value.trim()
     };
 
-    await Promise.all(
-    uploadedStorageRefs.map(fileRef =>
-        deleteObject(fileRef).catch(
-            cleanupError => {
-                console.error(
-                    'Erro ao remover imagem após falha:',
-                    cleanupError
-                );
-            }
-        )
-    )
-);
-
     if (!productData.name) {
         Swal.fire({
             icon: 'warning',
@@ -1151,17 +1544,32 @@ let uploadedStorageRefs = [];
             product => product.id === productId
         );
 
-    productData.imageUrls = [
-        ...(Array.isArray(currentProduct?.imageUrls)
+    const currentImageUrls =
+        Array.isArray(currentProduct?.imageUrls)
             ? currentProduct.imageUrls
-            : []),
+            : [];
+
+    const currentImagePaths =
+        Array.isArray(currentProduct?.imagePaths)
+            ? currentProduct.imagePaths
+            : [];
+
+    // Mantém imagePaths alinhado com imageUrls,
+    // inclusive para produtos antigos que ainda
+    // não possuem caminhos registrados.
+    const normalizedImagePaths =
+        currentImageUrls.map(
+            (_, index) =>
+                currentImagePaths[index] || null
+        );
+
+    productData.imageUrls = [
+        ...currentImageUrls,
         ...uploadResult.urls
     ];
 
     productData.imagePaths = [
-        ...(Array.isArray(currentProduct?.imagePaths)
-            ? currentProduct.imagePaths
-            : []),
+        ...normalizedImagePaths,
         ...uploadResult.paths
     ];
 
@@ -1397,6 +1805,66 @@ if (productsTableBodyEl) {
             if (action === 'delete') {
                 await deleteProduct(productId);
                 return;
+            }
+
+        }
+    );
+
+}
+
+if (productCurrentImagesEl) {
+
+    productCurrentImagesEl.addEventListener(
+        'click',
+        async event => {
+
+            const button =
+                event.target.closest(
+                    '[data-image-action]'
+                );
+
+            if (!button) {
+                return;
+            }
+
+            const action =
+                button.dataset.imageAction;
+
+            const imageIndex =
+                Number(
+                    button.dataset.imageIndex
+                );
+
+            const productId =
+                productIdEl?.value?.trim();
+
+            if (
+                !productId ||
+                Number.isNaN(imageIndex)
+            ) {
+                return;
+            }
+
+            if (
+                action === 'primary'
+            ) {
+
+                await setPrimaryProductImage(
+                    productId,
+                    imageIndex
+                );
+
+            }
+
+            if (
+                action === 'delete'
+            ) {
+
+                await deleteProductImage(
+                    productId,
+                    imageIndex
+                );
+
             }
 
         }
