@@ -1562,22 +1562,42 @@ async function saveProductChanges() {
 for (const file of selectedImageFiles) {
 
     if (!file.type.startsWith('image/')) {
-        Swal.fire({
-            icon: 'warning',
-            title: 'Arquivo inválido',
-            text: 'Selecione somente arquivos de imagem.'
-        });
-        return;
+
+    if (saveButton) {
+        saveButton.disabled = false;
+        saveButton.textContent =
+            isCreatingProduct
+                ? 'Salvar produto'
+                : 'Salvar alterações';
     }
 
+    Swal.fire({
+        icon: 'warning',
+        title: 'Arquivo inválido',
+        text: 'Selecione somente arquivos de imagem.'
+    });
+
+    return;
+}
+
     if (file.size >= 10 * 1024 * 1024) {
-        Swal.fire({
-            icon: 'warning',
-            title: 'Imagem muito grande',
-            text: `O arquivo "${file.name}" deve ter menos de 10 MB.`
-        });
-        return;
+
+    if (saveButton) {
+        saveButton.disabled = false;
+        saveButton.textContent =
+            isCreatingProduct
+                ? 'Salvar produto'
+                : 'Salvar alterações';
     }
+
+    Swal.fire({
+        icon: 'warning',
+        title: 'Imagem muito grande',
+        text: `O arquivo "${file.name}" deve ter menos de 10 MB.`
+    });
+
+    return;
+}
 
 }
 
