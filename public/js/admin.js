@@ -12,6 +12,7 @@ import {
     doc,
     getDoc,
     getDocs,
+    addDoc,
     updateDoc,
     deleteDoc
 } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js";
@@ -134,6 +135,12 @@ const productImagesPreviewEl =
 
 const cancelProductEditEl =
     document.getElementById('cancel-product-edit');
+
+const newProductButtonEl =
+    document.getElementById('new-product-button');
+
+const productEditorTitleEl =
+    document.getElementById('product-editor-title');
 
 
 /* =========================================================
@@ -783,6 +790,49 @@ function renderProductsTable(products) {
 
 }
 
+function openNewProductEditor() {
+
+    // Limpa o ID do produto para indicar
+    // que estamos criando um novo produto
+    productIdEl.value = '';
+
+    // Limpa os campos do formulário
+    productNameEl.value = '';
+    productCategoryEl.value = '';
+    productPriceEl.value = '';
+    productPromotionalPriceEl.value = '';
+    productStockEl.value = '';
+    productWeightEl.value = '';
+    productLengthEl.value = '';
+    productWidthEl.value = '';
+    productHeightEl.value = '';
+    productDescriptionEl.value = '';
+
+    // Limpa as imagens atuais e as novas imagens selecionadas
+    productCurrentImagesEl.innerHTML = '';
+    productImagesPreviewEl.innerHTML = '';
+
+    if (productImagesEl) {
+        productImagesEl.value = '';
+    }
+
+    // Altera o título do editor
+    if (productEditorTitleEl) {
+        productEditorTitleEl.textContent =
+            'Novo produto';
+    }
+
+    // Exibe o editor
+    productEditorEl.hidden = false;
+
+    // Leva o usuário até o formulário
+    productEditorEl.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+    });
+
+}
+
 function openProductEditor(productId) {
 
     const product = adminProducts.find(
@@ -802,6 +852,19 @@ function openProductEditor(productId) {
     }
 
     productIdEl.value = product.id;
+
+    if (productEditorTitleEl) {
+    productEditorTitleEl.textContent =
+        'Editar produto';
+}
+
+const saveButton =
+    document.getElementById('save-product');
+
+if (saveButton) {
+    saveButton.textContent =
+        'Salvar alterações';
+}
 
     productNameEl.value =
         product.name || '';
@@ -1385,10 +1448,7 @@ async function saveProductChanges() {
 
     const productId = productIdEl.value.trim();
 
-    if (!productId) {
-        console.error('ID do produto não encontrado.');
-        return;
-    }
+    const isCreatingProduct = !productId;
 
     const productData = {
         name: productNameEl.value.trim(),
@@ -1522,27 +1582,50 @@ for (const file of selectedImageFiles) {
 }
 
 let uploadedStorageRefs = [];
+let savedProductId = productId;
 
     try {
 
-        const productRef =
-            doc(db, 'products', productId);
+        let productRef;
+
+        if (isCreatingProduct) {
+
+            productRef = await addDoc(
+                collection(db, 'products'),
+                {
+                    ...productData,
+                    imageUrls: [],
+                    imagePaths: []
+                }
+            );
+
+        } else {
+
+            productRef =
+                doc(db, 'products', productId);
+
+        }
+
+         savedProductId =
+            productRef.id;
 
         if (selectedImageFiles.length > 0) {
 
-    const uploadResult =
-        await uploadProductImages(
-            productId,
-            selectedImageFiles
-        );
+        const uploadResult =
+            await uploadProductImages(
+                savedProductId,
+                selectedImageFiles
+            );
 
     uploadedStorageRefs =
         uploadResult.refs;
 
     const currentProduct =
-        adminProducts.find(
-            product => product.id === productId
-        );
+        isCreatingProduct
+            ? null
+            : adminProducts.find(
+                product => product.id === productId
+            );
 
     const currentImageUrls =
         Array.isArray(currentProduct?.imageUrls)
@@ -1580,17 +1663,29 @@ let uploadedStorageRefs = [];
             productData
         );
 
-        const productIndex =
-            adminProducts.findIndex(
-                product => product.id === productId
-            );
+        if (isCreatingProduct) {
 
-        if (productIndex !== -1) {
-
-            adminProducts[productIndex] = {
-                ...adminProducts[productIndex],
+            adminProducts.push({
+                id: savedProductId,
                 ...productData
-            };
+            });
+
+        } else {
+
+            const productIndex =
+                adminProducts.findIndex(
+                    product => product.id === productId
+                );
+
+            if (productIndex !== -1) {
+
+                adminProducts[productIndex] = {
+                    ...adminProducts[productIndex],
+                    ...productData
+                };
+
+            }
+
         }
 
         renderProductsTable(adminProducts);
@@ -1601,26 +1696,78 @@ let uploadedStorageRefs = [];
 
         Swal.fire({
             icon: 'success',
-            title: 'Produto atualizado',
-            text: 'As alterações foram salvas com sucesso.',
+            title: isCreatingProduct
+                ? 'Produto criado'
+                : 'Produto atualizado',
+            text: isCreatingProduct
+                ? 'O produto foi cadastrado com sucesso.'
+                : 'As alterações foram salvas com sucesso.',
             timer: 1800,
             showConfirmButton: false
         });
 
     } catch (error) {
 
-        console.error(
-            'Erro ao atualizar produto:',
-            error
+    console.error(
+        'Erro ao salvar produto:',
+        error
+    );
+
+    // Se o produto foi criado e alguma etapa posterior falhou,
+    // remove o documento recém-criado para evitar registro órfão.
+    if (isCreatingProduct && savedProductId) {
+
+        try {
+
+            await deleteDoc(
+                doc(
+                    db,
+                    'products',
+                    savedProductId
+                )
+            );
+
+        } catch (cleanupError) {
+
+            console.error(
+                'Erro ao remover produto criado após falha:',
+                cleanupError
+            );
+
+        }
+
+    }
+
+    // Se alguma imagem já foi enviada antes da falha,
+    // remove essas imagens do Storage.
+    if (uploadedStorageRefs.length > 0) {
+
+        await Promise.all(
+            uploadedStorageRefs.map(fileRef =>
+                deleteObject(fileRef).catch(
+                    cleanupError => {
+
+                        console.error(
+                            'Erro ao remover imagem após falha:',
+                            cleanupError
+                        );
+
+                    }
+                )
+            )
         );
 
-        Swal.fire({
-            icon: 'error',
-            title: 'Erro ao salvar',
-            text: 'Não foi possível atualizar o produto.'
-        });
+    }
 
-    } finally {
+    Swal.fire({
+        icon: 'error',
+        title: 'Erro ao salvar',
+        text: isCreatingProduct
+            ? 'Não foi possível cadastrar o produto.'
+            : 'Não foi possível atualizar o produto.'
+    });
+
+} finally {
 
         if (productImagesEl) {
             productImagesEl.value = '';
@@ -1632,7 +1779,9 @@ let uploadedStorageRefs = [];
 
         if (saveButton) {
             saveButton.disabled = false;
-            saveButton.textContent = 'Salvar alterações';
+            saveButton.textContent = isCreatingProduct
+                ? 'Salvar produto'
+                : 'Salvar alterações';
         }
     }
 }
@@ -1887,6 +2036,17 @@ if (cancelProductEditEl) {
             }
         }
     );
+}
+
+if (newProductButtonEl) {
+
+    newProductButtonEl.addEventListener(
+        'click',
+        () => {
+            openNewProductEditor();
+        }
+    );
+
 }
 
 if (productFormEl) {
