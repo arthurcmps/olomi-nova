@@ -2,6 +2,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
 import { initializeFirestore } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js";
+import { getStorage } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-storage.js";
 
 // ==========================================
 // 1. CREDENCIAIS DO PROJETO (Não altere as suas chaves!)
@@ -34,6 +35,7 @@ const db = initializeFirestore(app, {
 // 4. INICIALIZAÇÃO DA AUTENTICAÇÃO
 // ==========================================
 const auth = getAuth(app);
+const storage = getStorage(app);
 
 // Exporta as variáveis para serem usadas em outros arquivos (main.js, catalogo.js, admin.js)
-export { app, db, auth };
+export { app, db, auth, storage };

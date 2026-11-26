@@ -1,4 +1,11 @@
-import { auth, db } from './firebase.js';
+import { auth, db, storage } from './firebase.js';
+
+import {
+    ref as storageRef,
+    uploadBytes,
+    getDownloadURL,
+    deleteObject
+} from "https://www.gstatic.com/firebasejs/10.12.3/firebase-storage.js";
 
 import {
     collection,
@@ -115,6 +122,15 @@ const productHeightEl =
 
 const productDescriptionEl =
     document.getElementById('product-description');
+
+const productImagesEl =
+    document.getElementById('product-images');
+
+const productCurrentImagesEl =
+    document.getElementById('product-current-images');
+
+const productImagesPreviewEl =
+    document.getElementById('product-images-preview');
 
 const cancelProductEditEl =
     document.getElementById('cancel-product-edit');
@@ -817,12 +833,142 @@ function openProductEditor(productId) {
     productDescriptionEl.value =
         product.description || '';
 
+    renderCurrentProductImages(product);
+
     productEditorEl.hidden = false;
 
     productEditorEl.scrollIntoView({
         behavior: 'smooth',
         block: 'start'
     });
+}
+
+function renderCurrentProductImages(product) {
+
+    if (!productCurrentImagesEl) {
+        return;
+    }
+
+    productCurrentImagesEl.innerHTML = '';
+
+    const images = Array.isArray(product.imageUrls)
+        ? product.imageUrls
+        : [];
+
+    if (!images.length) {
+        productCurrentImagesEl.textContent =
+            'Este produto ainda não possui imagens cadastradas.';
+        return;
+    }
+
+    images.forEach((url, index) => {
+
+        const item = document.createElement('div');
+        item.className = 'product-image-preview-item';
+
+        const image = document.createElement('img');
+        image.src = url;
+        image.alt = `Imagem ${index + 1} do produto`;
+        image.loading = 'lazy';
+
+        const label = document.createElement('span');
+        label.textContent = `Imagem ${index + 1}`;
+
+        item.append(image, label);
+
+        productCurrentImagesEl.appendChild(item);
+
+    });
+
+}
+
+function renderSelectedProductImages(files) {
+
+    if (!productImagesPreviewEl) {
+        return;
+    }
+
+    productImagesPreviewEl.innerHTML = '';
+
+    Array.from(files).forEach((file, index) => {
+
+        const item = document.createElement('div');
+        item.className = 'product-image-preview-item';
+
+        const image = document.createElement('img');
+        image.src = URL.createObjectURL(file);
+        image.alt = file.name;
+
+        const label = document.createElement('span');
+        label.textContent = `Nova imagem ${index + 1}`;
+
+        item.append(image, label);
+
+        productImagesPreviewEl.appendChild(item);
+
+    });
+
+}
+
+async function uploadProductImages(productId, files) {
+
+    const uploadedUrls = [];
+    const uploadedPaths = [];
+    const uploadedRefs = [];
+
+    try {
+
+        for (let index = 0; index < files.length; index++) {
+
+            const file = files[index];
+
+            const safeName = file.name.replace(
+                /[^a-zA-Z0-9._-]/g,
+                '_'
+            );
+
+            const path =
+                `products/${productId}/${Date.now()}_${index}_${safeName}`;
+
+            const fileRef = storageRef(storage, path);
+
+            await uploadBytes(fileRef, file);
+
+            uploadedRefs.push(fileRef);
+
+            const downloadUrl =
+                await getDownloadURL(fileRef);
+
+            uploadedUrls.push(downloadUrl);
+            uploadedPaths.push(path);
+
+        }
+
+        return {
+            urls: uploadedUrls,
+            paths: uploadedPaths,
+            refs: uploadedRefs
+        };
+
+    } catch (error) {
+
+        await Promise.all(
+            uploadedRefs.map(fileRef =>
+                deleteObject(fileRef).catch(
+                    cleanupError => {
+                        console.error(
+                            'Erro ao limpar upload incompleto:',
+                            cleanupError
+                        );
+                    }
+                )
+            )
+        );
+
+        throw error;
+
+    }
+
 }
 
 async function saveProductChanges() {
@@ -870,6 +1016,19 @@ async function saveProductChanges() {
         description:
             productDescriptionEl.value.trim()
     };
+
+    await Promise.all(
+    uploadedStorageRefs.map(fileRef =>
+        deleteObject(fileRef).catch(
+            cleanupError => {
+                console.error(
+                    'Erro ao remover imagem após falha:',
+                    cleanupError
+                );
+            }
+        )
+    )
+);
 
     if (!productData.name) {
         Swal.fire({
@@ -944,10 +1103,69 @@ async function saveProductChanges() {
         saveButton.textContent = 'Salvando...';
     }
 
+    const selectedImageFiles =
+    Array.from(productImagesEl?.files || []);
+
+for (const file of selectedImageFiles) {
+
+    if (!file.type.startsWith('image/')) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Arquivo inválido',
+            text: 'Selecione somente arquivos de imagem.'
+        });
+        return;
+    }
+
+    if (file.size >= 10 * 1024 * 1024) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Imagem muito grande',
+            text: `O arquivo "${file.name}" deve ter menos de 10 MB.`
+        });
+        return;
+    }
+
+}
+
+let uploadedStorageRefs = [];
+
     try {
 
         const productRef =
             doc(db, 'products', productId);
+
+        if (selectedImageFiles.length > 0) {
+
+    const uploadResult =
+        await uploadProductImages(
+            productId,
+            selectedImageFiles
+        );
+
+    uploadedStorageRefs =
+        uploadResult.refs;
+
+    const currentProduct =
+        adminProducts.find(
+            product => product.id === productId
+        );
+
+    productData.imageUrls = [
+        ...(Array.isArray(currentProduct?.imageUrls)
+            ? currentProduct.imageUrls
+            : []),
+        ...uploadResult.urls
+    ];
+
+    productData.imagePaths = [
+        ...(Array.isArray(currentProduct?.imagePaths)
+            ? currentProduct.imagePaths
+            : []),
+        ...uploadResult.paths
+    ];
+
+}
 
         await updateDoc(
             productRef,
@@ -995,6 +1213,14 @@ async function saveProductChanges() {
         });
 
     } finally {
+
+        if (productImagesEl) {
+            productImagesEl.value = '';
+        }
+
+        if (productImagesPreviewEl) {
+            productImagesPreviewEl.innerHTML = '';
+        }
 
         if (saveButton) {
             saveButton.disabled = false;
@@ -1218,6 +1444,18 @@ if (refreshProductsEl) {
 
 }
 
+if (productImagesEl) {
+
+    productImagesEl.addEventListener(
+        'change',
+        () => {
+            renderSelectedProductImages(
+                productImagesEl.files
+            );
+        }
+    );
+
+}
 
 /* =========================================================
    PEDIDOS

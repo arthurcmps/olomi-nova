@@ -2200,3 +2200,51 @@ a {
         width: 100%;
     }
 }
+
+/* =========================================================
+   IMAGENS DOS PRODUTOS
+   ========================================================= */
+
+.product-images-field small {
+    color: var(--admin-muted);
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+.product-images-field input[type="file"] {
+    padding: 12px;
+    border: 1px dashed var(--admin-border);
+    border-radius: 10px;
+    background: var(--admin-paper);
+}
+
+.product-images-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.product-image-preview-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 110px;
+}
+
+.product-image-preview-item img {
+    width: 110px;
+    height: 110px;
+    object-fit: cover;
+    border: 1px solid var(--admin-border);
+    border-radius: 10px;
+    background: var(--admin-paper);
+}
+
+.product-image-preview-item span {
+    overflow: hidden;
+    color: var(--admin-muted);
+    font-size: 9px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
