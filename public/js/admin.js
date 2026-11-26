@@ -5,7 +5,8 @@ import {
     doc,
     getDoc,
     getDocs,
-    updateDoc
+    updateDoc,
+    deleteDoc
 } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js";
 
 import {
@@ -471,75 +472,11 @@ async function loadDashboard() {
 
 function updateProductStats(products) {
 
-    const total =
-        products.length;
-
-
-    const active =
-        products.filter(
-            product => {
-
-                if (
-                    product.active === false
-                ) {
-                    return false;
-                }
-
-                if (
-                    product.status === 'inactive'
-                ) {
-                    return false;
-                }
-
-                return true;
-
-            }
-        ).length;
-
-
-    const inactive =
-        total - active;
-
-
     const totalEl =
-        document.getElementById(
-            'stat-products'
-        );
-
-
-    const activeEl =
-        document.getElementById(
-            'summary-active-products'
-        );
-
-
-    const inactiveEl =
-        document.getElementById(
-            'summary-inactive-products'
-        );
-
+        document.getElementById('stat-products');
 
     if (totalEl) {
-
-        totalEl.textContent =
-            String(total);
-
-    }
-
-
-    if (activeEl) {
-
-        activeEl.textContent =
-            String(active);
-
-    }
-
-
-    if (inactiveEl) {
-
-        inactiveEl.textContent =
-            String(inactive);
-
+        totalEl.textContent = String(products.length);
     }
 
 }
@@ -687,24 +624,6 @@ function renderProductsTable(products) {
                     product.stock || 0
                 );
 
-
-            const isActive =
-                product.active !== false &&
-                product.status !== 'inactive';
-
-
-            const statusClass =
-                isActive
-                    ? 'status-active'
-                    : 'status-inactive';
-
-
-            const statusText =
-                isActive
-                    ? 'Ativo'
-                    : 'Inativo';
-
-
             const imageUrl =
                 product.imageUrls &&
                 product.imageUrls.length
@@ -812,20 +731,6 @@ function renderProductsTable(products) {
 
                     </td>
 
-
-                    <td>
-
-                        <span
-                            class="status-badge ${
-                                statusClass
-                            }"
-                        >
-                            ${statusText}
-                        </span>
-
-                    </td>
-
-
                     <td>
 
                         <div class="table-actions">
@@ -839,6 +744,15 @@ function renderProductsTable(products) {
                                 )}"
                             >
                                 Editar
+                            </button>
+
+                            <button
+                                type="button"
+                                class="table-action-button"
+                                data-product-action="delete"
+                                data-product-id="${escapeHTML(product.id)}"
+                            >
+                                Excluir
                             </button>
 
                         </div>
@@ -1089,6 +1003,81 @@ async function saveProductChanges() {
     }
 }
 
+async function deleteProduct(productId) {
+
+    const product =
+        adminProducts.find(
+            item => item.id === productId
+        );
+
+    if (!product) {
+        console.error('Produto não encontrado:', productId);
+        return;
+    }
+
+    const result = await Swal.fire({
+        icon: 'warning',
+        title: 'Excluir produto?',
+        text: `O produto "${product.name}" será removido do catálogo. Essa ação não poderá ser desfeita.`,
+        showCancelButton: true,
+        confirmButtonText: 'Sim, excluir',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: '#a33',
+        reverseButtons: true
+    });
+
+    if (!result.isConfirmed) {
+        return;
+    }
+
+    try {
+
+        await deleteDoc(
+            doc(db, 'products', productId)
+        );
+
+        adminProducts =
+            adminProducts.filter(
+                item => item.id !== productId
+            );
+
+        updateProductStats(adminProducts);
+
+        filterAdminProducts();
+
+        if (
+            productIdEl &&
+            productIdEl.value === productId
+        ) {
+            productEditorEl.hidden = true;
+            productFormEl.reset();
+        }
+
+        await Swal.fire({
+            icon: 'success',
+            title: 'Produto excluído',
+            text: 'O produto foi removido com sucesso.',
+            timer: 1800,
+            showConfirmButton: false
+        });
+
+    } catch (error) {
+
+        console.error(
+            'Erro ao excluir produto:',
+            error
+        );
+
+        Swal.fire({
+            icon: 'error',
+            title: 'Erro ao excluir',
+            text: 'Não foi possível excluir o produto.'
+        });
+
+    }
+
+}
+
 function filterAdminProducts() {
 
     if (!productsSearchEl) {
@@ -1157,11 +1146,11 @@ if (productsTableBodyEl) {
 
     productsTableBodyEl.addEventListener(
         'click',
-        event => {
+        async event => {
 
             const button =
                 event.target.closest(
-                    '[data-product-action="edit"]'
+                    '[data-product-action]'
                 );
 
             if (!button) {
@@ -1171,9 +1160,22 @@ if (productsTableBodyEl) {
             const productId =
                 button.dataset.productId;
 
-            openProductEditor(productId);
+            const action =
+                button.dataset.productAction;
+
+            if (action === 'edit') {
+                openProductEditor(productId);
+                return;
+            }
+
+            if (action === 'delete') {
+                await deleteProduct(productId);
+                return;
+            }
+
         }
     );
+
 }
 
 if (cancelProductEditEl) {
