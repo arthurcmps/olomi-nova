@@ -32,10 +32,42 @@ service cloud.firestore {
 
     // Pedidos: cliente lê apenas os próprios pedidos; admin lê e altera todos.
     match /orders/{orderId} {
-      allow read: if isSignedIn() &&
-        (resource.data.userId == request.auth.uid || isAdmin());
-      allow create, update, delete: if isAdmin();
-    }
+
+  allow read: if isSignedIn() &&
+    (
+      resource.data.userId == request.auth.uid ||
+      isAdmin()
+    );
+
+  /*
+   * Administradores podem alterar somente
+   * os status permitidos pelo fluxo
+   * administrativo.
+   *
+   * O status "paid" NÃO pode ser definido
+   * pelo cliente/admin.
+   *
+   * A confirmação de pagamento é feita
+   * exclusivamente pelo backend.
+   */
+  allow update: if isAdmin() &&
+    (
+      request.resource.data.status == resource.data.status ||
+      (
+        resource.data.status == 'pending' &&
+        request.resource.data.status == 'cancelled'
+      ) ||
+      (
+        resource.data.status == 'paid' &&
+        (
+          request.resource.data.status == 'shipped' ||
+          request.resource.data.status == 'cancelled'
+        )
+      )
+    );
+
+  allow create, delete: if isAdmin();
+}
 
     // Perfil do cliente.
     match /users/{userId} {
