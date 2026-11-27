@@ -1814,14 +1814,17 @@ async function deleteProduct(productId) {
         );
 
     if (!product) {
-        console.error('Produto não encontrado:', productId);
+        console.error(
+            'Produto não encontrado:',
+            productId
+        );
         return;
     }
 
     const result = await Swal.fire({
         icon: 'warning',
         title: 'Excluir produto?',
-        text: `O produto "${product.name}" será removido do catálogo. Essa ação não poderá ser desfeita.`,
+        text: `O produto "${product.name}" e suas imagens serão removidos do catálogo. Essa ação não poderá ser desfeita.`,
         showCancelButton: true,
         confirmButtonText: 'Sim, excluir',
         cancelButtonText: 'Cancelar',
@@ -1835,34 +1838,188 @@ async function deleteProduct(productId) {
 
     try {
 
+        /*
+         * Monta a lista de caminhos das imagens
+         * que precisam ser removidas do Storage.
+         *
+         * Produtos novos possuem imagePaths.
+         * Produtos antigos podem possuir apenas imageUrls.
+         */
+        const imagePaths = [];
+
+        if (Array.isArray(product.imagePaths)) {
+
+            product.imagePaths.forEach(path => {
+
+                if (
+                    path &&
+                    typeof path === 'string'
+                ) {
+                    imagePaths.push(path);
+                }
+
+            });
+
+        }
+
+        /*
+         * Compatibilidade com produtos antigos:
+         * se não houver imagePaths correspondentes,
+         * tenta descobrir o caminho diretamente
+         * a partir da URL do Storage.
+         */
+        if (Array.isArray(product.imageUrls)) {
+
+            product.imageUrls.forEach((url, index) => {
+
+                const existingPath =
+                    imagePaths[index];
+
+                if (!existingPath) {
+
+                    const derivedPath =
+                        getStoragePathFromDownloadUrl(
+                            url
+                        );
+
+                    if (derivedPath) {
+                        imagePaths.push(
+                            derivedPath
+                        );
+                    }
+
+                }
+
+            });
+
+        }
+
+        /*
+         * Remove caminhos duplicados.
+         */
+        const uniqueImagePaths =
+            [...new Set(imagePaths)];
+
+        /*
+         * Exclui as imagens do Firebase Storage.
+         *
+         * Cada imagem é tratada individualmente.
+         * Se uma imagem já não existir, a exclusão
+         * do produto não deve ser interrompida.
+         */
+        const storageDeletionResults =
+            await Promise.all(
+                uniqueImagePaths.map(
+                    async imagePath => {
+
+                        try {
+
+                            await deleteObject(
+                                storageRef(
+                                    storage,
+                                    imagePath
+                                )
+                            );
+
+                            return {
+                                success: true,
+                                path: imagePath
+                            };
+
+                        } catch (error) {
+
+                            console.warn(
+                                'Não foi possível excluir a imagem do Storage:',
+                                imagePath,
+                                error
+                            );
+
+                            return {
+                                success: false,
+                                path: imagePath,
+                                error
+                            };
+
+                        }
+
+                    }
+                )
+            );
+
+        const failedImageDeletions =
+            storageDeletionResults.filter(
+                result =>
+                    !result.success
+            );
+
+        /*
+         * Depois da tentativa de limpeza das imagens,
+         * remove o documento do produto no Firestore.
+         */
         await deleteDoc(
-            doc(db, 'products', productId)
+            doc(
+                db,
+                'products',
+                productId
+            )
         );
 
+        /*
+         * Atualiza a lista local de produtos.
+         */
         adminProducts =
             adminProducts.filter(
                 item => item.id !== productId
             );
 
-        updateProductStats(adminProducts);
+        updateProductStats(
+            adminProducts
+        );
 
         filterAdminProducts();
 
+        /*
+         * Se o produto excluído estava aberto
+         * no editor, fecha o editor.
+         */
         if (
             productIdEl &&
             productIdEl.value === productId
         ) {
+
             productEditorEl.hidden = true;
             productFormEl.reset();
+
         }
 
-        await Swal.fire({
-            icon: 'success',
-            title: 'Produto excluído',
-            text: 'O produto foi removido com sucesso.',
-            timer: 1800,
-            showConfirmButton: false
-        });
+        /*
+         * Se alguma imagem não pôde ser excluída,
+         * o produto ainda foi removido corretamente,
+         * mas avisamos sobre a limpeza incompleta
+         * do Storage.
+         */
+        if (
+            failedImageDeletions.length > 0
+        ) {
+
+            await Swal.fire({
+                icon: 'warning',
+                title: 'Produto excluído',
+                text: 'O produto foi removido, mas algumas imagens não puderam ser excluídas do armazenamento. Verifique o console para identificar os arquivos.',
+                confirmButtonText: 'Entendi'
+            });
+
+        } else {
+
+            await Swal.fire({
+                icon: 'success',
+                title: 'Produto excluído',
+                text: 'O produto e suas imagens foram removidos com sucesso.',
+                timer: 1800,
+                showConfirmButton: false
+            });
+
+        }
 
     } catch (error) {
 
