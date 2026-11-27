@@ -1,48 +1,31 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8" />
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <meta
-        name="description"
-        content="Painel administrativo da Olomi."
-    />
+    <meta name="description" content="Painel administrativo da Olomi." />
 
     <title>Painel Administrativo | Olomi</title>
 
     <!-- Fontes -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin
-    >
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
     <link
         href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap"
-        rel="stylesheet"
-    >
+        rel="stylesheet">
 
     <!-- CSS -->
-    <link
-        rel="stylesheet"
-        href="./css/admin.css?v=1.0"
-    >
+    <link rel="stylesheet" href="./css/admin.css?v=1.0">
 
     <!-- SweetAlert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- JavaScript -->
-    <script
-        type="module"
-        src="./js/admin.js"
-        defer
-    ></script>
+    <script type="module" src="./js/admin.js" defer></script>
 </head>
 
 <body class="admin-page">
@@ -51,11 +34,7 @@
          LOADING
          ===================================================== -->
 
-    <div
-        id="admin-loading"
-        class="admin-loading"
-        aria-live="polite"
-    >
+    <div id="admin-loading" class="admin-loading" aria-live="polite">
         <div class="admin-loading-card">
 
             <div class="admin-spinner"></div>
@@ -72,31 +51,18 @@
          APP
          ===================================================== -->
 
-    <div
-        id="admin-app"
-        class="admin-app"
-        hidden
-    >
+    <div id="admin-app" class="admin-app" hidden>
 
         <!-- =================================================
              SIDEBAR
              ================================================= -->
 
-        <aside
-            id="admin-sidebar"
-            class="admin-sidebar"
-        >
+        <aside id="admin-sidebar" class="admin-sidebar">
 
             <div class="sidebar-brand">
 
-                <a
-                    href="index.html"
-                    class="sidebar-logo"
-                >
-                    <img
-                        src="./assets/img/logo.jpg"
-                        alt="Olomi"
-                    >
+                <a href="index.html" class="sidebar-logo">
+                    <img src="./assets/img/logo.jpg" alt="Olomi">
                 </a>
 
                 <div class="sidebar-brand-text">
@@ -116,16 +82,9 @@
 
             <!-- Navegação -->
 
-            <nav
-                class="admin-nav"
-                aria-label="Navegação administrativa"
-            >
+            <nav class="admin-nav" aria-label="Navegação administrativa">
 
-                <button
-                    type="button"
-                    class="admin-nav-item is-active"
-                    data-section="dashboard"
-                >
+                <button type="button" class="admin-nav-item is-active" data-section="dashboard">
                     <span class="nav-icon">⌂</span>
 
                     <span>
@@ -134,11 +93,7 @@
                 </button>
 
 
-                <button
-                    type="button"
-                    class="admin-nav-item"
-                    data-section="products"
-                >
+                <button type="button" class="admin-nav-item" data-section="products">
                     <span class="nav-icon">◇</span>
 
                     <span>
@@ -147,11 +102,7 @@
                 </button>
 
 
-                <button
-                    type="button"
-                    class="admin-nav-item"
-                    data-section="orders"
-                >
+                <button type="button" class="admin-nav-item" data-section="orders">
                     <span class="nav-icon">▣</span>
 
                     <span>
@@ -160,11 +111,7 @@
                 </button>
 
 
-                <button
-                    type="button"
-                    class="admin-nav-item"
-                    data-section="customers"
-                >
+                <button type="button" class="admin-nav-item" data-section="customers">
                     <span class="nav-icon">♙</span>
 
                     <span>
@@ -173,11 +120,7 @@
                 </button>
 
 
-                <button
-                    type="button"
-                    class="admin-nav-item"
-                    data-section="coupons"
-                >
+                <button type="button" class="admin-nav-item" data-section="coupons">
                     <span class="nav-icon">%</span>
 
                     <span>
@@ -186,11 +129,7 @@
                 </button>
 
 
-                <button
-                    type="button"
-                    class="admin-nav-item"
-                    data-section="settings"
-                >
+                <button type="button" class="admin-nav-item" data-section="settings">
                     <span class="nav-icon">⚙</span>
 
                     <span>
@@ -205,20 +144,13 @@
 
             <div class="sidebar-footer">
 
-                <a
-                    href="index.html"
-                    class="back-store-link"
-                >
+                <a href="index.html" class="back-store-link">
                     <span>←</span>
                     Voltar para a loja
                 </a>
 
 
-                <button
-                    type="button"
-                    id="admin-logout"
-                    class="logout-button"
-                >
+                <button type="button" id="admin-logout" class="logout-button">
                     <span>↪</span>
                     Sair
                 </button>
@@ -240,12 +172,7 @@
 
                 <div class="admin-header-left">
 
-                    <button
-                        type="button"
-                        id="sidebar-toggle"
-                        class="sidebar-toggle"
-                        aria-label="Abrir menu"
-                    >
+                    <button type="button" id="sidebar-toggle" class="sidebar-toggle" aria-label="Abrir menu">
                         ☰
                     </button>
 
@@ -298,11 +225,7 @@
                  DASHBOARD
                  ================================================= -->
 
-            <section
-                id="section-dashboard"
-                class="admin-section is-active"
-                data-section-content="dashboard"
-            >
+            <section id="section-dashboard" class="admin-section is-active" data-section-content="dashboard">
 
                 <div class="section-intro">
 
@@ -322,11 +245,7 @@
 
                     </div>
 
-                    <button
-                        type="button"
-                        id="refresh-dashboard"
-                        class="secondary-button"
-                    >
+                    <button type="button" id="refresh-dashboard" class="secondary-button">
                         ↻ Atualizar dados
                     </button>
 
@@ -463,21 +382,14 @@
 
                             </div>
 
-                            <button
-                                type="button"
-                                class="text-button"
-                                data-section-link="orders"
-                            >
+                            <button type="button" class="text-button" data-section-link="orders">
                                 Ver todos
                             </button>
 
                         </div>
 
 
-                        <div
-                            id="recent-orders"
-                            class="recent-orders"
-                        >
+                        <div id="recent-orders" class="recent-orders">
                             <div class="table-loading">
                                 Carregando pedidos...
                             </div>
@@ -605,11 +517,7 @@
 
                     <div class="quick-actions-grid">
 
-                        <button
-                            type="button"
-                            class="quick-action"
-                            data-section-link="products"
-                        >
+                        <button type="button" class="quick-action" data-section-link="products">
 
                             <span class="quick-action-icon">
                                 +
@@ -634,11 +542,7 @@
                         </button>
 
 
-                        <button
-                            type="button"
-                            class="quick-action"
-                            data-section-link="orders"
-                        >
+                        <button type="button" class="quick-action" data-section-link="orders">
 
                             <span class="quick-action-icon">
                                 #
@@ -663,11 +567,7 @@
                         </button>
 
 
-                        <button
-                            type="button"
-                            class="quick-action"
-                            data-section-link="customers"
-                        >
+                        <button type="button" class="quick-action" data-section-link="customers">
 
                             <span class="quick-action-icon">
                                 ♙
@@ -692,11 +592,7 @@
                         </button>
 
 
-                        <button
-                            type="button"
-                            class="quick-action"
-                            data-section-link="coupons"
-                        >
+                        <button type="button" class="quick-action" data-section-link="coupons">
 
                             <span class="quick-action-icon">
                                 %
@@ -731,12 +627,7 @@
                  PRODUTOS
                  ================================================= -->
 
-            <section
-                id="section-products"
-                class="admin-section"
-                data-section-content="products"
-                hidden
-            >
+            <section id="section-products" class="admin-section" data-section-content="products" hidden>
 
                 <div class="section-intro">
 
@@ -756,11 +647,7 @@
 
                     </div>
 
-                    <button
-                        type="button"
-                        class="primary-button"
-                        id="new-product-button"
-                    >
+                    <button type="button" class="primary-button" id="new-product-button">
                         + Novo produto
                     </button>
 
@@ -769,328 +656,231 @@
 
                 <div class="admin-card products-card">
 
-    <div class="products-toolbar">
+                    <div class="products-toolbar">
 
-        <div class="products-toolbar-info">
+                        <div class="products-toolbar-info">
 
-            <span class="card-kicker">
-                CATÁLOGO
-            </span>
+                            <span class="card-kicker">
+                                CATÁLOGO
+                            </span>
 
-            <h3>
-                Produtos cadastrados
-            </h3>
+                            <h3>
+                                Produtos cadastrados
+                            </h3>
 
-            <p>
-                Visualize os produtos atualmente registrados na Olomi.
-            </p>
+                            <p>
+                                Visualize os produtos atualmente registrados na Olomi.
+                            </p>
 
-        </div>
+                        </div>
 
-        <div class="products-toolbar-actions">
+                        <div class="products-toolbar-actions">
 
-            <label
-                class="admin-search"
-                for="products-search"
-            >
-                <span aria-hidden="true">⌕</span>
+                            <label class="admin-search" for="products-search">
+                                <span aria-hidden="true">⌕</span>
 
-                <input
-                    type="search"
-                    id="products-search"
-                    placeholder="Buscar produto..."
-                    autocomplete="off"
-                >
-            </label>
+                                <input type="search" id="products-search" placeholder="Buscar produto..."
+                                    autocomplete="off">
+                            </label>
 
-            <button
-                type="button"
-                class="secondary-button"
-                id="refresh-products"
-            >
-                ↻ Atualizar
-            </button>
+                            <button type="button" class="secondary-button" id="refresh-products">
+                                ↻ Atualizar
+                            </button>
 
-        </div>
+                        </div>
 
-    </div>
+                    </div>
 
 
-    <div
-        id="products-loading"
-        class="table-loading"
-        hidden
-    >
-        Carregando produtos...
-    </div>
+                    <div id="products-loading" class="table-loading" hidden>
+                        Carregando produtos...
+                    </div>
 
 
-    <div
-        id="products-empty"
-        class="empty-table"
-        hidden
-    >
-        Nenhum produto cadastrado.
-    </div>
+                    <div id="products-empty" class="empty-table" hidden>
+                        Nenhum produto cadastrado.
+                    </div>
 
 
-    <div
-        id="products-table-wrapper"
-        class="admin-table-wrapper"
-        hidden
-    >
-
-        <table class="admin-table">
+                    <div id="products-table-wrapper" class="admin-table-wrapper" hidden>
 
-            <thead>
-
-                <tr>
+                        <table class="admin-table">
 
-                    <th>
-                        Produto
-                    </th>
-
-                    <th>
-                        Categoria
-                    </th>
-
-                    <th>
-                        Preço
-                    </th>
-
-                    <th>
-                        Estoque
-                    </th>
-
-                    <th>
-                        Ações
-                    </th>
-
-                </tr>
-
-            </thead>
-
-            <tbody id="products-table-body">
-            </tbody>
-
-        </table>
-
-    </div>
-    <div
-    id="product-editor"
-    class="admin-card product-editor"
-    hidden
->
-    <div class="product-editor-header">
-
-        <div>
-            <span class="card-kicker">
-                CATÁLOGO
-            </span>
-
-            <h3 id="product-editor-title">
-                Editar produto
-            </h3>
-
-            <p>
-                Atualize as informações do produto selecionado.
-            </p>
-        </div>
-
-        <button
-            type="button"
-            class="secondary-button"
-            id="cancel-product-edit"
-        >
-            Cancelar
-        </button>
-
-    </div>
-
-    <form id="product-form" class="product-form">
-
-        <input
-            type="hidden"
-            id="product-id"
-        >
-
-        <div class="product-form-grid">
-
-            <div class="form-field">
-                <label for="product-name">
-                    Nome do produto
-                </label>
-
-                <input
-                    type="text"
-                    id="product-name"
-                    required
-                >
-            </div>
-
-            <div class="form-field">
-                <label for="product-category">
-                    Categoria
-                </label>
-
-                <input
-                    type="text"
-                    id="product-category"
-                    required
-                >
-            </div>
-
-            <div class="form-field">
-                <label for="product-price">
-                    Preço
-                </label>
-
-                <input
-                    type="number"
-                    id="product-price"
-                    min="0"
-                    step="0.01"
-                    required
-                >
-            </div>
-
-            <div class="form-field">
-                <label for="product-promotional-price">
-                    Preço promocional
-                </label>
-
-                <input
-                    type="number"
-                    id="product-promotional-price"
-                    min="0"
-                    step="0.01"
-                >
-            </div>
-
-            <div class="form-field">
-                <label for="product-stock">
-                    Estoque
-                </label>
-
-                <input
-                    type="number"
-                    id="product-stock"
-                    min="0"
-                    step="1"
-                    required
-                >
-            </div>
-
-            <div class="form-field">
-                <label for="product-weight">
-                    Peso (g)
-                </label>
-
-                <input
-                    type="number"
-                    id="product-weight"
-                    min="0"
-                    step="0.01"
-                >
-            </div>
-
-            <div class="form-field">
-                <label for="product-length">
-                    Comprimento (cm)
-                </label>
-
-                <input
-                    type="number"
-                    id="product-length"
-                    min="0"
-                    step="0.01"
-                >
-            </div>
-
-            <div class="form-field">
-                <label for="product-width">
-                    Largura (cm)
-                </label>
-
-                <input
-                    type="number"
-                    id="product-width"
-                    min="0"
-                    step="0.01"
-                >
-            </div>
-
-            <div class="form-field">
-                <label for="product-height">
-                    Altura (cm)
-                </label>
-
-                <input
-                    type="number"
-                    id="product-height"
-                    min="0"
-                    step="0.01"
-                >
-            </div>
-
-            <div class="form-field form-field-full">
-                <label for="product-description">
-                    Descrição
-                </label>
-
-                <textarea
-                    id="product-description"
-                    rows="5"
-                ></textarea>
-            </div>
-
-            <div class="form-field form-field-full product-images-field">
-
-                <label for="product-images">
-                    Imagens do produto
-                </label>
-
-                <input
-                    type="file"
-                    id="product-images"
-                    accept="image/*"
-                    multiple
-                >
-
-                <small>
-                    Selecione uma ou mais imagens. Limite de 10 MB por arquivo.
-                </small>
-
-                <div
-                    id="product-current-images"
-                    class="product-images-preview"
-                ></div>
-
-                <div
-                    id="product-images-preview"
-                    class="product-images-preview"
-                ></div>
-
-            </div>
-
-        </div>
-
-        <div class="product-form-actions">
-
-            <button
-                type="submit"
-                class="primary-button"
-                id="save-product"
-            >
-                Salvar alterações
-            </button>
-
-        </div>
-
-    </form>
-</div>
-
-</div>
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Produto
+                                    </th>
+
+                                    <th>
+                                        Categoria
+                                    </th>
+
+                                    <th>
+                                        Preço
+                                    </th>
+
+                                    <th>
+                                        Estoque
+                                    </th>
+
+                                    <th>
+                                        Ações
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="products-table-body">
+                            </tbody>
+
+                        </table>
+
+                    </div>
+                    <div id="product-editor" class="admin-card product-editor" hidden>
+                        <div class="product-editor-header">
+
+                            <div>
+                                <span class="card-kicker">
+                                    CATÁLOGO
+                                </span>
+
+                                <h3 id="product-editor-title">
+                                    Editar produto
+                                </h3>
+
+                                <p>
+                                    Atualize as informações do produto selecionado.
+                                </p>
+                            </div>
+
+                            <button type="button" class="secondary-button" id="cancel-product-edit">
+                                Cancelar
+                            </button>
+
+                        </div>
+
+                        <form id="product-form" class="product-form">
+
+                            <input type="hidden" id="product-id">
+
+                            <div class="product-form-grid">
+
+                                <div class="form-field">
+                                    <label for="product-name">
+                                        Nome do produto
+                                    </label>
+
+                                    <input type="text" id="product-name" required>
+                                </div>
+
+                                <div class="form-field">
+                                    <label for="product-category">
+                                        Categoria
+                                    </label>
+
+                                    <input type="text" id="product-category" required>
+                                </div>
+
+                                <div class="form-field">
+                                    <label for="product-price">
+                                        Preço
+                                    </label>
+
+                                    <input type="number" id="product-price" min="0" step="0.01" required>
+                                </div>
+
+                                <div class="form-field">
+                                    <label for="product-promotional-price">
+                                        Preço promocional
+                                    </label>
+
+                                    <input type="number" id="product-promotional-price" min="0" step="0.01">
+                                </div>
+
+                                <div class="form-field">
+                                    <label for="product-stock">
+                                        Estoque
+                                    </label>
+
+                                    <input type="number" id="product-stock" min="0" step="1" required>
+                                </div>
+
+                                <div class="form-field">
+                                    <label for="product-weight">
+                                        Peso (g)
+                                    </label>
+
+                                    <input type="number" id="product-weight" min="0" step="0.01">
+                                </div>
+
+                                <div class="form-field">
+                                    <label for="product-length">
+                                        Comprimento (cm)
+                                    </label>
+
+                                    <input type="number" id="product-length" min="0" step="0.01">
+                                </div>
+
+                                <div class="form-field">
+                                    <label for="product-width">
+                                        Largura (cm)
+                                    </label>
+
+                                    <input type="number" id="product-width" min="0" step="0.01">
+                                </div>
+
+                                <div class="form-field">
+                                    <label for="product-height">
+                                        Altura (cm)
+                                    </label>
+
+                                    <input type="number" id="product-height" min="0" step="0.01">
+                                </div>
+
+                                <div class="form-field form-field-full">
+                                    <label for="product-description">
+                                        Descrição
+                                    </label>
+
+                                    <textarea id="product-description" rows="5"></textarea>
+                                </div>
+
+                                <div class="form-field form-field-full product-images-field">
+
+                                    <label for="product-images">
+                                        Imagens do produto
+                                    </label>
+
+                                    <input type="file" id="product-images" accept="image/*" multiple>
+
+                                    <small>
+                                        Selecione uma ou mais imagens. Limite de 10 MB por arquivo.
+                                    </small>
+
+                                    <div id="product-current-images" class="product-images-preview"></div>
+
+                                    <div id="product-images-preview" class="product-images-preview"></div>
+
+                                </div>
+
+                            </div>
+
+                            <div class="product-form-actions">
+
+                                <button type="submit" class="primary-button" id="save-product">
+                                    Salvar alterações
+                                </button>
+
+                            </div>
+
+                        </form>
+                    </div>
+
+                </div>
 
             </section>
 
@@ -1099,12 +889,7 @@
                  PEDIDOS
                  ================================================= -->
 
-            <section
-                id="section-orders"
-                class="admin-section"
-                data-section-content="orders"
-                hidden
-            >
+            <section id="section-orders" class="admin-section" data-section-content="orders" hidden>
 
                 <div class="section-intro">
 
@@ -1129,119 +914,134 @@
 
                 <div class="admin-card orders-card">
 
-    <div class="orders-toolbar">
+                    <div class="orders-toolbar">
 
-        <div class="orders-toolbar-info">
+                        <div class="orders-toolbar-info">
 
-            <span class="card-kicker">
-                VENDAS
-            </span>
+                            <span class="card-kicker">
+                                VENDAS
+                            </span>
 
-            <h3>
-                Pedidos registrados
-            </h3>
+                            <h3>
+                                Pedidos registrados
+                            </h3>
 
-            <p>
-                Consulte os pedidos realizados na Olomi.
-            </p>
+                            <p>
+                                Consulte os pedidos realizados na Olomi.
+                            </p>
 
-        </div>
+                        </div>
 
-        <div class="orders-toolbar-actions">
+                        <div class="orders-toolbar-actions">
 
-            <label
-                class="admin-search"
-                for="orders-search"
-            >
-                <span aria-hidden="true">⌕</span>
+                            <label class="admin-search" for="orders-search">
+                                <span aria-hidden="true">⌕</span>
 
-                <input
-                    type="search"
-                    id="orders-search"
-                    placeholder="Buscar pedido ou cliente..."
-                    autocomplete="off"
-                >
-            </label>
+                                <input type="search" id="orders-search" placeholder="Buscar pedido ou cliente..."
+                                    autocomplete="off">
+                            </label>
 
-            <button
-                type="button"
-                class="secondary-button"
-                id="refresh-orders"
-            >
-                ↻ Atualizar
-            </button>
+                            <button type="button" class="secondary-button" id="refresh-orders">
+                                ↻ Atualizar
+                            </button>
 
-        </div>
+                        </div>
 
-    </div>
+                    </div>
 
 
-    <div
-        id="orders-loading"
-        class="table-loading"
-        hidden
-    >
-        Carregando pedidos...
-    </div>
+                    <div id="orders-loading" class="table-loading" hidden>
+                        Carregando pedidos...
+                    </div>
 
 
-    <div
-        id="orders-empty"
-        class="empty-table"
-        hidden
-    >
-        Nenhum pedido encontrado.
-    </div>
+                    <div id="orders-empty" class="empty-table" hidden>
+                        Nenhum pedido encontrado.
+                    </div>
 
 
-    <div
-        id="orders-table-wrapper"
-        class="admin-table-wrapper"
-        hidden
-    >
+                    <div id="orders-table-wrapper" class="admin-table-wrapper" hidden>
 
-        <table class="admin-table">
+                        <table class="admin-table">
 
-            <thead>
+                            <thead>
 
-                <tr>
+                                <tr>
 
-                    <th>
-                        Pedido
-                    </th>
+                                    <th>
+                                        Pedido
+                                    </th>
 
-                    <th>
-                        Cliente
-                    </th>
+                                    <th>
+                                        Cliente
+                                    </th>
 
-                    <th>
-                        Data
-                    </th>
+                                    <th>
+                                        Data
+                                    </th>
 
-                    <th>
-                        Total
-                    </th>
+                                    <th>
+                                        Total
+                                    </th>
 
-                    <th>
-                        Status
-                    </th>
+                                    <th>
+                                        Status
+                                    </th>
 
-                    <th>
-                        Ações
-                    </th>
+                                    <th>
+                                        Ações
+                                    </th>
 
-                </tr>
+                                </tr>
 
-            </thead>
+                            </thead>
 
-            <tbody id="orders-table-body">
-            </tbody>
+                            <tbody id="orders-table-body">
+                            </tbody>
 
-        </table>
+                        </table>
 
-    </div>
+                    </div>
 
-</div>
+                </div>
+
+                <div id="order-details" class="admin-card order-details-card" hidden>
+                
+                    <div class="order-details-header">
+                
+                        <div>
+                
+                            <span class="card-kicker">
+                                PEDIDO
+                            </span>
+                
+                            <h3 id="order-details-title">
+                                Detalhes do pedido
+                            </h3>
+                
+                            <p id="order-details-date">
+                                —
+                            </p>
+                
+                        </div>
+                
+                
+                        <button type="button" class="secondary-button" id="close-order-details">
+                            Fechar
+                        </button>
+                
+                    </div>
+                
+                
+                    <div id="order-details-content" class="order-details-content">
+                
+                        <div class="table-loading">
+                            Carregando detalhes do pedido...
+                        </div>
+                
+                    </div>
+                
+                </div>
 
             </section>
 
@@ -1250,12 +1050,7 @@
                  CLIENTES
                  ================================================= -->
 
-            <section
-                id="section-customers"
-                class="admin-section"
-                data-section-content="customers"
-                hidden
-            >
+            <section id="section-customers" class="admin-section" data-section-content="customers" hidden>
 
                 <div class="section-intro">
 
@@ -1280,10 +1075,7 @@
 
                 <div class="admin-card">
 
-                    <div
-                        id="customers-content"
-                        class="section-placeholder"
-                    >
+                    <div id="customers-content" class="section-placeholder">
 
                         <div class="placeholder-icon">
                             ♙
@@ -1309,12 +1101,7 @@
                  CUPONS
                  ================================================= -->
 
-            <section
-                id="section-coupons"
-                class="admin-section"
-                data-section-content="coupons"
-                hidden
-            >
+            <section id="section-coupons" class="admin-section" data-section-content="coupons" hidden>
 
                 <div class="section-intro">
 
@@ -1339,10 +1126,7 @@
 
                 <div class="admin-card">
 
-                    <div
-                        id="coupons-content"
-                        class="section-placeholder"
-                    >
+                    <div id="coupons-content" class="section-placeholder">
 
                         <div class="placeholder-icon">
                             %
@@ -1368,12 +1152,7 @@
                  CONFIGURAÇÕES
                  ================================================= -->
 
-            <section
-                id="section-settings"
-                class="admin-section"
-                data-section-content="settings"
-                hidden
-            >
+            <section id="section-settings" class="admin-section" data-section-content="settings" hidden>
 
                 <div class="section-intro">
 
@@ -1398,9 +1177,7 @@
 
                 <div class="admin-card">
 
-                    <div
-                        class="section-placeholder"
-                    >
+                    <div class="section-placeholder">
 
                         <div class="placeholder-icon">
                             ⚙
@@ -1429,11 +1206,7 @@
          ACESSO NEGADO
          ===================================================== -->
 
-    <div
-        id="access-denied"
-        class="access-denied"
-        hidden
-    >
+    <div id="access-denied" class="access-denied" hidden>
 
         <div class="access-denied-card">
 
@@ -1456,18 +1229,11 @@
 
             <div class="access-denied-actions">
 
-                <a
-                    href="index.html"
-                    class="primary-button"
-                >
+                <a href="index.html" class="primary-button">
                     Voltar para a loja
                 </a>
 
-                <button
-                    type="button"
-                    id="denied-logout"
-                    class="secondary-button"
-                >
+                <button type="button" id="denied-logout" class="secondary-button">
                     Sair da conta
                 </button>
 
@@ -1478,4 +1244,5 @@
     </div>
 
 </body>
+
 </html>

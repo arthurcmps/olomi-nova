@@ -85,6 +85,39 @@ const productsSearchEl =
 const refreshProductsEl =
     document.getElementById('refresh-products');
 
+const ordersLoadingEl =
+    document.getElementById('orders-loading');
+
+const ordersEmptyEl =
+    document.getElementById('orders-empty');
+
+const ordersTableWrapperEl =
+    document.getElementById('orders-table-wrapper');
+
+const ordersTableBodyEl =
+    document.getElementById('orders-table-body');
+
+const ordersSearchEl =
+    document.getElementById('orders-search');
+
+const refreshOrdersEl =
+    document.getElementById('refresh-orders');
+
+const orderDetailsEl =
+    document.getElementById('order-details');
+
+const orderDetailsTitleEl =
+    document.getElementById('order-details-title');
+
+const orderDetailsDateEl =
+    document.getElementById('order-details-date');
+
+const orderDetailsContentEl =
+    document.getElementById('order-details-content');
+
+const closeOrderDetailsEl =
+    document.getElementById('close-order-details');
+
 const productEditorEl =
     document.getElementById('product-editor');
 
@@ -2102,6 +2135,84 @@ if (productsSearchEl) {
 
 }
 
+if (ordersSearchEl) {
+
+    ordersSearchEl.addEventListener(
+        'input',
+        filterAdminOrders
+    );
+
+}
+
+if (ordersTableBodyEl) {
+
+    ordersTableBodyEl.addEventListener(
+        'click',
+        event => {
+
+            const button =
+                event.target.closest(
+                    '[data-order-action]'
+                );
+
+
+            if (!button) {
+                return;
+            }
+
+
+            const action =
+                button.dataset.orderAction;
+
+
+            const orderId =
+                button.dataset.orderId;
+
+
+            if (
+                action === 'view' &&
+                orderId
+            ) {
+
+                openOrderDetails(
+                    orderId
+                );
+
+            }
+
+        }
+    );
+
+}
+
+if (closeOrderDetailsEl) {
+
+    closeOrderDetailsEl.addEventListener(
+        'click',
+        () => {
+
+            if (orderDetailsEl) {
+
+                orderDetailsEl.hidden =
+                    true;
+
+            }
+
+        }
+    );
+
+}
+
+
+if (refreshOrdersEl) {
+
+    refreshOrdersEl.addEventListener(
+        'click',
+        loadOrders
+    );
+
+}
+
 if (productsTableBodyEl) {
 
     productsTableBodyEl.addEventListener(
@@ -2262,9 +2373,964 @@ if (productImagesEl) {
 
 }
 
+let adminOrders = [];
+
+
+async function loadOrders() {
+
+    if (!ordersTableBodyEl) {
+        return;
+    }
+
+    if (orderDetailsEl) {
+        orderDetailsEl.hidden = true;
+    }
+
+
+    if (ordersLoadingEl) {
+        ordersLoadingEl.hidden = false;
+    }
+
+    if (ordersEmptyEl) {
+        ordersEmptyEl.hidden = true;
+    }
+
+    if (ordersTableWrapperEl) {
+        ordersTableWrapperEl.hidden = true;
+    }
+
+
+    try {
+
+        const snapshot =
+            await getDocs(
+                collection(
+                    db,
+                    'orders'
+                )
+            );
+
+
+        adminOrders =
+            snapshot.docs.map(
+                document => ({
+                    id: document.id,
+                    ...document.data()
+                })
+            );
+
+
+        renderOrdersTable(
+            adminOrders
+        );
+
+    } catch (error) {
+
+        console.error(
+            'Erro ao carregar pedidos:',
+            error
+        );
+
+
+        if (ordersLoadingEl) {
+            ordersLoadingEl.hidden = true;
+        }
+
+
+        if (ordersEmptyEl) {
+
+            ordersEmptyEl.hidden = false;
+
+            ordersEmptyEl.textContent =
+                'Não foi possível carregar os pedidos.';
+
+        }
+
+    }
+
+}
+
+
+function renderOrdersTable(orders) {
+
+    if (!ordersTableBodyEl) {
+        return;
+    }
+
+
+    if (ordersLoadingEl) {
+        ordersLoadingEl.hidden = true;
+    }
+
+
+    if (!orders.length) {
+
+        ordersTableBodyEl.innerHTML = '';
+
+        if (ordersTableWrapperEl) {
+            ordersTableWrapperEl.hidden = true;
+        }
+
+        if (ordersEmptyEl) {
+
+            ordersEmptyEl.hidden = false;
+
+            ordersEmptyEl.textContent =
+                'Nenhum pedido encontrado.';
+
+        }
+
+        return;
+
+    }
+
+
+    if (ordersEmptyEl) {
+        ordersEmptyEl.hidden = true;
+    }
+
+
+    if (ordersTableWrapperEl) {
+        ordersTableWrapperEl.hidden = false;
+    }
+
+
+    const sortedOrders =
+        [...orders].sort(
+            (a, b) => {
+
+                const dateA =
+                    getTimestampValue(
+                        a.createdAt
+                    );
+
+
+                const dateB =
+                    getTimestampValue(
+                        b.createdAt
+                    );
+
+
+                return dateB - dateA;
+
+            }
+        );
+
+
+    ordersTableBodyEl.innerHTML =
+        sortedOrders
+            .map(order => {
+
+                const status =
+                    getStatusInfo(
+                        order.status
+                    );
+
+
+                const customer =
+                    order.customer || {};
+
+
+                const customerName =
+                    customer.name ||
+                    order.customerName ||
+                    order.name ||
+                    'Cliente';
+
+
+                const customerEmail =
+                    customer.email ||
+                    order.customerEmail ||
+                    order.email ||
+                    '';
+
+
+                const total =
+                    Number(
+                        order.total ??
+                        order.totalAmount ??
+                        order.amount ??
+                        0
+                    );
+
+
+                const shortOrderId =
+                    order.id
+                        ? order.id.slice(0, 8)
+                        : '—';
+
+
+                return `
+
+                    <tr>
+
+                        <td>
+
+                            <div class="order-table-id">
+
+                                <strong>
+                                    #${escapeHTML(
+                                        shortOrderId
+                                    )}
+                                </strong>
+
+                                <span>
+                                    ${escapeHTML(
+                                        order.id || ''
+                                    )}
+                                </span>
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+
+                            <div class="order-table-customer">
+
+                                <strong>
+                                    ${escapeHTML(
+                                        customerName
+                                    )}
+                                </strong>
+
+                                ${
+                                    customerEmail
+                                        ? `
+                                            <span>
+                                                ${escapeHTML(
+                                                    customerEmail
+                                                )}
+                                            </span>
+                                        `
+                                        : ''
+                                }
+
+                            </div>
+
+                        </td>
+
+
+                        <td>
+                            ${escapeHTML(
+                                formatDate(
+                                    order.createdAt
+                                )
+                            )}
+                        </td>
+
+
+                        <td>
+
+                            <strong>
+                                ${formatCurrency(
+                                    total
+                                )}
+                            </strong>
+
+                        </td>
+
+
+                        <td>
+
+                            <span
+                                class="status-badge ${escapeHTML(
+                                    status.className
+                                )}"
+                            >
+                                ${escapeHTML(
+                                    status.text
+                                )}
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            <div class="table-actions">
+
+                                <button
+                                    type="button"
+                                    class="table-action-button"
+                                    data-order-action="view"
+                                    data-order-id="${escapeHTML(
+                                        order.id
+                                    )}"
+                                >
+                                    Ver pedido
+                                </button>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+            })
+            .join('');
+
+}
+
+
+function filterAdminOrders() {
+
+    if (!ordersSearchEl) {
+        return;
+    }
+
+
+    const term =
+        ordersSearchEl.value
+            .trim()
+            .toLowerCase();
+
+
+    if (!term) {
+
+        renderOrdersTable(
+            adminOrders
+        );
+
+        return;
+
+    }
+
+
+    const filtered =
+        adminOrders.filter(
+            order => {
+
+                const customer =
+                    order.customer || {};
+
+
+                const orderId =
+                    String(
+                        order.id || ''
+                    ).toLowerCase();
+
+
+                const customerName =
+                    String(
+                        customer.name ||
+                        order.customerName ||
+                        order.name ||
+                        ''
+                    ).toLowerCase();
+
+
+                const customerEmail =
+                    String(
+                        customer.email ||
+                        order.customerEmail ||
+                        order.email ||
+                        ''
+                    ).toLowerCase();
+
+
+                return (
+                    orderId.includes(term) ||
+                    customerName.includes(term) ||
+                    customerEmail.includes(term)
+                );
+
+            }
+        );
+
+
+    renderOrdersTable(
+        filtered
+    );
+
+}
+
 /* =========================================================
    PEDIDOS
    ========================================================= */
+
+function openOrderDetails(orderId) {
+
+    const order =
+        adminOrders.find(
+            item => item.id === orderId
+        );
+
+
+    if (!order) {
+
+        console.error(
+            'Pedido não encontrado:',
+            orderId
+        );
+
+        return;
+
+    }
+
+
+    if (!orderDetailsEl) {
+        return;
+    }
+
+
+    const status =
+        getStatusInfo(
+            order.status
+        );
+
+
+    const customer =
+        order.customer || {};
+
+
+    const customerName =
+        customer.name ||
+        order.customerName ||
+        order.name ||
+        'Cliente';
+
+
+    const customerEmail =
+        customer.email ||
+        order.customerEmail ||
+        order.email ||
+        'Não informado';
+
+
+    const customerPhone =
+        customer.phone ||
+        order.customerPhone ||
+        order.phone ||
+        'Não informado';
+
+
+    const address =
+        customer.address ||
+        order.address ||
+        {};
+
+
+    const total =
+        Number(
+            order.total ??
+            order.totalAmount ??
+            order.amount ??
+            0
+        );
+
+
+    const subtotal =
+        Number(
+            order.subtotal || 0
+        );
+
+
+    const discount =
+        Number(
+            order.desconto || 0
+        );
+
+
+    const shipping =
+        order.shipping || {};
+
+
+    const shippingCost =
+        Number(
+            shipping.cost || 0
+        );
+
+
+    const coupon =
+        order.cupomUsado ||
+        'Nenhum';
+
+
+    if (orderDetailsTitleEl) {
+
+        orderDetailsTitleEl.textContent =
+            `Pedido #${order.id}`;
+
+    }
+
+
+    if (orderDetailsDateEl) {
+
+        orderDetailsDateEl.textContent =
+            formatDateTime(
+                order.createdAt
+            );
+
+    }
+
+
+    if (orderDetailsContentEl) {
+
+        orderDetailsContentEl.innerHTML = `
+
+            <div class="order-detail-status">
+
+                <span
+                    class="status-badge ${escapeHTML(
+            status.className
+        )}"
+                >
+                    ${escapeHTML(
+            status.text
+        )}
+                </span>
+
+            </div>
+
+
+            <div class="order-detail-grid">
+
+                <div class="order-detail-section">
+
+                    <span class="card-kicker">
+                        CLIENTE
+                    </span>
+
+                    <h4>
+                        ${escapeHTML(
+            customerName
+        )}
+                    </h4>
+
+                    <p>
+                        ${escapeHTML(
+            customerEmail
+        )}
+                    </p>
+
+                    <p>
+                        ${escapeHTML(
+            customerPhone
+        )}
+                    </p>
+
+                </div>
+
+
+                <div class="order-detail-section">
+
+                    <span class="card-kicker">
+                        ENTREGA
+                    </span>
+
+                    <h4>
+                        Endereço
+                    </h4>
+
+                    <p>
+                        ${escapeHTML(
+            formatOrderAddress(
+                address
+            )
+        )}
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="order-detail-section">
+
+                <span class="card-kicker">
+                    PRODUTOS
+                </span>
+
+                <div class="order-items">
+
+                    ${renderOrderItems(
+            order.items
+        )}
+
+                </div>
+
+            </div>
+
+
+            <div class="order-summary">
+
+                <div class="order-summary-line">
+
+                    <span>
+                        Subtotal
+                    </span>
+
+                    <strong>
+                        ${formatCurrency(
+            subtotal
+        )}
+                    </strong>
+
+                </div>
+
+
+                <div class="order-summary-line">
+
+                    <span>
+                        Desconto
+                    </span>
+
+                    <strong>
+                        ${formatCurrency(
+            discount
+        )}
+                    </strong>
+
+                </div>
+
+
+                <div class="order-summary-line">
+
+                    <span>
+                        Frete
+                    </span>
+
+                    <strong>
+                        ${formatCurrency(
+            shippingCost
+        )}
+                    </strong>
+
+                </div>
+
+
+                <div class="order-summary-line order-summary-total">
+
+                    <span>
+                        Total
+                    </span>
+
+                    <strong>
+                        ${formatCurrency(
+            total
+        )}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="order-detail-grid">
+
+                <div class="order-detail-section">
+
+                    <span class="card-kicker">
+                        PAGAMENTO
+                    </span>
+
+                    <p>
+                        ${escapeHTML(
+            getPaymentMethodLabel(
+                order.payment
+            )
+        )}
+                    </p>
+
+                </div>
+
+
+                <div class="order-detail-section">
+
+                    <span class="card-kicker">
+                        CUPOM
+                    </span>
+
+                    <p>
+                        ${escapeHTML(
+            coupon
+        )}
+                    </p>
+
+                </div>
+
+            </div>
+
+        `;
+
+    }
+
+
+    orderDetailsEl.hidden = false;
+
+
+    orderDetailsEl.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+    });
+
+}
+
+
+function formatDateTime(timestamp) {
+
+    if (!timestamp) {
+        return 'Data não informada';
+    }
+
+
+    try {
+
+        let date;
+
+
+        if (
+            typeof timestamp.toDate ===
+            'function'
+        ) {
+
+            date =
+                timestamp.toDate();
+
+        } else {
+
+            date =
+                new Date(timestamp);
+
+        }
+
+
+        if (
+            Number.isNaN(
+                date.getTime()
+            )
+        ) {
+
+            return 'Data não informada';
+
+        }
+
+
+        return date.toLocaleString(
+            'pt-BR',
+            {
+                dateStyle: 'short',
+                timeStyle: 'short'
+            }
+        );
+
+    } catch (error) {
+
+        return 'Data não informada';
+
+    }
+
+}
+
+
+function formatOrderAddress(address) {
+
+    if (!address) {
+        return 'Endereço não informado';
+    }
+
+
+    const parts = [];
+
+
+    if (address.street) {
+
+        let street =
+            address.street;
+
+
+        if (address.number) {
+
+            street +=
+                `, ${address.number}`;
+
+        }
+
+
+        parts.push(street);
+
+    }
+
+
+    if (address.complement) {
+
+        parts.push(
+            address.complement
+        );
+
+    }
+
+
+    if (address.neighborhood) {
+
+        parts.push(
+            address.neighborhood
+        );
+
+    }
+
+
+    const cityState = [
+        address.city,
+        address.state
+    ]
+        .filter(Boolean)
+        .join(' - ');
+
+
+    if (cityState) {
+
+        parts.push(
+            cityState
+        );
+
+    }
+
+
+    if (address.cep) {
+
+        parts.push(
+            `CEP: ${address.cep}`
+        );
+
+    }
+
+
+    return parts.length
+        ? parts.join(', ')
+        : 'Endereço não informado';
+
+}
+
+
+function renderOrderItems(items) {
+
+    if (
+        !Array.isArray(items) ||
+        !items.length
+    ) {
+
+        return `
+            <p>
+                Nenhum produto registrado neste pedido.
+            </p>
+        `;
+
+    }
+
+
+    return items
+        .map(item => {
+
+            const quantity =
+                Number(
+                    item.qty || 0
+                );
+
+
+            const price =
+                Number(
+                    item.price || 0
+                );
+
+
+            const itemTotal =
+                price * quantity;
+
+
+            return `
+
+                <div class="order-item">
+
+                    <div>
+
+                        <strong>
+                            ${escapeHTML(
+                item.name ||
+                'Produto'
+            )}
+                        </strong>
+
+                        <span>
+                            ${quantity} ×
+                            ${formatCurrency(
+                price
+            )}
+                        </span>
+
+                    </div>
+
+
+                    <strong>
+                        ${formatCurrency(
+                itemTotal
+            )}
+                    </strong>
+
+                </div>
+
+            `;
+
+        })
+        .join('');
+
+}
+
+
+function getPaymentMethodLabel(payment) {
+
+    if (!payment) {
+        return 'Não informado';
+    }
+
+
+    if (typeof payment === 'string') {
+        return payment;
+    }
+
+
+    const method =
+        payment.method ||
+        payment.type ||
+        payment.paymentMethod ||
+        '';
+
+
+    if (!method) {
+        return 'Não informado';
+    }
+
+
+    const labels = {
+
+        pix:
+            'PIX',
+
+        credit_card:
+            'Cartão de crédito',
+
+        debit_card:
+            'Cartão de débito',
+
+        card:
+            'Cartão',
+
+        boleto:
+            'Boleto'
+
+    };
+
+
+    return (
+        labels[method] ||
+        method
+    );
+
+}
 
 function updateOrderStats(orders) {
 
@@ -2890,6 +3956,8 @@ async function refreshDashboard() {
 
         await loadProducts();
 
+        await loadOrders();
+
         if (loadingEl) {
         loadingEl.hidden = true;
     }
@@ -2987,6 +4055,10 @@ async function initializeAdmin(user) {
         await loadDashboard();
 
         console.log('[ADMIN] 9. loadDashboard concluído.');
+
+        await loadOrders();
+
+        console.log('[ADMIN] 9.5. loadOrders concluído.');
 
         if (loadingEl) {
             loadingEl.hidden = true;

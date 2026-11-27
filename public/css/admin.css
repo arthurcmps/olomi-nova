@@ -2285,3 +2285,535 @@ a {
     border-color: rgba(170, 55, 55, 0.35);
     background: rgba(170, 55, 55, 0.07);
 }
+
+/* =========================================================
+   PEDIDOS — LISTAGEM
+   ========================================================= */
+
+.orders-card {
+    padding: 0;
+    overflow: hidden;
+}
+
+
+.orders-toolbar {
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: space-between;
+
+    gap: 24px;
+
+    padding: 24px;
+
+    border-bottom:
+        1px solid var(--admin-border);
+}
+
+
+.orders-toolbar-info {
+    min-width: 0;
+}
+
+
+.orders-toolbar-info h3 {
+    margin: 4px 0 4px;
+
+    color: var(--admin-wine);
+
+    font-family: var(--font-display);
+
+    font-size: 25px;
+
+    font-weight: 400;
+}
+
+
+.orders-toolbar-info p {
+    margin: 0;
+
+    color: var(--admin-muted);
+
+    font-size: 11px;
+
+    line-height: 1.5;
+}
+
+
+.orders-toolbar-actions {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+}
+
+
+.orders-toolbar-actions .admin-search {
+    min-width: 250px;
+}
+
+
+/* =========================================================
+   PEDIDOS — DETALHES
+   ========================================================= */
+
+.order-details-card {
+    margin-top: 24px;
+
+    padding: 0;
+
+    overflow: hidden;
+}
+
+
+.order-details-header {
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    gap: 24px;
+
+    padding: 28px 30px;
+
+    border-bottom:
+        1px solid var(--admin-border);
+
+    background:
+        linear-gradient(135deg,
+            rgba(53, 19, 19, 0.035),
+            rgba(197, 106, 24, 0.035));
+}
+
+
+.order-details-header h3 {
+    margin: 5px 0 5px;
+
+    color: var(--admin-wine);
+
+    font-family: var(--font-display);
+
+    font-size: clamp(25px, 3vw, 32px);
+
+    font-weight: 400;
+
+    line-height: 1.1;
+
+    word-break: break-word;
+}
+
+
+.order-details-header p {
+    margin: 0;
+
+    color: var(--admin-muted);
+
+    font-size: 11px;
+
+    line-height: 1.5;
+}
+
+
+.order-details-header .secondary-button {
+    flex: 0 0 auto;
+}
+
+
+/* =========================================================
+   STATUS DO PEDIDO
+   ========================================================= */
+
+.order-detail-status {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: flex-end;
+
+    padding: 18px 30px 0;
+}
+
+
+.order-detail-status .status-badge {
+    min-height: 30px;
+
+    padding: 0 13px;
+
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   ÁREA INTERNA
+   ========================================================= */
+
+.order-details-content {
+    padding: 0 30px 30px;
+}
+
+
+.order-detail-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 18px;
+
+    margin-top: 18px;
+}
+
+
+.order-detail-section {
+    min-width: 0;
+
+    padding: 20px;
+
+    border:
+        1px solid var(--admin-border);
+
+    border-radius: 16px;
+
+    background:
+        rgba(255, 250, 241, 0.72);
+}
+
+
+.order-detail-section .card-kicker {
+    margin-bottom: 9px;
+}
+
+
+.order-detail-section h4 {
+    margin: 0 0 7px;
+
+    color: var(--admin-wine);
+
+    font-family: var(--font-ui);
+
+    font-size: 13px;
+
+    font-weight: 800;
+}
+
+
+.order-detail-section p {
+    margin: 5px 0 0;
+
+    color: var(--admin-muted);
+
+    font-size: 11px;
+
+    line-height: 1.65;
+
+    overflow-wrap: anywhere;
+}
+
+
+.order-detail-section p+p {
+    margin-top: 2px;
+}
+
+
+/* =========================================================
+   PRODUTOS DO PEDIDO
+   ========================================================= */
+
+.order-detail-section:has(.order-items) {
+    margin-top: 18px;
+}
+
+
+.order-items {
+    display: flex;
+
+    flex-direction: column;
+
+    margin-top: 14px;
+
+    border-top:
+        1px solid var(--admin-border);
+}
+
+
+.order-item {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr) auto;
+
+    align-items: center;
+
+    gap: 20px;
+
+    padding: 16px 0;
+
+    border-bottom:
+        1px solid var(--admin-border);
+}
+
+
+.order-item:last-child {
+    border-bottom: 0;
+}
+
+
+.order-item>div:first-child {
+    display: flex;
+
+    flex-direction: column;
+
+    min-width: 0;
+}
+
+
+.order-item>div:first-child strong {
+    color: var(--admin-wine);
+
+    font-family: var(--font-ui);
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    overflow-wrap: anywhere;
+}
+
+
+.order-item>div:first-child span {
+    margin-top: 4px;
+
+    color: var(--admin-muted);
+
+    font-size: 10px;
+}
+
+
+.order-item>strong {
+    color: var(--admin-wine);
+
+    font-family: var(--font-ui);
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   RESUMO FINANCEIRO
+   ========================================================= */
+
+.order-summary {
+    width: min(100%, 430px);
+
+    margin:
+
+        18px 0 0 auto;
+
+    padding: 20px;
+
+    border:
+        1px solid var(--admin-border);
+
+    border-radius: 16px;
+
+    background:
+        linear-gradient(145deg,
+            rgba(53, 19, 19, 0.045),
+            rgba(197, 106, 24, 0.06));
+}
+
+
+.order-summary-line {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    min-height: 34px;
+
+    color: var(--admin-muted);
+
+    font-size: 11px;
+}
+
+
+.order-summary-line strong {
+    color: var(--admin-text);
+
+    font-family: var(--font-ui);
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    white-space: nowrap;
+}
+
+
+.order-summary-total {
+    margin-top: 10px;
+
+    padding-top: 14px;
+
+    border-top:
+        1px solid var(--admin-border);
+
+    color: var(--admin-wine);
+
+    font-family: var(--font-ui);
+
+    font-size: 12px;
+
+    font-weight: 800;
+}
+
+
+.order-summary-total strong {
+    color: var(--admin-wine);
+
+    font-size: 20px;
+}
+
+
+/* =========================================================
+   PAGAMENTO / CUPOM
+   ========================================================= */
+
+.order-detail-grid:last-child {
+    margin-top: 18px;
+}
+
+
+.order-detail-grid:last-child .order-detail-section {
+    min-height: 100%;
+}
+
+
+/* =========================================================
+   RESPONSIVIDADE — PEDIDOS
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    .order-details-header {
+        padding:
+            24px;
+    }
+
+
+    .order-details-content {
+        padding:
+            0 24px 24px;
+    }
+
+
+    .order-detail-status {
+        padding:
+            16px 24px 0;
+    }
+
+
+    .order-detail-grid {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .order-summary {
+        width: 100%;
+    }
+
+}
+
+
+@media (max-width: 720px) {
+
+    .orders-toolbar {
+        align-items: stretch;
+
+        flex-direction: column;
+
+        padding: 20px;
+    }
+
+
+    .orders-toolbar-actions {
+        align-items: stretch;
+
+        flex-direction: column;
+    }
+
+
+    .orders-toolbar-actions .admin-search {
+        width: 100%;
+
+        min-width: 0;
+    }
+
+
+    .orders-toolbar-actions .secondary-button {
+        width: 100%;
+    }
+
+
+    .order-details-header {
+        align-items: stretch;
+
+        flex-direction: column;
+
+        padding: 20px;
+    }
+
+
+    .order-details-header .secondary-button {
+        width: 100%;
+    }
+
+
+    .order-detail-status {
+        justify-content: flex-start;
+
+        padding:
+            16px 20px 0;
+    }
+
+
+    .order-details-content {
+        padding:
+            0 20px 20px;
+    }
+
+
+    .order-detail-section {
+        padding: 17px;
+    }
+
+
+    .order-item {
+        grid-template-columns:
+            minmax(0, 1fr);
+
+        gap: 7px;
+    }
+
+
+    .order-item>strong {
+        justify-self: start;
+    }
+
+
+    .order-summary {
+        padding: 17px;
+    }
+
+}
