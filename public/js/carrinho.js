@@ -34,6 +34,7 @@ form.addEventListener('submit', (e) => e.preventDefault());
 
 window.valorFrete = 0;
 window.nomeFrete = '';
+window.quoteIdFrete = '';
 window.cupomAtivo = null;
 
 // ==========================================
@@ -59,12 +60,10 @@ if (btnCalcShipping) {
         btnCalcShipping.disabled = true;
 
         const cart = cartStore.get();
+
         const itemsForFreight = cart.map(item => ({
-            qty: item.qty,
-            weight: item.weight || 0.5, 
-            length: item.length || 20,
-            width: item.width || 20,
-            height: item.height || 20
+            id: String(item.id),
+            qty: Number(item.qty)
         }));
 
         const functionsBR = getFunctions(app, 'southamerica-east1');
@@ -76,22 +75,29 @@ if (btnCalcShipping) {
 
             let htmlOpcoes = '<div style="margin-top: 1rem; text-align: left; display: flex; flex-direction: column; gap: 0.5rem;">';
             if (apenasCorreios.length > 0) {
-                apenasCorreios.forEach(opcao => {
-                    const tipo = opcao.name; 
-                    const precoComDesconto = parseFloat(opcao.price);
-                    const valorDesconto = parseFloat(opcao.discount || 0);
-                    const valorDeBalcao = parseFloat(opcao.original_price) || (precoComDesconto + valorDesconto);
-                    const idFrete = `frete-${tipo.replace(/\s+/g, '')}`;
-                    
+                apenasCorreios.forEach((opcao, index) => {
+                    const tipo = opcao.name;
+                    const valorDeBalcao = parseFloat(opcao.price);
+                    const quoteId = String(opcao.quoteId || '');
+                    const idFrete = `frete-${tipo.replace(/\s+/g, '')}-${index}`;
+
                     htmlOpcoes += `
-                        <label for="${idFrete}" style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border: 1px solid #ddd; border-radius: 8px; cursor: pointer;">
-                            <div>
-                                <input type="radio" id="${idFrete}" name="escolhaFrete" value="${valorDeBalcao}" data-nome="${tipo}" onchange="selecionarFrete(this)">
-                                <strong>${tipo}</strong> (até ${opcao.delivery_time} dias úteis)
-                            </div>
-                            <span>${BRL(valorDeBalcao)}</span>
-                        </label>
-                    `;
+        <label for="${idFrete}" style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem; border: 1px solid #ddd; border-radius: 8px; cursor: pointer;">
+            <div>
+                <input
+                    type="radio"
+                    id="${idFrete}"
+                    name="escolhaFrete"
+                    value="${valorDeBalcao}"
+                    data-nome="${tipo}"
+                    data-quote-id="${quoteId}"
+                    onchange="selecionarFrete(this)"
+                >
+                <strong>${tipo}</strong> (até ${opcao.delivery_time} dias úteis)
+            </div>
+            <span>${BRL(valorDeBalcao)}</span>
+        </label>
+    `;
                 });
                 htmlOpcoes += '</div>';
                 shippingResult.innerHTML = htmlOpcoes;            
@@ -106,16 +112,23 @@ if (btnCalcShipping) {
     });
 }
 
-window.selecionarFrete = function(radioElement) {
+window.selecionarFrete = function (radioElement) {
     window.valorFrete = parseFloat(radioElement.value);
-    window.nomeFrete = radioElement.getAttribute('data-nome');
-    renderCart(); 
+    window.nomeFrete = radioElement.getAttribute('data-nome') || '';
+    window.quoteIdFrete = radioElement.getAttribute('data-quote-id') || '';
+
+    renderCart();
 };
 
 cartStore.onChange(() => {
     window.valorFrete = 0;
     window.nomeFrete = '';
-    if (shippingResult) shippingResult.innerHTML = '';
+    window.quoteIdFrete = '';
+
+    if (shippingResult) {
+        shippingResult.innerHTML = '';
+    }
+
     renderCart();
 });
 
@@ -227,10 +240,10 @@ const renderPaymentBrick = async (totalFinal) => {
                             return reject(); // Destrava
                         }
 
-                        if (window.valorFrete === 0) {
+                        if (window.valorFrete === 0 || !window.nomeFrete || !window.quoteIdFrete) {
                             showToast('Por favor, calcule e selecione uma opção de frete antes de finalizar.', 'warning');
                             inputCep.focus();
-                            return reject(); // Destrava
+                            return reject();
                         }
 
                         if (!form.checkValidity()) {
@@ -249,7 +262,10 @@ const renderPaymentBrick = async (totalFinal) => {
                                 city: formEntries.city, state: formEntries.state
                             }
                         };
-                        const shippingPayload = { method: window.nomeFrete, cost: window.valorFrete };
+                        const shippingPayload = {
+                            method: window.nomeFrete,
+                            quoteId: window.quoteIdFrete
+                        };
                         const itemsForFunction = cartStore.get().map(item => ({ id: item.id, qty: item.qty }));
 
                         const functionsBR = getFunctions(app, 'southamerica-east1');
@@ -432,12 +448,19 @@ if (btnAplicarCupom) {
         cupomResult.innerHTML = '';
 
         const cart = cartStore.get();
-        const subtotal = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
+
+        const itemsForCoupon = cart.map(item => ({
+            id: String(item.id),
+            qty: Number(item.qty)
+        }));
 
         try {
             const functionsBR = getFunctions(app, 'southamerica-east1');
             const validarCupomFn = httpsCallable(functionsBR, 'validarcupom');
-            const result = await validarCupomFn({ codigo, subtotal });
+            const result = await validarCupomFn({
+                codigo,
+                items: itemsForCoupon
+            });
             
             window.cupomAtivo = result.data; 
             cupomResult.innerHTML = `<span style="color: #2ecc71; font-weight: bold;">✅ Desconto de ${BRL(result.data.desconto)} aplicado!</span>`;
