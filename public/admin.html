@@ -1034,11 +1034,70 @@
                 
                 
                     <div id="order-details-content" class="order-details-content">
-                
-                        <div class="table-loading">
-                            Carregando detalhes do pedido...
+                    
+                        <div class="order-status-editor">
+                    
+                            <div class="order-status-editor-info">
+                    
+                                <span class="card-kicker">
+                                    STATUS DO PEDIDO
+                                </span>
+                    
+                                <strong>
+                                    Atualize a situação deste pedido.
+                                </strong>
+                    
+                            </div>
+                    
+                    
+                            <div class="order-status-editor-actions">
+                    
+                                <label class="order-status-select" for="order-status-select">
+                    
+                                    <span class="sr-only">
+                                        Status do pedido
+                                    </span>
+                    
+                                    <select id="order-status-select">
+                    
+                                        <option value="pending">
+                                            Pendente
+                                        </option>
+                    
+                                        <option value="paid">
+                                            Pago
+                                        </option>
+                    
+                                        <option value="shipped">
+                                            Enviado
+                                        </option>
+                    
+                                        <option value="cancelled">
+                                            Cancelado
+                                        </option>
+                    
+                                    </select>
+                    
+                                </label>
+                    
+                    
+                                <button type="button" class="primary-button" id="save-order-status">
+                                    Salvar status
+                                </button>
+                    
+                            </div>
+                    
                         </div>
-                
+                    
+                    
+                        <div id="order-details-body">
+                    
+                            <div class="table-loading">
+                                Carregando detalhes do pedido...
+                            </div>
+                    
+                        </div>
+                    
                     </div>
                 
                 </div>

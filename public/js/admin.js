@@ -118,6 +118,15 @@ const orderDetailsContentEl =
 const closeOrderDetailsEl =
     document.getElementById('close-order-details');
 
+const orderStatusSelectEl =
+    document.getElementById('order-status-select');
+
+const saveOrderStatusEl =
+    document.getElementById('save-order-status');
+
+const orderDetailsBodyEl =
+    document.getElementById('order-details-body');
+
 const productEditorEl =
     document.getElementById('product-editor');
 
@@ -2203,6 +2212,15 @@ if (closeOrderDetailsEl) {
 
 }
 
+if (saveOrderStatusEl) {
+
+    saveOrderStatusEl.addEventListener(
+        'click',
+        updateOrderStatus
+    );
+
+}
+
 
 if (refreshOrdersEl) {
 
@@ -2868,9 +2886,22 @@ function openOrderDetails(orderId) {
     }
 
 
-    if (orderDetailsContentEl) {
+    /*
+     * Atualiza o seletor de status
+     * para refletir o status atual do pedido.
+     */
+    if (orderStatusSelectEl) {
 
-        orderDetailsContentEl.innerHTML = `
+        updateOrderStatusOptions(
+            order.status || 'pending'
+        );
+
+    }
+
+
+    if (orderDetailsBodyEl) {
+
+        orderDetailsBodyEl.innerHTML = `
 
             <div class="order-detail-status">
 
@@ -3067,6 +3098,411 @@ function openOrderDetails(orderId) {
         behavior: 'smooth',
         block: 'start'
     });
+
+}
+
+function getAllowedOrderStatusTransitions(currentStatus) {
+
+    const transitions = {
+        /*
+         * O pagamento NÃO pode ser alterado
+         * manualmente pelo administrador.
+         *
+         * O status "paid" é definido pelo
+         * backend após a confirmação do
+         * pagamento.
+         */
+        pending: [
+            'cancelled'
+        ],
+
+        /*
+         * Depois que o pagamento foi confirmado,
+         * o administrador pode enviar ou cancelar
+         * o pedido.
+         */
+        paid: [
+            'shipped',
+            'cancelled'
+        ],
+
+        /*
+         * Pedido enviado é um estado final
+         * para o fluxo administrativo atual.
+         */
+        shipped: [],
+
+        /*
+         * Pedido cancelado também é final.
+         */
+        cancelled: []
+    };
+
+    return transitions[currentStatus] || [];
+}
+
+function updateOrderStatusOptions(currentStatus) {
+
+    if (!orderStatusSelectEl) {
+        return;
+    }
+
+    const allowedStatuses =
+        getAllowedOrderStatusTransitions(
+            currentStatus
+        );
+
+    const statusOptions = [
+        {
+            value: 'pending',
+            label: 'Pendente'
+        },
+        {
+            value: 'paid',
+            label: 'Pago'
+        },
+        {
+            value: 'shipped',
+            label: 'Enviado'
+        },
+        {
+            value: 'cancelled',
+            label: 'Cancelado'
+        }
+    ];
+
+    orderStatusSelectEl.innerHTML = '';
+
+    /*
+     * O status atual continua aparecendo
+     * para que o administrador consiga
+     * visualizar a situação atual.
+     */
+    const currentOption =
+        statusOptions.find(
+            option =>
+                option.value === currentStatus
+        );
+
+    if (currentOption) {
+
+        const option =
+            document.createElement('option');
+
+        option.value =
+            currentOption.value;
+
+        option.textContent =
+            `${currentOption.label} (atual)`;
+
+        orderStatusSelectEl.appendChild(
+            option
+        );
+
+    }
+
+    /*
+     * Adiciona somente as transições
+     * permitidas para o status atual.
+     */
+    allowedStatuses.forEach(
+        allowedStatus => {
+
+            const optionData =
+                statusOptions.find(
+                    option =>
+                        option.value === allowedStatus
+                );
+
+            if (!optionData) {
+                return;
+            }
+
+            const option =
+                document.createElement('option');
+
+            option.value =
+                optionData.value;
+
+            option.textContent =
+                optionData.label;
+
+            orderStatusSelectEl.appendChild(
+                option
+            );
+
+        }
+    );
+
+    /*
+     * Se não existem transições possíveis,
+     * desabilita o seletor e o botão.
+     */
+    const hasTransitions =
+        allowedStatuses.length > 0;
+
+    orderStatusSelectEl.disabled =
+        !hasTransitions;
+
+    if (saveOrderStatusEl) {
+
+        saveOrderStatusEl.disabled =
+            !hasTransitions;
+
+    }
+
+}
+
+async function updateOrderStatus() {
+
+    if (
+        !orderStatusSelectEl ||
+        !saveOrderStatusEl
+    ) {
+        return;
+    }
+
+
+    const orderId =
+        orderDetailsTitleEl?.textContent
+            ?.replace('Pedido #', '')
+            ?.trim();
+
+
+    if (!orderId) {
+
+        Swal.fire({
+            icon: 'error',
+            title: 'Pedido não identificado',
+            text: 'Não foi possível identificar o pedido.'
+        });
+
+        return;
+
+    }
+
+
+    const order =
+        adminOrders.find(
+            item => item.id === orderId
+        );
+
+
+    if (!order) {
+
+        Swal.fire({
+            icon: 'error',
+            title: 'Pedido não encontrado',
+            text: 'Não foi possível localizar este pedido.'
+        });
+
+        return;
+
+    }
+
+
+    const newStatus =
+        orderStatusSelectEl.value;
+
+
+    const currentStatus =
+        order.status || 'pending';
+
+
+    if (newStatus === currentStatus) {
+
+        Swal.fire({
+            icon: 'info',
+            title: 'Nenhuma alteração',
+            text: 'O pedido já está com esse status.',
+            timer: 1600,
+            showConfirmButton: false
+        });
+
+        return;
+
+    }
+
+
+    const newStatusInfo =
+        getStatusInfo(
+            newStatus
+        );
+
+
+    const currentStatusInfo =
+        getStatusInfo(
+            currentStatus
+        );
+
+
+    const confirmation =
+        await Swal.fire({
+
+            icon: 'question',
+
+            title: 'Alterar status do pedido?',
+
+            html: `
+                <p>
+                    O pedido
+                    <strong>
+                        #${escapeHTML(order.id)}
+                    </strong>
+                    será alterado de
+                    <strong>
+                        ${escapeHTML(
+                currentStatusInfo.text
+            )}
+                    </strong>
+                    para
+                    <strong>
+                        ${escapeHTML(
+                newStatusInfo.text
+            )}
+                    </strong>.
+                </p>
+            `,
+
+            showCancelButton: true,
+
+            confirmButtonText:
+                'Sim, alterar',
+
+            cancelButtonText:
+                'Cancelar',
+
+            reverseButtons: true
+
+        });
+
+
+    if (!confirmation.isConfirmed) {
+
+        orderStatusSelectEl.value =
+            currentStatus;
+
+        return;
+
+    }
+
+
+    saveOrderStatusEl.disabled = true;
+
+    saveOrderStatusEl.textContent =
+        'Salvando...';
+
+
+    try {
+
+        await updateDoc(
+            doc(
+                db,
+                'orders',
+                orderId
+            ),
+            {
+                status: newStatus
+            }
+        );
+
+
+        /*
+         * Atualiza o pedido em memória.
+         */
+        const orderIndex =
+            adminOrders.findIndex(
+                item =>
+                    item.id === orderId
+            );
+
+
+        if (orderIndex !== -1) {
+
+            adminOrders[orderIndex] = {
+                ...adminOrders[orderIndex],
+                status: newStatus
+            };
+
+        }
+
+
+        /*
+         * Atualiza a tabela de pedidos.
+         */
+        filterAdminOrders();
+
+
+        /*
+         * Atualiza os indicadores
+         * do dashboard usando os pedidos
+         * já carregados.
+         */
+        updateOrderStats(
+            adminOrders
+        );
+
+
+        /*
+         * Reabre o detalhe com o
+         * novo status visual.
+         */
+        openOrderDetails(
+            orderId
+        );
+
+
+        await Swal.fire({
+
+            icon: 'success',
+
+            title: 'Status atualizado',
+
+            text:
+                `O pedido foi marcado como ${newStatusInfo.text}.`,
+
+            timer: 1700,
+
+            showConfirmButton: false
+
+        });
+
+    } catch (error) {
+
+        console.error(
+            'Erro ao atualizar status do pedido:',
+            error
+        );
+
+
+        /*
+         * Restaura o status anterior
+         * caso a atualização falhe.
+         */
+        orderStatusSelectEl.value =
+            currentStatus;
+
+
+        Swal.fire({
+
+            icon: 'error',
+
+            title: 'Erro ao atualizar',
+
+            text:
+                'Não foi possível alterar o status do pedido.'
+
+        });
+
+    } finally {
+
+        saveOrderStatusEl.disabled =
+            false;
+
+        saveOrderStatusEl.textContent =
+            'Salvar status';
+
+    }
 
 }
 
