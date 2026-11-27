@@ -1127,29 +1127,121 @@
                 </div>
 
 
-                <div class="admin-card">
+                <div class="admin-card orders-card">
 
-                    <div
-                        id="orders-content"
-                        class="section-placeholder"
-                    >
+    <div class="orders-toolbar">
 
-                        <div class="placeholder-icon">
-                            ▣
-                        </div>
+        <div class="orders-toolbar-info">
 
-                        <h3>
-                            Gestão de pedidos
-                        </h3>
+            <span class="card-kicker">
+                VENDAS
+            </span>
 
-                        <p>
-                            A estrutura está pronta. Vamos implementar
-                            a listagem e atualização dos pedidos na próxima etapa.
-                        </p>
+            <h3>
+                Pedidos registrados
+            </h3>
 
-                    </div>
+            <p>
+                Consulte os pedidos realizados na Olomi.
+            </p>
 
-                </div>
+        </div>
+
+        <div class="orders-toolbar-actions">
+
+            <label
+                class="admin-search"
+                for="orders-search"
+            >
+                <span aria-hidden="true">⌕</span>
+
+                <input
+                    type="search"
+                    id="orders-search"
+                    placeholder="Buscar pedido ou cliente..."
+                    autocomplete="off"
+                >
+            </label>
+
+            <button
+                type="button"
+                class="secondary-button"
+                id="refresh-orders"
+            >
+                ↻ Atualizar
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div
+        id="orders-loading"
+        class="table-loading"
+        hidden
+    >
+        Carregando pedidos...
+    </div>
+
+
+    <div
+        id="orders-empty"
+        class="empty-table"
+        hidden
+    >
+        Nenhum pedido encontrado.
+    </div>
+
+
+    <div
+        id="orders-table-wrapper"
+        class="admin-table-wrapper"
+        hidden
+    >
+
+        <table class="admin-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Pedido
+                    </th>
+
+                    <th>
+                        Cliente
+                    </th>
+
+                    <th>
+                        Data
+                    </th>
+
+                    <th>
+                        Total
+                    </th>
+
+                    <th>
+                        Status
+                    </th>
+
+                    <th>
+                        Ações
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="orders-table-body">
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
 
             </section>
 
